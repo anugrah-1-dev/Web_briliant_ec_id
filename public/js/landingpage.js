@@ -51,13 +51,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const carousel = document.getElementById("carousel");
 
     if (navbar && carousel) {
+        const logoImg = document.querySelector("#navbar .logo img");
+
         window.addEventListener("scroll", () => {
             const carouselBottom = carousel.offsetTop + carousel.offsetHeight;
-            if (window.scrollY > carouselBottom - 80) {
+            const hasScrolled = window.scrollY > carouselBottom - 80;
+
+            if (hasScrolled) {
                 navbar.classList.add("scrolled");
+                if (logoImg) logoImg.src = logo2URL;
             } else {
                 navbar.classList.remove("scrolled");
+                if (logoImg) logoImg.src = logo1URL;
             }
         });
     }
+
+    // --- Kode Scroll ke Atas Saat Logo Diklik ---
+    const logo = document.querySelector("#navbar .logo");
+    if (logo) {
+        logo.addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        });
+    }
 });
+
+// Scroll ke atas saat logo diklik
+const logo = document.querySelector("#navbar .logo");
+if (logo) {
+    logo.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    });
+}
