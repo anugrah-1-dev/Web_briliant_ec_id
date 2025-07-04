@@ -358,6 +358,12 @@ return [
             'icon' => 'fas fa-home',
         ],
 
+            [
+            'text' => 'Transport',
+            'url'  => '/admin/transports',
+            'icon' => 'fas fa-shuttle-van',
+        ],
+
         [
             'text' => 'Bank',
             'url'  => '/admin/banks',
