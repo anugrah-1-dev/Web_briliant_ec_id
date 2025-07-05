@@ -7,33 +7,45 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BankController;
 use App\Http\Controllers\Admin\TransportsController;
+use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingPageController; 
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-Route::get('/', fn() => view('landingpage'))->name('dashboard');
+// =========================================================================
+// ROUTE UNTUK LANDING PAGE & HALAMAN USER
+// =========================================================================
+
+// INI BAGIAN YANG DIPERBAIKI:
+// Sekarang route '/' akan memanggil LandingPageController
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 Auth::routes();
+Route::get('/Dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/Dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('Dashboard');
 
-// Admin Routes
-Route::middleware('role:admin')->group(function () {
-    Route::resource('/admin/roles', RoleController::class);
-    Route::resource('/admin/permissions', PermissionController::class);
-    Route::resource('/admin/users', UserController::class);
-    Route::resource('/admin/banks', BankController::class);
-});
-
-// Transports route khusus dengan prefix & nama 'admin.'
-Route::middleware('role:admin')->prefix('admin')->as('admin.')->group(function () {
+// =========================================================================
+// SEMUA ROUTE ADMIN DISATUKAN DI SINI
+// =========================================================================
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+    
+    // Resource routes
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('banks', BankController::class);
+    Route::resource('programs', ProgramController::class);
     Route::resource('transports', TransportsController::class);
+    
+    // Route dashboard admin (jika ada)
+    // Jika dashboard admin sama dengan dashboard user, route ini bisa dihapus dari sini
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });

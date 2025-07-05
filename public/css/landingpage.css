@@ -869,21 +869,26 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
+/* Program Section */
 .program-section {
     padding: 80px 0;
     text-align: center;
     background-color: #ffffff;
 }
 .program-section h2 {
-    color: #0d47a1;
     font-size: 2.8rem;
     text-transform: uppercase;
     font-weight: 800;
+    margin-bottom: 1rem;
+    color: #0d47a1;
 }
 .program-section .section-subtitle {
     font-size: 1.1rem;
     color: #555;
     margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .program-tabs {
     display: flex;
@@ -893,9 +898,6 @@ body {
     margin-bottom: 50px;
 }
 .program-tabs .tab-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
     padding: 12px 25px;
     font-size: 1rem;
     font-weight: 600;
@@ -915,85 +917,43 @@ body {
     border-color: #f39c12;
     color: #fff;
 }
-
-/* --- CSS BARU UNTUK KONTEN INTERAKTIF --- */
+/* 1. Sembunyikan SEMUA detail program secara default */
 .program-detail {
-    display: none; /* Semua detail disembunyikan secara default */
-    grid-template-columns: 1fr 1fr;
+    display: none; /* <-- BARIS INI PENTING */
+    grid-template-columns: 1.2fr 1fr;
     gap: 50px;
-    align-items: center;
+    align-items: start;
     text-align: left;
 }
-.program-detail.active {
-    display: grid; /* Hanya yang aktif yang ditampilkan sebagai grid */
-}
-/* ------------------------------------------- */
 
-.content-text h3 {
-    font-size: 2rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #111;
+/* 2. HANYA tampilkan yang memiliki kelas 'active' */
+.program-detail.active {
+    display: grid; 
 }
-.content-text .description {
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 25px;
+/* Tata letak terbalik untuk program dengan ID genap */
+.program-detail.layout-reversed .content-text {
+    order: 2; /* Pindahkan kolom teks ke posisi kedua */
 }
-.benefits-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 30px 0;
+
+.program-detail.layout-reversed .content-image {
+    order: 1; /* Pindahkan kolom gambar ke posisi pertama */
 }
-.benefits-list li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    font-size: 1rem;
+/* STRUKTUR KONTEN PROGRAM YANG BARU */
+.content-text h2 { font-size: 2.5rem; }
+.content-text h3 { font-size: 2rem; }
+.content-text .description { font-size: 1rem; line-height: 1.7; }
+.benefits-title { font-size: 1.1rem; margin-bottom: 0.8rem; }
+.benefits-list { list-style: none; padding: 0; margin: 0; }
+.benefits-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.benefits-list li .fa-check-circle { color: #28a745; font-size: 1.2rem; }
+.action-buttons { display: flex; gap: 15px; }
+.action-buttons .btn { padding: 12px 25px; font-size: 1rem; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.3s ease; }
+.action-buttons .btn-primary { background-color: #f39c12; color: #fff; }
+.action-buttons .btn-secondary { background-color: #fff; color: #f39c12; border: 2px solid #f39c12; }
+.action-buttons .btn:hover { transform: translateY(-2px); }
+.content-image img { width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.content-image {
+    margin-top: 2.5rem; /* Anda bisa sesuaikan angka ini */
 }
-.benefits-list li .fa-check-circle {
-    color: #28a745;
-    font-size: 1.2rem;
-}
-.action-buttons {
-    display: flex;
-    gap: 15px;
-}
-.action-buttons .btn {
-    padding: 12px 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-.action-buttons .btn-primary {
-    background-color: #f39c12;
-    color: #fff;
-}
-.action-buttons .btn-secondary {
-    background-color: #fff;
-    color: #f39c12;
-    border: 2px solid #f39c12;
-}
-.action-buttons .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.content-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-@media (max-width: 992px) {
-    .program-detail {
-        grid-template-columns: 1fr;
-    }
-}
-@media (max-width: 768px) {
-    .program-section h2 {
-        font-size: 2.2rem;
-    }
-}
+
+/* STRUKTUR KONTEN PROGRAM YANG BARU */ 

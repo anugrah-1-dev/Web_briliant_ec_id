@@ -63,7 +63,7 @@ class BankController extends Controller
         $bank = Banks::findOrFail($id);
         $bank->delete();
 
-        return redirect()->route('banks.index')
+        return redirect()->route('admin.banks.index')
             ->with('success', 'Bank deleted successfully.')
             ->with('sweetalert', true);
     }

@@ -62,7 +62,7 @@
                                     <div class="btn-group btn-group-sm">
                                         {{-- <x-adminlte-button theme="warning" icon="fas fa-edit"
                                             onclick="window.location='{{ route('admin.banks.edit', $bank->id) }}'" title="Edit"/> --}}
-                                        <form action="{{ route('banks.destroy', $bank->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.banks.destroy', $bank->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <x-adminlte-button theme="danger" icon="fas fa-trash"

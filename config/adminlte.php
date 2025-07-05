@@ -362,6 +362,11 @@ return [
             'icon' => 'fas fa-home',
         ],
 
+        [
+            'text' => 'Program',
+            'url'  => '/admin/programs',
+            'icon' => 'fas fa-project-diagram',
+        ],
             [
             'text' => 'Transport',
             'url'  => '/admin/transports',
