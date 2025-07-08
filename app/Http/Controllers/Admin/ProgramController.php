@@ -17,7 +17,8 @@ class ProgramController extends Controller
             $query->where('judul_konten', 'like', '%' . $request->search . '%');
         }
 
-        $programs = $query->latest()->get(); // Menggunakan latest() untuk mengambil data terbaru
+        $programs = $query->latest()->paginate(10); // Menampilkan 10 data per halaman
+// Menggunakan latest() untuk mengambil data terbaru
         return view('admin.pamflet_programs.index', compact('programs'));
     }
 

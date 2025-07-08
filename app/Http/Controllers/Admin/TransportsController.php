@@ -30,7 +30,12 @@ class TransportsController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->back()->with('success', 'Transportasi berhasil ditambahkan.');
+        return redirect()->back()->with('alert', [
+    'icon' => 'success',
+    'title' => 'Berhasil!',
+    'text' => 'Transportasi berhasil ditambahkan.'
+]);
+
     }
 
     public function edit($id)
@@ -54,7 +59,12 @@ class TransportsController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.transports.index')->with('success', 'Data transportasi diperbarui.');
+        return redirect()->route('admin.transports.index')->with('alert', [
+    'icon' => 'success',
+    'title' => 'Berhasil!',
+    'text' => 'Data transportasi berhasil diperbarui.'
+]);
+
     }
 
     public function destroy($id)

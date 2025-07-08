@@ -24,7 +24,8 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive scrollable-table-wrapper">
+
                     <table class="table table-hover table-bordered table-striped" id="transportTable">
                         <thead class="bg-lightblue text-center">
                             <tr>
@@ -134,6 +135,36 @@
                 #createTransportModal .modal-footer {
                     display: none;
                 }
+
+                .scrollable-table-wrapper {
+        max-height: 350px; /* Atur sesuai tinggi yang kamu mau */
+        overflow-y: auto;
+    }
+
+    #transportTable th:nth-child(1),
+    #transportTable td:nth-child(1) {
+        min-width: 40px; /* No */
+    }
+
+    #transportTable th:nth-child(2),
+    #transportTable td:nth-child(2) {
+        min-width: 200px; /* Nama Transportasi */
+    }
+
+    #transportTable th:nth-child(3),
+    #transportTable td:nth-child(3) {
+        min-width: 150px; /* Harga */
+    }
+
+    #transportTable th:nth-child(4),
+    #transportTable td:nth-child(4) {
+        min-width: 120px; /* Status */
+    }
+
+    #transportTable th:nth-child(5),
+    #transportTable td:nth-child(5) {
+        min-width: 130px; /* Aksi */
+    }
             </style>
         </x-slot>
     </x-adminlte-modal>

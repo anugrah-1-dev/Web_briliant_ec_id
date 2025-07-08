@@ -27,7 +27,7 @@
                 </form>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive scrollable-table-wrapper" style="max-height: 350px; overflow: auto;">
                 <table class="table table-bordered table-hover">
                     <thead class="table-custom-header">
                         <tr>
@@ -43,7 +43,8 @@
                     <tbody>
                         @forelse($programs as $program)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ ($programs->currentPage() - 1) * $programs->perPage() + $loop->iteration }}</td>
+
 
                                 <td>{{ $program->judul }}</td>
                                 <td>{{ Str::limit($program->deskripsi, 50, '...') }}</td>
@@ -73,18 +74,108 @@
                             </tr>
                         @endforelse
                     </tbody>
+                    @if ($programs instanceof \Illuminate\Pagination\LengthAwarePaginator && $programs->hasPages())
+    
+@endif
+
                 </table>
+                
             </div>
 
         </div>
+        
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+            {{-- Tombol Sebelumnya --}}
+            <li class="page-item {{ $programs->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $programs->onFirstPage() ? '#' : $programs->previousPageUrl() }}">«</a>
+            </li>
+
+            {{-- Nomor Halaman --}}
+            @foreach ($programs->getUrlRange(1, $programs->lastPage()) as $page => $url)
+                <li class="page-item {{ $programs->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Berikutnya --}}
+            <li class="page-item {{ !$programs->hasMorePages() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $programs->hasMorePages() ? $programs->nextPageUrl() : '#' }}">»</a>
+            </li>
+        </ul>
     </div>
 @stop
 
 @push('css')
-    <style>
-        .table-custom-header {
-            background-color: #3c8dbc;
-            color: white;
-        }
-    </style>
+<style>
+    .table-custom-header {
+        background-color: #3c8dbc;
+        color: white;
+    }
+
+    .scrollable-table-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Atur lebar minimum kolom */
+    table th:nth-child(1), table td:nth-child(1) {
+        min-width: 40px; /* No */
+    }
+
+    table th:nth-child(2), table td:nth-child(2) {
+        min-width: 180px; /* Judul */
+    }
+
+    table th:nth-child(3), table td:nth-child(3),
+    table th:nth-child(4), table td:nth-child(4) {
+        min-width: 200px; /* Deskripsi, Keunggulan */
+    }
+
+    table th:nth-child(5), table td:nth-child(5) {
+        min-width: 130px; /* Gambar */
+    }
+
+    table th:nth-child(6), table td:nth-child(6) {
+        min-width: 100px; /* Status */
+    }
+
+    table th:nth-child(7), table td:nth-child(7) {
+        min-width: 130px; /* Aksi */
+    }
+
+    .pagination {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        gap: 4px;
+    }
+
+    .pagination .page-item {
+        display: inline-block;
+    }
+
+    .pagination .page-link {
+        display: block;
+        padding: 6px 12px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        color: #007bff;
+        text-decoration: none;
+        background-color: #fff;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #f8f9fa;
+    }
+</style>
 @endpush

@@ -121,7 +121,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive" style="max-height: 400px; overflow: auto;">
+                <div class="table-responsive" style="max-height: 350px; overflow: auto;">
 
                     <table class="table table-hover table-bordered table-striped" id="programTable">
                         <thead class="bg-lightblue text-center">
