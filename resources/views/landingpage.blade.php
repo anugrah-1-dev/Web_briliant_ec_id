@@ -212,7 +212,7 @@
                 </svg>
             </div>
 
-//pakde kerjaan
+
                 {{--
    <!-- Section 1: Judul + Subtitle + Tabs -->
 <section class="program-section" id="program">
@@ -282,7 +282,7 @@
     </div>
 </section> --}}
 
-//pakde
+
 
 
     {{-- <script>
