@@ -27,7 +27,11 @@ Route::get('/camps', [ProgramCampController::class, 'publicIndex'])->name('camps
 
 // Route untuk menampilkan halaman detail satu camp (INI PERBAIKANNYA)
 Route::get('/camps/{camp:slug}', [ProgramCampController::class, 'publicShow'])->name('camps.show');
+// Detail program offline public
+Route::get('/program-offline/{program:slug}', [LandingPageController::class, 'showOfflinePublic'])->name('program.offline.show');
 
+// Detail program online public
+Route::get('/program-online/{program:slug}', [LandingPageController::class, 'showOnlinePublic'])->name('program.online.show');
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 

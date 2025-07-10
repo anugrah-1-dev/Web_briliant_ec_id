@@ -14,27 +14,35 @@ class LandingPageController extends Controller
 {
     public function index()
     {
-    $programs = Program::orderBy('id', 'asc')->get();
+        $programs = Program::orderBy('id', 'asc')->get();
 
-        // Ambil galeri aktif beserta gambar-gambarnya
-    $galleries = Gallery::where('status', 1)
-            ->with('images') // eager loading agar tidak N+1
-            ->latest()
-            ->get();
-    $offlinePrograms = ProgramOffline::where('is_active', 1)->latest()->get();
+        $galleries = Gallery::where('status', 1)
+                ->with('images')
+                ->latest()
+                ->get();
 
-    // 2. Ambil data program online yang aktif
-    $onlinePrograms = ProgramOnline::where('is_active', 1)->latest()->get();
+        $offlinePrograms = ProgramOffline::where('is_active', 1)->latest()->get();
+        $onlinePrograms  = ProgramOnline::where('is_active', 1)->latest()->get();
+        $camps           = ProgramCamp::orderBy('id', 'asc')->get();
 
-    $camps = ProgramCamp::orderBy('id', 'asc')->get();
-        // 2. Kirim data tersebut ke view 'landingpage'
-        //    Variabel $programs sekarang akan tersedia di dalam view
         return view('landingpage', [
             'offlinePrograms' => $offlinePrograms,
             'onlinePrograms'  => $onlinePrograms,
-            'programs' => $programs,
-            'galleries' => $galleries, // <- variabel yang konsisten dengan view
-            'camps'    => $camps, 
+            'programs'        => $programs,
+            'galleries'       => $galleries,
+            'camps'           => $camps,
         ]);
+    }
+
+    // Detail program offline (untuk public)
+    public function showOfflinePublic(ProgramOffline $program)
+    {
+        return view('admin.programs.offline.show', compact('program'));
+    }
+
+    // Detail program online (untuk public)
+    public function showOnlinePublic(ProgramOnline $program)
+    {
+        return view('admin.programs.online.show', compact('program'));
     }
 }

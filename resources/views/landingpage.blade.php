@@ -126,6 +126,14 @@
                 </div>
                 
                 <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Daftar Ulang</h3>
+                        <p>Melakukan daftar ulang secara langsung melalui Admin kami yang berada di  Ruang Office Brilliant English Course.</p>
+                    </div>
+                </div>
+      
+                <div class="flow-step">
                     <div class="step-number">5</div>
                     <div class="step-content">
                         <h3>Siap Belajar!</h3>
@@ -225,7 +233,8 @@
                                         {{ \Carbon\Carbon::parse($program->jadwal_mulai)->format('d M') }} - {{ \Carbon\Carbon::parse($program->jadwal_selesai)->format('d M Y') }}
                                     </p>
                                     <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}</p>
-                                    <a href="#" class="btn-detail">Lihat Detail</a>
+                                    <a href="{{ route('program.offline.show', $program->slug) }}" class="btn btn-success">Lihat Detail</a>
+
                                 </div>
                             </div>
                         </div>
@@ -239,7 +248,7 @@
                                 <div class="program-card-image-wrapper">
                                     <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img" alt="{{ $program->nama }}">
                                     @if ($program->is_active)
-                                        <span class="program-badge">Tersedia</span>
+                                     
                                     @endif
                                 </div>
                                 <div class="program-card-body">
@@ -249,7 +258,7 @@
                                         Kategori: {{ $program->kategori ?? '-' }}
                                     </p>
                                     <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}</p>
-                                    <a href="#" class="btn-detail">Lihat Detail</a>
+                                    <a href="{{ route('program.online.show', $program->slug) }}" class="btn btn-primary">Lihat Detail</a>
                                 </div>
                             </div>
                         </div>

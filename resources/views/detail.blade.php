@@ -161,9 +161,11 @@
         </section>
         
         <section class="cta-section">
-            <p>Kirim pesan kepada kami di WhatsApp untuk memesan sekarang! Tersedia tarif mingguan dan bulanan.</p>
-            <a href="#" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Booking Camp Sekarang</a>
-            <a href="https://wa.me/6281234567890?text=Halo, saya tertarik dengan program '{{ urlencode($program->nama) }}'" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Hubungi Kami</a>
+            <p>Kirim pesan kepada kami di WhatsApp untuk memesan sekarang!Kemudian selesaikan pemesanan secara langsung ke Ruang Office yang ada di Brilliant English Course.</p>
+            <a href="https://wa.me/6281234567890?text=Halo, saya tertarik dengan program '{{ urlencode($program->nama) }}'" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Contact
+                Person 1</a>
+            <a href="https://wa.me/6281234567890?text=Halo, saya tertarik dengan program '{{ urlencode($program->nama) }}'" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Contact
+                Person 2</a>
         </section>
          <!-- TOMBOL KEMBALI -->
          <section class="back-button-section">
