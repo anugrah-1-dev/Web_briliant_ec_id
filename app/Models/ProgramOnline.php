@@ -43,8 +43,8 @@ class ProgramOnline extends Model
         'features_program' => 'array', // Casting JSON ke array
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 }

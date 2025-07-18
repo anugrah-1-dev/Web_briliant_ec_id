@@ -351,7 +351,7 @@ return [
         ],
 
         [
-            'header' => 'Menu Utama ',
+            'header' => 'MENU UTAMA',
         ],
 
 
@@ -363,7 +363,7 @@ return [
         ],
 
         [
-            'header' => 'Program ',
+            'header' => 'PROGRAM PENDAFTARAN',
         ],
 
         [
@@ -375,6 +375,13 @@ return [
                     'url'  => '/admin/pamflet_programs',
                     'icon' => 'fas fa-list',
                 ],
+
+                [
+                    'text' => 'Periode Program',
+                    'url'  => '/admin/periods',
+                    'icon' => 'fas fa-calendar-alt',
+                ],
+                
                 [
                     'text' => 'Program Offline',
                     'url'  => '/admin/programs/offline',
@@ -393,60 +400,64 @@ return [
             ],
         ],
 
-        [
-            'header' => 'Data Master ',
-        ],
-
+        ['header' => 'DATA PENDAFTAR'],
 
         [
-            'text' => 'Transport',
-            'url'  => '/admin/transports',
-            'icon' => 'fas fa-shuttle-van',
-        ],
-
-        [
-            'text' => 'Galleries',
-            'url'  => '/admin/galleries',
-            'icon' => 'fas fa-images',
-        ],
-
-        [
-            'text' => 'Sosmed',
-            'url'  => '/admin/sosmed',
-            'icon' => 'fas fa-globe',
-        ],
-
-        [
-            'text' => 'Bank',
-            'url'  => '/admin/banks',
-            'icon' => 'fas fa-university',
-        ],
-        [
-            'text' => 'Customer Service',
-            'url'  => '/admin/customer_services',
-            'icon' => 'fas fa-headset',
-        ],
-
-        [
-            'text' => 'Periode Program',
-            'url'  => '/admin/periods',
-            'icon' => 'fas fa-calendar-alt',
-        ],
-        
-        ['header' => 'PENDAFTARAN'],
-
-        [
-            'text' => 'Pendaftaran Offline',
+            'text' => 'Pendaftar Offline',
             'route'  => 'admin.pendaftaran.offline.index',
             'icon'   => 'fas fa-user-friends',
             'active' => ['admin/pendaftaran/offline*'],
         ],
         [
-            'text' => 'Pendaftaran Online',
+            'text' => 'Pendaftar Online',
             'route'  => 'admin.pendaftaran.online.index',
             'icon'   => 'fas fa-laptop',
             'active' => ['admin/pendaftaran/online*'],
         ],
+
+
+
+        [
+            'header' => 'DATA MASTER ',
+        ],
+        [
+            'text' => 'Data Master',
+            'icon' => 'fas fa-fw fa-tools',
+            'submenu' => [
+                [
+                    'text' => 'Transport',
+                    'url'  => '/admin/transports',
+                    'icon' => 'fas fa-shuttle-van',
+                ],
+
+                [
+                    'text' => 'Galleries',
+                    'url'  => '/admin/galleries',
+                    'icon' => 'fas fa-images',
+                ],
+
+                [
+                    'text' => 'Sosmed',
+                    'url'  => '/admin/sosmed',
+                    'icon' => 'fas fa-globe',
+                ],
+
+                [
+                    'text' => 'Bank',
+                    'url'  => '/admin/banks',
+                    'icon' => 'fas fa-university',
+                ],
+                [
+                    'text' => 'Customer Service',
+                    'url'  => '/admin/customer_services',
+                    'icon' => 'fas fa-headset',
+                ],
+
+
+
+            ],
+        ],
+
 
 
 
@@ -461,7 +472,7 @@ return [
         ],
 
         [
-            'header' => 'Hak Akses ',
+            'header' => 'HAK AKSES ',
         ],
 
 
@@ -564,8 +575,8 @@ return [
                     'asset' => false,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
-                'Bootstrap' => true,
-                'jQuery' => true,
+                // 'Bootstrap' => true,
+                // 'jQuery' => true,
 
             ],
         ],
@@ -619,6 +630,34 @@ return [
                 ],
             ],
         ],
+
+        'Bootstrap' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap/js/bootstrap.bundle.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap/css/bootstrap.min.css',
+                ],
+            ],
+        ],
+        'jQuery' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/jquery/jquery.min.js',
+                ],
+            ],
+        ],
+
+
     ],
 
     /*

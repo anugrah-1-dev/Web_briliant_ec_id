@@ -3,61 +3,150 @@
 @section('title', 'Pendaftar Program Offline')
 
 @section('content_header')
-    <h1>Pendaftaran Program Offline</h1>
-@endsection
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+        <h1 class="m-0">Daftar Pendaftar Program Offline</h1>
+        <div class="d-flex flex-column flex-md-row gap-2 align-items-center">
+            <div class="input-group input-group-sm" style="width: 250px;">
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-default btn-flat">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </span>
+            </div>
+            <a href="{{ route('admin.pendaftaran.offline.export') }}" class="btn btn-success btn-sm ml-md-2">
+                <i class="fas fa-file-csv mr-1"></i> Export CSV
+            </a>
+        </div>
+    </div>
+@stop
 
 @section('content')
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show mb-4">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     @endif
 
-    <div class="card">
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>TRX ID</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>No HP</th>
-                        <th>Program</th>
-                        <th>Periode</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($pendaftar as $key => $data)
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Data Pendaftar</h3>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="pendaftarTable" class="table table-hover table-bordered mb-0">
+                    <thead>
                         <tr>
-                            <td>{{ $pendaftar->firstItem() + $key }}</td>
-                            <td>{{ $data->trx_id }}</td>
-                            <td>{{ $data->nama_lengkap }}</td>
-                            <td>{{ $data->email }}</td>
-                            <td>{{ $data->no_hp }}</td>
-                            <td>{{ $data->program->nama ?? '-' }}</td>
-                            <td>{{ $data->period->date ?? '-' }}</td>
-                            <td>
-                                <span class="badge bg-{{ $data->status === 'pending' ? 'warning' : ($data->status === 'approved' ? 'success' : 'danger') }}">
-                                    {{ ucfirst($data->status) }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.pendaftaran.offline.show', $data->id) }}" class="btn btn-info btn-sm">Detail</a>
-                                <form action="{{ route('admin.pendaftaran.offline.destroy', $data->id) }}" method="POST" style="display:inline;">
-                                    @csrf @method('DELETE')
-                                    <button onclick="return confirm('Yakin hapus?')" class="btn btn-danger btn-sm">Hapus</button>
-                                </form>
-                            </td>
+                            <th width="5%">#</th>
+                            <th>TRX ID</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>No HP</th>
+                            <th>Program</th>
+                            <th>Periode</th>
+                            <th>Status</th>
+                            <th width="15%">Aksi</th>
                         </tr>
-                    @empty
-                        <tr><td colspan="9" class="text-center">Belum ada pendaftar.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse ($pendaftar as $key => $data)
+                            <tr>
+                                <td>{{ $pendaftar->firstItem() + $key }}</td>
+                                <td>{{ $data->trx_id }}</td>
+                                <td>{{ $data->nama_lengkap }}</td>
+                                <td>{{ $data->email }}</td>
+                                <td>{{ $data->no_hp ?? '-' }}</td>
+                                <td>{{ $data->program->nama ?? '-' }}</td>
+                                <td>{{ $data->period->date ?? '-' }}</td>
+                                <td>
+                                    <span class="badge badge-{{ $data->status === 'pending' ? 'warning' : ($data->status === 'approved' ? 'success' : 'danger') }}">
+                                        {{ ucfirst($data->status) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        {{-- <a href="{{ route('admin.pendaftaran.offline.show', $data->id) }}"
+                                           class="btn btn-info" title="Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a> --}}
+                                        {{-- <form action="{{ route('admin.pendaftaran.offline.destroy', $data->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Yakin menghapus data ini?')"
+                                                    class="btn btn-danger" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form> --}}
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center py-4">Belum ada pendaftar.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="card-footer">
-            {{ $pendaftar->links() }}
-        </div>
+
+        @if($pendaftar->hasPages())
+            <div class="card-footer bg-light">
+                {{ $pendaftar->links('vendor.pagination.bootstrap-4') }}
+            </div>
+        @endif
     </div>
-@endsection
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+        .table-responsive {
+            max-height: 500px;
+        }
+        .table-responsive::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+            border-radius: 10px;
+        }
+        .btn-group-sm .btn {
+            padding: 0.25rem 0.5rem;
+        }
+    </style>
+@stop
+
+@section('js')
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#pendaftarTable').DataTable({
+                paging: false,
+                ordering: true,
+                searching: true,
+                info: false,
+                responsive: true,
+                columnDefs: [
+                    { orderable: false, targets: [0, 8] }
+                ],
+                language: {
+                    search: "Cari:",
+                    emptyTable: "Belum ada data yang tersedia.",
+                    zeroRecords: "Tidak ditemukan data yang cocok."
+                }
+            });
+
+            $('#searchInput').on('keyup', function() {
+                $('#pendaftarTable').DataTable().search(this.value).draw();
+            });
+        });
+    </script>
+@stop

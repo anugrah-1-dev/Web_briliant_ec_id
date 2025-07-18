@@ -6,6 +6,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PendaftaranProgramOffline;
 use Illuminate\Http\Request;
+use App\Exports\PendaftaranOfflineExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class PendaftaranOfflineController extends Controller
 {
@@ -29,5 +32,10 @@ class PendaftaranOfflineController extends Controller
         $data->delete();
 
         return redirect()->route('admin.pendaftaran.offline.index')->with('success', 'Data berhasil dihapus.');
+    }
+
+    public function exportCsvOffline()
+    {
+        return Excel::download(new PendaftaranOfflineExport, 'pendaftaran_program_offline.xlsx');
     }
 }

@@ -9,6 +9,8 @@ use App\Models\GalleryImage;
 use App\Models\ProgramOffline;
 use App\Models\ProgramOnline;
 use App\Models\ProgramCamp;
+use App\Models\Customer_Service;
+
 
 class LandingPageController extends Controller
 {
@@ -24,13 +26,15 @@ class LandingPageController extends Controller
         $offlinePrograms = ProgramOffline::where('is_active', 1)->latest()->get();
         $onlinePrograms  = ProgramOnline::where('is_active', 1)->latest()->get();
         $camps           = ProgramCamp::orderBy('id', 'asc')->get();
-
+        $contactServices = Customer_Service::all();
+        
         return view('landingpage', [
             'offlinePrograms' => $offlinePrograms,
             'onlinePrograms'  => $onlinePrograms,
             'programs'        => $programs,
             'galleries'       => $galleries,
             'camps'           => $camps,
+            'contactServices' => $contactServices,
         ]);
     }
 

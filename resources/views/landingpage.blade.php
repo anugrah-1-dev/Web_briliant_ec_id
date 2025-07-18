@@ -11,6 +11,8 @@
     <script src="{{ asset('js/gallery.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -129,18 +131,20 @@
                     <div class="step-number">4</div>
                     <div class="step-content">
                         <h3>Daftar Ulang</h3>
-                        <p>Melakukan daftar ulang secara langsung melalui Admin kami yang berada di  Ruang Office Brilliant English Course.</p>
+                        <p>Melakukan daftar ulang secara langsung melalui Admin kami yang berada di Ruang Office
+                            Brilliant English Course.</p>
                     </div>
-                </div>
+
+                </div>
 
                 <div class="flow-step">
                     <div class="step-number">5</div>
                     <div class="step-content">
                         <h3>Siap Belajar!</h3>
                         <p>Selamat! Anda resmi terdaftar dan siap mengikuti program pembelajaran di Brilliant English
-                                Course.</p>
+                            Course.</p>
+                    </div>
                 </div>
-            </div>
     </section>
     </div>
     </div>
@@ -154,22 +158,27 @@
             </path>
         </svg>
     </div>
-
     <div class="container">
         {{-- Loop untuk menampilkan semua program yang aktif --}}
         @foreach ($programs->where('status', 'aktif') as $index => $program)
-    
-            {{-- Logika untuk kelas 'active' dan ID dihapus agar semua tampil --}}
             <div class="program-detail @if ($index % 2 == 0) layout-left @else layout-right @endif">
-    
                 <div class="program-content-container">
-    
+
                     {{-- Kartu teks --}}
                     <div class="card-info">
                         <div class="content-text content-structured">
-                            <h3>{{ $program->judul }}</h3>
-                            <p class="description">{{ $program->deskripsi }}</p>
-    
+
+                            {{-- Judul: bold, center, font Poppins / Times --}}
+                            <h3
+                                style="font-weight: bold; text-align: center; font-family: 'Poppins', 'Times New Roman', serif;">
+                                {{ $program->judul }}
+                            </h3>
+
+                            {{-- Deskripsi: justify dan support baris baru --}}
+                            <p class="description" style="text-align: justify;">
+                                {!! nl2br(e($program->deskripsi)) !!}
+                            </p>
+
                             <div class="benefits-container">
                                 <p class="benefits-title"><strong>Keunggulan Program:</strong></p>
                                 <div class="benefits-grid">
@@ -178,30 +187,34 @@
                                     @endphp
                                     @foreach ($benefits as $item)
                                         @if (trim($item) != '')
-                                            <div class="benefit-item"><i class="fas fa-check-circle"></i>
-                                                {{ trim($item) }}</div>
+                                            <div class="benefit-item">
+                                                <i class="fas fa-check-circle"></i> {{ trim($item) }}
+                                            </div>
                                         @endif
                                     @endforeach
                                 </div>
                             </div>
+
                         </div>
                     </div>
+
                     {{-- Gambar --}}
                     <div class="content-image card-image">
-                        <img src="{{ asset('uploads/programs/' . $program->gambar) }}"
-                             alt="{{ $program->judul }}" onclick="openLightbox(this)">
+                        <img src="{{ asset('uploads/programs/' . $program->gambar) }}" alt="{{ $program->judul }}"
+                            onclick="openLightbox(this)">
                     </div>
-                    
-    
+
                 </div>
             </div>
         @endforeach
     </div>
-    
-        <section class="program-section" id="program">
-            <div class="container">
-               
-                    <div class="program-card-image-wrapper">
+
+
+
+    <section class="program-section" id="program">
+        <div class="container">
+
+            <div class="program-card-image-wrapper">
                 <div class="text-center mb-5">
                     <h2>PROGRAM</h2>
                     <p class="lead text-muted">Temukan program yang paling sesuai dengan tujuan Anda.</p>
@@ -219,20 +232,23 @@
                         <div class="program-item" data-filter="offline">
                             <div class="program-card">
                                 <div class="program-card-image-wrapper">
-                          
-              <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img" alt="{{ $program->nama }}">
-                                    @if ($program->is_active)
 
+                                    <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img"
+                                        alt="{{ $program->nama }}">
+                                    @if ($program->is_active)
                                     @endif
                                 </div>
                                 <div class="program-card-body">
                                     <h5 class="program-card-title">{{ $program->nama }}</h5>
                                     <p class="program-card-info">
                                         <i class="fas fa-calendar-alt"></i>
-                                        {{ \Carbon\Carbon::parse($program->jadwal_mulai)->format('d M') }} - {{ \Carbon\Carbon::parse($program->jadwal_selesai)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($program->jadwal_mulai)->format('d M') }} -
+                                        {{ \Carbon\Carbon::parse($program->jadwal_selesai)->format('d M Y') }}
                                     </p>
-                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}</p>
-                                    <a href="{{ route('public.program.offline.show', $program->slug) }}" class="btn btn-success">Lihat Detail</a>
+                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}
+                                    </p>
+                                    <a href="{{ route('public.program.offline.show', $program->slug) }}"
+                                        class="btn btn-success">Lihat Detail</a>
 
                                 </div>
                             </div>
@@ -243,11 +259,11 @@
                     {{-- Loop untuk Program ONLINE --}}
                     @forelse ($onlinePrograms as $program)
                         <div class="program-item" data-filter="online">
-                             <div class="program-card">
+                            <div class="program-card">
                                 <div class="program-card-image-wrapper">
-                                    <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img" alt="{{ $program->nama }}">
+                                    <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img"
+                                        alt="{{ $program->nama }}">
                                     @if ($program->is_active)
-
                                     @endif
                                 </div>
                                 <div class="program-card-body">
@@ -256,8 +272,10 @@
                                         <i class="fas fa-tag"></i>
                                         Kategori: {{ $program->kategori ?? '-' }}
                                     </p>
-                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}</p>
-                                    <a href="{{ route('public.program.online.show', $program->slug) }}" class="btn btn-success">Lihat Detail</a>
+                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}
+                                    </p>
+                                    <a href="{{ route('public.program.online.show', $program->slug) }}"
+                                        class="btn btn-success">Lihat Detail</a>
 
                                 </div>
                             </div>
@@ -281,53 +299,53 @@
     </div>
 
 
-            <script>
- document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const programItems = document.querySelectorAll('.program-item');
-    const noProgramMessage = document.getElementById('no-program-message');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const programItems = document.querySelectorAll('.program-item');
+            const noProgramMessage = document.getElementById('no-program-message');
 
-    function filterItems(filterValue) {
-        let visibleCount = 0;
-        programItems.forEach(item => {
-            if (item.dataset.filter === filterValue) {
-                item.classList.remove('hidden');
-                visibleCount++;
+            function filterItems(filterValue) {
+                let visibleCount = 0;
+                programItems.forEach(item => {
+                    if (item.dataset.filter === filterValue) {
+                        item.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    noProgramMessage.style.display = 'block';
+                } else {
+                    noProgramMessage.style.display = 'none';
+                }
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const filterValue = this.dataset.filter;
+                    filterItems(filterValue);
+                });
+            });
+
+            const initialActiveButton = document.querySelector('.filter-btn.active');
+            if (initialActiveButton) {
+                filterItems(initialActiveButton.dataset.filter);
             } else {
-                item.classList.add('hidden');
+                // Jika tidak ada yang aktif, tampilkan yang pertama secara default
+                if (filterButtons.length > 0) {
+                    filterButtons[0].classList.add('active');
+                    filterItems(filterButtons[0].dataset.filter);
+                }
             }
         });
+    </script>
 
-        if (visibleCount === 0) {
-            noProgramMessage.style.display = 'block';
-        } else {
-            noProgramMessage.style.display = 'none';
-        }
-    }
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            const filterValue = this.dataset.filter;
-            filterItems(filterValue);
-        });
-    });
-
-    const initialActiveButton = document.querySelector('.filter-btn.active');
-    if (initialActiveButton) {
-        filterItems(initialActiveButton.dataset.filter);
-    } else {
-        // Jika tidak ada yang aktif, tampilkan yang pertama secara default
-        if(filterButtons.length > 0){
-             filterButtons[0].classList.add('active');
-             filterItems(filterButtons[0].dataset.filter);
-        }
-    }
-});
-</script>
-
-           
 
     <link rel="stylesheet" href="{{ asset('css/program.css') }}">
 
@@ -353,105 +371,112 @@
         });
     </script>
 
-<section class="camp-section"id="camp">
-    <div class="container">
-       
+    <section class="camp-section"id="camp">
+        <div class="container">
+
             <div class="program-card-image-wrapper">
-        <div class="text-center mb-5">
-            <h2 class="section-title-camp">CAMP BIEPLUS</h2>
-            <p class="section-subtitle-camp">CAMP BIEPLUS menawarkan kenyamanan, fasilitas lengkap, dan lokasi strategis untuk mendukung pengalaman belajar terbaik Anda di Kampung Inggris Pare.</p>
-        </div>
-
-        <div class="camp-grid">
-            {{-- Loop data dari controller --}}
-            @forelse ($camps as $camp)
-            <div class="camp-card">
-                <div class="camp-card-image">
-                    {{-- Kita gunakan thumbnail utama. Untuk galeri kecil di dalam kartu akan memerlukan struktur database yang berbeda --}}
-                    <img src="{{ asset('upload/camp/' . $camp->thumbnail) }}" alt="{{ $camp->nama }}">
+                <div class="text-center mb-5">
+                    <h2 class="section-title-camp">CAMP BIEPLUS</h2>
+                    <p class="section-subtitle-camp">CAMP BIEPLUS menawarkan kenyamanan, fasilitas lengkap, dan lokasi
+                        strategis untuk mendukung pengalaman belajar terbaik Anda di Kampung Inggris Pare.</p>
                 </div>
-                <div class="camp-card-body">
-                    <h3 class="camp-card-title">{{ $camp->nama }}</h3>
-                    <p class="camp-card-description">
-                        {{-- Asumsi Anda memiliki kolom 'deskripsi' di tabel camp Anda --}}
-                        {{ $camp->deskripsi ?? 'Pilihan terbaik dengan fasilitas modern dan kenyamanan optimal untuk pengalaman belajar yang maksimal.' }}
-                    </p>
-                    <div class="promo-banner">
-                        <i class="fas fa-star"></i> Special Promo Available <i class="fas fa-fire"></i>
-                    </div>
-                    <a href="{{ route('camps.show', $camp->slug) }}" class="btn-details">Lihat Selengkapnya →</a>                </div>
-            </div>
-                @empty
-            <div class="col-12 text-center">
-                <p class="text-muted">Belum ada informasi camp yang tersedia.</p>
-            </div>
-            @endforelse
-        </div>
-    </div>
-</section>
 
-            <div class="wave-divider5">
-                <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                    <path class="shape-fill5"
-                        d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                    </path>
-                </svg>
+                <div class="camp-grid">
+                    {{-- Loop data dari controller --}}
+                    @forelse ($camps as $camp)
+                        <div class="camp-card">
+                            <div class="camp-card-image">
+                                {{-- Kita gunakan thumbnail utama. Untuk galeri kecil di dalam kartu akan memerlukan struktur database yang berbeda --}}
+                                <img src="{{ asset('upload/camp/' . $camp->thumbnail) }}" alt="{{ $camp->nama }}">
+                            </div>
+                            <div class="camp-card-body">
+                                <h3 class="camp-card-title">{{ $camp->nama }}</h3>
+                                <p class="camp-card-description">
+                                    {{-- Asumsi Anda memiliki kolom 'deskripsi' di tabel camp Anda --}}
+                                    {{ $camp->deskripsi ?? 'Pilihan terbaik dengan fasilitas modern dan kenyamanan optimal untuk pengalaman belajar yang maksimal.' }}
+                                </p>
+                                <div class="promo-banner">
+                                    <i class="fas fa-star"></i> Special Promo Available <i class="fas fa-fire"></i>
+                                </div>
+                                <a href="{{ route('camps.show', $camp->slug) }}" class="btn-details">Lihat
+                                    Selengkapnya →</a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Belum ada informasi camp yang tersedia.</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
+    </section>
+
+    <div class="wave-divider5">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path class="shape-fill5"
+                d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
 
     <section id="galeri" class="gallery">
         <h2 class="section-title">GALLERY</h2>
 
-    <div class="gallery-slider-wrapper">
-        <button class="gallery-nav left" onclick="slideGalleryGrid(-1)">
-    <i class="fas fa-chevron-left"></i>
-</button>
+        <div class="gallery-slider-wrapper">
+            <button class="gallery-nav left" onclick="slideGalleryGrid(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
 
-        <div class="gallery-scroll-outer">
-            <div class="gallery-scroll-inner" id="gallerySlider">
-                @php $index = 0; @endphp
-                @foreach ($galleries as $gallery)
-                    @if ($gallery->images->isNotEmpty())
-                        <div class="gallery-frame text-center" data-index="{{ $index }}">
-    <img src="{{ asset('storage/' . $gallery->images->first()->image_path) }}"
-        alt="{{ $gallery->title }}" class="gallery-thumbnail"
-        onclick="openGalleryModal({{ $gallery->id }})">
-    
-    <div class="gallery-caption">
-        <h5>{{ $gallery->title }}</h5>
-        <p>{{ Str::limit($gallery->deskripsi ?? 'Galeri kegiatan Brilliant', 50) }}</p>
-    </div>
-</div>
+            <div class="gallery-scroll-outer">
+                <div class="gallery-scroll-inner" id="gallerySlider">
+                    @php $index = 0; @endphp
+                    @foreach ($galleries as $gallery)
+                        @if ($gallery->images->isNotEmpty())
+                            <div class="gallery-frame text-center" data-index="{{ $index }}">
+                                <img src="{{ asset('storage/' . $gallery->images->first()->image_path) }}"
+                                    alt="{{ $gallery->title }}" class="gallery-thumbnail"
+                                    onclick="openGalleryModal({{ $gallery->id }})">
 
-
-                        <!-- Modal -->
-                        <div id="modal-{{ $gallery->id }}" class="gallery-modal">
-                            <div class="modal-content">
-                                <span class="close-btn" onclick="closeGalleryModal({{ $gallery->id }})">&times;</span>
-                                <h3>{{ $gallery->title }}</h3>
-                                <div class="modal-slider-wrapper">
-                                    <button class="nav-btn left" onclick="slideGallery({{ $gallery->id }}, -1)">&#8592;</button>
-                                    <div class="modal-slider" id="slider-{{ $gallery->id }}">
-                                        @foreach ($gallery->images as $image)
-                                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Image">
-                                        @endforeach
-                                    </div>
-                                    <button class="nav-btn right" onclick="slideGallery({{ $gallery->id }}, 1)">&#8594;</button>
+                                <div class="gallery-caption">
+                                    <h5>{{ $gallery->title }}</h5>
+                                    <p>{{ Str::limit($gallery->deskripsi ?? 'Galeri kegiatan Brilliant', 50) }}</p>
                                 </div>
                             </div>
-                        </div>
-                        @php $index++; @endphp
-                    @endif
-                @endforeach
+
+
+                            <!-- Modal -->
+                            <div id="modal-{{ $gallery->id }}" class="gallery-modal">
+                                <div class="modal-content">
+                                    <span class="close-btn"
+                                        onclick="closeGalleryModal({{ $gallery->id }})">&times;</span>
+                                    <h3>{{ $gallery->title }}</h3>
+                                    <div class="modal-slider-wrapper">
+                                        <button class="nav-btn left"
+                                            onclick="slideGallery({{ $gallery->id }}, -1)">&#8592;</button>
+                                        <div class="modal-slider" id="slider-{{ $gallery->id }}">
+                                            @foreach ($gallery->images as $image)
+                                                <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                    alt="Image">
+                                            @endforeach
+                                        </div>
+                                        <button class="nav-btn right"
+                                            onclick="slideGallery({{ $gallery->id }}, 1)">&#8594;</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @php $index++; @endphp
+                        @endif
+                    @endforeach
+                </div>
             </div>
+
+            <button class="gallery-nav right" onclick="slideGalleryGrid(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
+    </section>
 
-        <button class="gallery-nav right" onclick="slideGalleryGrid(1)">
-    <i class="fas fa-chevron-right"></i>
-</button>
-    </div>
-</section>
 
- 
 
     <script>
         function openGalleryModal(id) {
@@ -482,67 +507,31 @@
         <img class="lightbox-content" id="lightboxImg">
     </div>
 
- <div class="wave-divider6">
-                <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                    <path class="shape-fill6"
-                        d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                    </path>
-                </svg>
-            </div>
+    <div class="wave-divider6">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path class="shape-fill6"
+                d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
 
-
-    <section class="contact-section"
-        style="background-color: #F7F7F7FF; padding: 40px 0; display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-        <div style="flex: 1 1 400px; min-width: 300px; height: 300px; border: 1px solid #ccc; background: #fff;">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5003.899952911135!2d112.19113927974144!3d-7.75928448127593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e785db44d753ad7%3A0xee91fffa177f7176!2sBriliant%20English%20Course%20Camp%2016!5e0!3m2!1sid!2sid!4v1751310522673!5m2!1sid!2sid"
-                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-
-        <div id="kontak" class="contact-box"
-            style="background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 24px; flex: 1 1 350px; min-width: 300px;">
-            <h2 style="text-align: center;">Hubungi Kami</h2>
-            <p style="color: #000;"><strong>Alamat:</strong><br>Jl. Flamboyan No.48, Mulyoasri, Tulungrejo, Kec. Pare,
-                Kabupaten Kediri, Jawa Timur 64212</p>
-            <p><strong>Email:</strong><br>
-                <a href="mailto:info@kampunginggris.com"
-                    class="text-blue-600 hover:underline">info@kampunginggris.com</a>
-            </p>
-            <div>
-                <p class="font-semibold text-gray-700">Sosial Media:</p>
-                <p class="text-blue-600">
-                    <a href="https://instagram.com/your_instagram" target="_blank" class="hover:underline"
-                        style="margin-right: 10px;">
-                        <i class="fab fa-instagram" style="margin-right: 5px;"></i>Instagram
-                    </a>
-                    |
-                    <a href="https://facebook.com/your_facebook" target="_blank" class="hover:underline"
-                        style="margin-left: 10px;">
-                        <i class="fab fa-facebook" style="margin-right: 5px;"></i>Facebook
-                    </a>
-                </p>
-            </div>
-        </div>
-    </section>
 
     <footer>
         © 2025 Brilliant English Course. Hak Cipta Dilindungi Oleh Undang-Undang
     </footer>
 
-   <div class="wa-sticky-wrapper">
-    <div class="wa-circle-row">
-        <a href="https://wa.me/6281234567890" class="wa-circle tooltip" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            <span class="tooltip-text">Contact Person 1</span>
-        </a>
-        <a href="https://wa.me/6289876543210" class="wa-circle tooltip" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            <span class="tooltip-text">Contact Person 2</span>
-        </a>
+    <div class="wa-sticky-wrapper">
+        <div class="wa-circle-row">
+            <a href="https://wa.me/6281234567890" class="wa-circle tooltip" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span class="tooltip-text">Contact Person 1</span>
+            </a>
+            <a href="https://wa.me/6289876543210" class="wa-circle tooltip" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span class="tooltip-text">Contact Person 2</span>
+            </a>
+        </div>
     </div>
-</div>
 
 
     <script>
@@ -560,6 +549,9 @@
             });
         });
     </script>
+
+    @include('partials.whatsapp-floating')
+
 </body>
 
 </html>

@@ -93,7 +93,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')  ->name('admin.') ->g
     Route::resource('galleries', GalleryController::class);
     Route::delete('galleries/images/{id}', [GalleryController::class, 'destroyImage'])->name('galleries.images.destroy');
 
-
     //program camp
     Route::resource('programs/camp', ProgramCampController::class)->names('programs.camp');
     Route::get('/camps/{camp:slug}', [ProgramCampController::class, 'publicShow'])->name('camps.show');
@@ -113,4 +112,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')  ->name('admin.') ->g
 
     //sosmed
     Route::resource('sosmed', SosmedController::class);
+
+    //CSV Export
+    Route::get('/pendaftaran-online/export', [PendaftaranOnlineController::class, 'exportCsv'])
+        ->name('pendaftaran.online.export');
+
+    //CSV Export
+    Route::get('/pendaftaran-offline/export', [PendaftaranOfflineController::class, 'exportCsvOffline'])
+        ->name('pendaftaran.offline.export');
 });

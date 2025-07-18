@@ -57,11 +57,12 @@ class ProgramOfflineController extends Controller
 
         return redirect()->route('admin.offline.index')->with('success', 'Program offline berhasil ditambahkan.');
     }
+
+
     public function edit(ProgramOffline $offline)
     {
         return view('admin.programs.offline.edit', ['offline' => $offline]);
     }
-
     public function update(Request $request, ProgramOffline $offline)
     {
         $request->validate([
@@ -85,33 +86,31 @@ class ProgramOfflineController extends Controller
             'lama_program',
             'kategori',
             'harga',
-            'features_program',
             'lokasi',
             'jadwal_mulai',
             'jadwal_selesai',
             'kuota',
-            'is_active',
+            'is_active'
         ]);
 
-        // Hapus thumbnail jika dicentang
+        // Fitur diformat sebagai array
+        $data['features_program'] = array_filter(array_map('trim', explode("\n", $request->input('features_program', ''))));
+
+        // Thumbnail logic
         if ($request->has('hapus_thumbnail')) {
-            if ($offline->thumbnail && file_exists(public_path('uploads/thumbnails/' . $offline->thumbnail))) {
-                unlink(public_path('uploads/thumbnails/' . $offline->thumbnail));
+            if ($offline->thumbnail && Storage::disk('public')->exists($offline->thumbnail)) {
+                Storage::disk('public')->delete($offline->thumbnail);
             }
             $data['thumbnail'] = null;
         }
 
-        // Upload thumbnail baru jika ada
         if ($request->hasFile('thumbnail')) {
-            // Hapus thumbnail lama jika ada
-            if ($offline->thumbnail && file_exists(public_path('uploads/thumbnails/' . $offline->thumbnail))) {
-                unlink(public_path('uploads/thumbnails/' . $offline->thumbnail));
+            if ($offline->thumbnail && Storage::disk('public')->exists($offline->thumbnail)) {
+                Storage::disk('public')->delete($offline->thumbnail);
             }
 
-            $file = $request->file('thumbnail');
-            $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/thumbnails'), $namaFile);
-            $data['thumbnail'] = $namaFile;
+            $path = $request->file('thumbnail')->store('thumbnails/program_offline', 'public');
+            $data['thumbnail'] = $path;
         }
 
         $offline->update($data);

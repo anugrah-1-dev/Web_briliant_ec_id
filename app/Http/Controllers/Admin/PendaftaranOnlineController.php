@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\PendaftaranProgramOnline;
+use App\Exports\PendaftaranOnlineExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PendaftaranOnlineController extends Controller
 {
@@ -64,5 +66,10 @@ class PendaftaranOnlineController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil! TRX ID: ' . $trx_id);
+    }
+
+    public function exportCsv()
+    {
+        return Excel::download(new PendaftaranOnlineExport, 'pendaftaran_program_online.xlsx');
     }
 }

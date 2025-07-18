@@ -19,15 +19,15 @@ class ProgramOffline extends Model
         'harga',
         'features_program',
         'lokasi',
-        'jadwal_mulai',
+        'jadwal_mula    i',
         'jadwal_selesai',
         'kuota',
         'is_active',
         'thumbnail'
     ];
-    
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 }

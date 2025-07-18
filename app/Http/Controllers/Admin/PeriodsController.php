@@ -8,27 +8,29 @@ use Illuminate\Http\Request;
 
 class PeriodsController extends Controller
 {
+    // TAMPILKAN DATA
     public function index()
     {
         $periods = Period::orderBy('date', 'desc')->paginate(10);
         return view('admin.periods.index', compact('periods'));
     }
 
+    // TAMBAH DATA
     public function store(Request $request)
     {
         $request->validate([
             'date' => 'required|date|unique:periods,date',
-            'is_active' => 'nullable|boolean',
         ]);
 
-        // If this period will be active, deactivate all others first
-        if ($request->is_active) {
+        $isActive = $request->has('is_active');
+
+        if ($isActive) {
             Period::query()->update(['is_active' => false]);
         }
 
         Period::create([
             'date' => $request->date,
-            'is_active' => $request->is_active ?? false,
+            'is_active' => $isActive,
         ]);
 
         return redirect()->back()->with('alert', [
@@ -38,23 +40,23 @@ class PeriodsController extends Controller
         ]);
     }
 
+    // UPDATE DATA
     public function update(Request $request, $id)
     {
         $request->validate([
             'date' => 'required|date|unique:periods,date,' . $id,
-            'is_active' => 'nullable|boolean',
         ]);
 
-        $period = Period::findOrFail($id);
+        $isActive = $request->has('is_active');
 
-        // If this period will be active, deactivate all others first
-        if ($request->is_active) {
+        if ($isActive) {
             Period::where('id', '!=', $id)->update(['is_active' => false]);
         }
 
+        $period = Period::findOrFail($id);
         $period->update([
             'date' => $request->date,
-            'is_active' => $request->is_active ?? false,
+            'is_active' => $isActive,
         ]);
 
         return redirect()->back()->with('alert', [
@@ -64,13 +66,13 @@ class PeriodsController extends Controller
         ]);
     }
 
+    // HAPUS DATA
     public function destroy($id)
     {
         $period = Period::findOrFail($id);
 
-        // If deleting the active period, you might want to handle this case
         if ($period->is_active) {
-            // Optionally activate another period here if needed
+            // Bisa otomatis aktifkan periode terbaru kalau dibutuhkan
         }
 
         $period->delete();
