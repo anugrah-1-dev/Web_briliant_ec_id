@@ -161,7 +161,9 @@
     <div class="container">
         {{-- Loop untuk menampilkan semua program yang aktif --}}
         @foreach ($programs->where('status', 'aktif') as $index => $program)
+
             <div class="program-detail @if ($index % 2 == 0) layout-left @else layout-right @endif">
+
                 <div class="program-content-container">
 
                     {{-- Kartu teks --}}
@@ -203,13 +205,10 @@
                         <img src="{{ asset('uploads/programs/' . $program->gambar) }}" alt="{{ $program->judul }}"
                             onclick="openLightbox(this)">
                     </div>
-
                 </div>
             </div>
         @endforeach
     </div>
-
-
 
     <section class="program-section" id="program">
         <div class="container">
@@ -245,8 +244,8 @@
                                         {{ \Carbon\Carbon::parse($program->jadwal_mulai)->format('d M') }} -
                                         {{ \Carbon\Carbon::parse($program->jadwal_selesai)->format('d M Y') }}
                                     </p>
-                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}
-                                    </p>
+
+                                    <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }} </p>
                                     <a href="{{ route('public.program.offline.show', $program->slug) }}"
                                         class="btn btn-success">Lihat Detail</a>
 
@@ -272,6 +271,7 @@
                                         <i class="fas fa-tag"></i>
                                         Kategori: {{ $program->kategori ?? '-' }}
                                     </p>
+
                                     <p class="program-card-price">Rp {{ number_format($program->harga, 0, ',', '.') }}
                                     </p>
                                     <a href="{{ route('public.program.online.show', $program->slug) }}"
@@ -300,7 +300,9 @@
 
 
     <script>
+
         document.addEventListener('DOMContentLoaded', function() {
+
             const filterButtons = document.querySelectorAll('.filter-btn');
             const programItems = document.querySelectorAll('.program-item');
             const noProgramMessage = document.getElementById('no-program-message');
@@ -325,6 +327,7 @@
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
+
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
                     const filterValue = this.dataset.filter;
@@ -350,7 +353,7 @@
     <link rel="stylesheet" href="{{ asset('css/program.css') }}">
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.program-tabs .tab-button');
             const contents = document.querySelectorAll('.program-detail');
 
@@ -370,7 +373,13 @@
             });
         });
     </script>
-
+    <div class="wave-divider7">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path class="shape-fill7"
+                d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
     <section class="camp-section"id="camp">
         <div class="container">
 
@@ -419,63 +428,62 @@
         </svg>
     </div>
 
-    <section id="galeri" class="gallery">
-        <h2 class="section-title">GALLERY</h2>
+        <section id="galeri" class="gallery">
+            <h2 class="section-title">GALLERY</h2>
+            <p class="section-subtitle text-center mb-4">
+                Dokumentasi kegiatan dan momen-momen seru bersama Brilliant English Course
+            </p>
+            <div class="gallery-slider-wrapper">
+                <button class="gallery-nav left" onclick="slideGalleryGrid(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
 
-        <div class="gallery-slider-wrapper">
-            <button class="gallery-nav left" onclick="slideGalleryGrid(-1)">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+                <div class="gallery-scroll-outer">
+                    <div class="gallery-scroll-inner" id="gallerySlider">
+                        @php $index = 0; @endphp
+                        @foreach ($galleries as $gallery)
+                            @if ($gallery->images->isNotEmpty())
+                                <div class="gallery-frame text-center" data-index="{{ $index }}">
+                                    <img src="{{ asset('storage/' . $gallery->images->first()->image_path) }}"
+                                        alt="{{ $gallery->title }}" class="gallery-thumbnail"
+                                        onclick="openGalleryModal({{ $gallery->id }})">
 
-            <div class="gallery-scroll-outer">
-                <div class="gallery-scroll-inner" id="gallerySlider">
-                    @php $index = 0; @endphp
-                    @foreach ($galleries as $gallery)
-                        @if ($gallery->images->isNotEmpty())
-                            <div class="gallery-frame text-center" data-index="{{ $index }}">
-                                <img src="{{ asset('storage/' . $gallery->images->first()->image_path) }}"
-                                    alt="{{ $gallery->title }}" class="gallery-thumbnail"
-                                    onclick="openGalleryModal({{ $gallery->id }})">
-
-                                <div class="gallery-caption">
-                                    <h5>{{ $gallery->title }}</h5>
-                                    <p>{{ Str::limit($gallery->deskripsi ?? 'Galeri kegiatan Brilliant', 50) }}</p>
-                                </div>
-                            </div>
-
-
-                            <!-- Modal -->
-                            <div id="modal-{{ $gallery->id }}" class="gallery-modal">
-                                <div class="modal-content">
-                                    <span class="close-btn"
-                                        onclick="closeGalleryModal({{ $gallery->id }})">&times;</span>
-                                    <h3>{{ $gallery->title }}</h3>
-                                    <div class="modal-slider-wrapper">
-                                        <button class="nav-btn left"
-                                            onclick="slideGallery({{ $gallery->id }}, -1)">&#8592;</button>
-                                        <div class="modal-slider" id="slider-{{ $gallery->id }}">
-                                            @foreach ($gallery->images as $image)
-                                                <img src="{{ asset('storage/' . $image->image_path) }}"
-                                                    alt="Image">
-                                            @endforeach
-                                        </div>
-                                        <button class="nav-btn right"
-                                            onclick="slideGallery({{ $gallery->id }}, 1)">&#8594;</button>
+                                    <div class="gallery-caption">
+                                        <h5>{{ $gallery->title }}</h5>
+                                        <p>{{ Str::limit($gallery->deskripsi ?? 'Galeri kegiatan Brilliant', 50) }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            @php $index++; @endphp
-                        @endif
-                    @endforeach
+
+
+                                <!-- Modal -->
+                                <div id="modal-{{ $gallery->id }}" class="gallery-modal">
+                                    <div class="modal-content">
+                                        <span class="close-btn" onclick="closeGalleryModal({{ $gallery->id }})">&times;</span>
+                                        <h3>{{ $gallery->title }}</h3>
+                                        <div class="modal-slider-wrapper">
+                                            <button class="nav-btn left"
+                                                onclick="slideGallery({{ $gallery->id }}, -1)">&#8592;</button>
+                                            <div class="modal-slider" id="slider-{{ $gallery->id }}">
+                                                @foreach ($gallery->images as $image)
+                                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="Image">
+                                                @endforeach
+                                            </div>
+                                            <button class="nav-btn right"
+                                                onclick="slideGallery({{ $gallery->id }}, 1)">&#8594;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @php $index++; @endphp
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
+
+                <button class="gallery-nav right" onclick="slideGalleryGrid(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
-
-            <button class="gallery-nav right" onclick="slideGalleryGrid(1)">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </section>
-
+        </section>
 
 
     <script>
@@ -500,8 +508,6 @@
         }
     </script>
 
-
-
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <span class="lightbox-close" onclick="closeLightbox()">x</span>
         <img class="lightbox-content" id="lightboxImg">
@@ -515,40 +521,61 @@
         </svg>
     </div>
 
+    <link rel="stylesheet" href="{{ asset('css/sosmed.css') }}">
+
+    <section id="sosmed" class="sosmed-section">
+        <div class="container">
+            <h2 class="section-title">Sosial Media Kami</h2>
+            @php
+                // Cek apakah ada data sosmed di salah satu platform
+                $hasSosmed = collect($groupedSosmed)->flatten(1)->isNotEmpty();
+            @endphp
+            @if (!$hasSosmed)
+                <p class="text-center">Belum ada data yang ditambahkan. Stay tuned!</p>
+            @else
+                @foreach ($groupedSosmed as $platform => $items)
+                    @if (count($items) > 0)
+                        <div class="mb-5">
+                            <h4 class="section-subtitle fw-semibold mb-4">{{ $platform }}</h4>
+                            <div class="sosmed-grid">
+                                @foreach ($items as $item)
+                                    @php
+                                        if ($platform === 'YouTube') {
+                                            preg_match('/(?:youtu\.be\/|v=)([^&\/\?]+)/', $item->url, $matches);
+                                            $youtubeId = $matches[1] ?? null;
+                                            $thumb = $youtubeId ? "https://img.youtube.com/vi/$youtubeId/hqdefault.jpg" : null;
+                                        } else {
+                                            $thumb = $item->image_path ? asset('storage/' . $item->image_path) : null;
+                                        }
+                                    @endphp
+
+                                    <div class="sosmed-card">
+                                        @if ($thumb)
+                                            <div class="sosmed-card-image">
+                                                <img src="{{ $thumb }}" alt="{{ $item->nama }}">
+                                            </div>
+                                        @endif
+                                        <div class="sosmed-card-body">
+                                            <h5 class="sosmed-card-title">{{ $item->nama }}</h5>
+                                            <a href="{{ $item->url }}" class="sosmed-card-link" target="_blank">Lihat</a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @endif
+        </div>
+    </section>
+
+
+
 
     <footer>
         © 2025 Brilliant English Course. Hak Cipta Dilindungi Oleh Undang-Undang
     </footer>
 
-    <div class="wa-sticky-wrapper">
-        <div class="wa-circle-row">
-            <a href="https://wa.me/6281234567890" class="wa-circle tooltip" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-                <span class="tooltip-text">Contact Person 1</span>
-            </a>
-            <a href="https://wa.me/6289876543210" class="wa-circle tooltip" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-                <span class="tooltip-text">Contact Person 2</span>
-            </a>
-        </div>
-    </div>
-
-
-    <script>
-        // Tooltip effect for WhatsApp buttons
-        document.querySelectorAll('.wa-circle.tooltip').forEach(function(el) {
-            el.addEventListener('mouseenter', function() {
-                const tooltip = el.querySelector('.tooltip-text');
-                tooltip.style.visibility = 'visible';
-                tooltip.style.opacity = '1';
-            });
-            el.addEventListener('mouseleave', function() {
-                const tooltip = el.querySelector('.tooltip-text');
-                tooltip.style.visibility = 'hidden';
-                tooltip.style.opacity = '0';
-            });
-        });
-    </script>
 
     @include('partials.whatsapp-floating')
 

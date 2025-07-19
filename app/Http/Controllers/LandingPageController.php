@@ -9,6 +9,7 @@ use App\Models\GalleryImage;
 use App\Models\ProgramOffline;
 use App\Models\ProgramOnline;
 use App\Models\ProgramCamp;
+use App\Models\Sosmed;
 use App\Models\Customer_Service;
 
 
@@ -16,17 +17,40 @@ class LandingPageController extends Controller
 {
     public function index()
     {
-        $programs = Program::orderBy('id', 'asc')->get();
-
-        $galleries = Gallery::where('status', 1)
-                ->with('images')
-                ->latest()
-                ->get();
-
+        $programs        = Program::orderBy('id', 'asc')->get();
+        $galleries       = Gallery::where('status', 1)->with('images')->latest()->get();
         $offlinePrograms = ProgramOffline::where('is_active', 1)->latest()->get();
         $onlinePrograms  = ProgramOnline::where('is_active', 1)->latest()->get();
         $camps           = ProgramCamp::orderBy('id', 'asc')->get();
+        $sosmed          = Sosmed::all();
         $contactServices = Customer_Service::all();
+        // Periksa apakah ada data sosmed sama sekali
+
+
+        // Kelompokkan berdasarkan platform sosial media
+        $groupedSosmed = [
+            'YouTube'   => [],
+            'Instagram' => [],
+            'Facebook'  => [],
+            'TikTok'    => [],
+        ];
+        $hasSosmed = collect($groupedSosmed)->flatten(1)->isNotEmpty();
+
+        foreach ($sosmed as $item) {
+            $url = strtolower($item->url); // lowercase untuk akurasi pencarian
+
+            if (str_contains($url, 'youtube.com') || str_contains($url, 'youtu.be')) {
+                $groupedSosmed['YouTube'][] = $item;
+            } elseif (str_contains($url, 'instagram.com')) {
+                $groupedSosmed['Instagram'][] = $item;
+            } elseif (str_contains($url, 'facebook.com')) {
+                $groupedSosmed['Facebook'][] = $item;
+            } elseif (str_contains($url, 'tiktok.com')) {
+                $groupedSosmed['TikTok'][] = $item;
+            }
+        }
+
+      
         
         return view('landingpage', [
             'offlinePrograms' => $offlinePrograms,
@@ -35,6 +59,9 @@ class LandingPageController extends Controller
             'galleries'       => $galleries,
             'camps'           => $camps,
             'contactServices' => $contactServices,
+            'groupedSosmed' => $groupedSosmed,
+            'hasSosmed' => $hasSosmed,
+
         ]);
     }
 
@@ -42,14 +69,12 @@ class LandingPageController extends Controller
     public function showOfflinePublic(ProgramOffline $program)
     {
         if (!$program->is_active) {
-            abort(404); // hanya tampilkan yang aktif
+            abort(404);
         }
 
         return view('programs.offline.show', compact('program'));
     }
 
-
-    // Detail program online (untuk public)
     public function showOnlinePublic(ProgramOnline $program)
     {
         return view('admin.programs.online.show', compact('program'));

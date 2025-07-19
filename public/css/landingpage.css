@@ -579,7 +579,7 @@ body {
 }
 /* Section Gallery */
 .gallery {
-    background-color: #060017;
+    background-color: #2c3e50;
     width: 100%;
     text-align: center;
 
@@ -590,11 +590,10 @@ body {
 .gallery h2 {
     text-align: center;
     font-size: 2.8rem;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     text-transform: uppercase;
     font-weight: 800;
-    color: #ffffff;
-    /* --- Efek Warna Gradient Disalin ke sini --- */
+    color: #e0f7fa;
 }
 
 .gallery-scroll-container.grid-layout {
@@ -608,8 +607,10 @@ body {
 }
 
 .gallery-scroll-outer {
-    overflow: hidden;
-    flex: 1;
+    overflow-x: auto;
+    overflow-y: visible; /* biar gambar tidak terpotong saat zoom */
+    padding: 40px 0; /* menambah jarak atas dan bawah */
+    position: relative;
 }
 
 .gallery-scroll-inner {
@@ -618,7 +619,7 @@ body {
     gap: 16px; /* kasih jarak antar gambar */
     padding: 0 12px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* .gallery-scroll-container {
@@ -650,6 +651,7 @@ body {
     cursor: pointer;
     border: 1px solid #ddd;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
 }
 
 .gallery-frame img.gallery-thumbnail {
@@ -1197,7 +1199,7 @@ body {
 }
 
 .wave-divider3 .shape-fill3 {
-    fill: #060017;
+    fill: #d0e0e3;
 }
 
 .wave-divider4 {
@@ -1218,7 +1220,7 @@ body {
 }
 
 .wave-divider4 .shape-fill4 {
-    fill: #060017; /* Warna atas gelombang */
+    fill: #d0e0e3; /* Warna atas gelombang */
 }
 
 .wave-divider5 {
@@ -1226,7 +1228,7 @@ body {
     height: 150px;
     overflow: hidden;
     line-height: 0;
-    background: #ffffff; /* Bagian bawah putih */
+    background: #d0e0e3; /* Bagian bawah putih */
     margin-top: -1px; /* Hilangkan celah garis putih */
     margin-bottom: -1px; /* Hilangkan celah garis putih */
 }
@@ -1238,7 +1240,7 @@ body {
 }
 
 .wave-divider5 .shape-fill5 {
-    fill: #060017; /* Warna atas gelombang */
+    fill: #2c3e50; /* Warna atas gelombang */
 }
 
 .wave-divider6 {
@@ -1246,7 +1248,7 @@ body {
     height: 150px;
     overflow: hidden;
     line-height: 0;
-    background: #060017; /* Bagian bawah putih */
+    background: #2c3e50; /* Bagian bawah putih */
     margin-top: -1px; /* Hilangkan celah garis putih */
     margin-bottom: -1px; /* Hilangkan celah garis putih */
 }
@@ -1258,7 +1260,27 @@ body {
 }
 
 .wave-divider6 .shape-fill6 {
-    fill: #ffffff; /* Warna atas gelombang */
+    fill: #d0e0e3; /* Warna atas gelombang */
+}
+
+.wave-divider7 {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    line-height: 0;
+    background: #ffffff; /* Bagian bawah putih */
+    margin-top: -1px; /* Hilangkan celah garis putih */
+    margin-bottom: -1px; /* Hilangkan celah garis putih */
+}
+
+.wave-divider7 svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.wave-divider7 .shape-fill7 {
+    fill: #d0e0e3; /* Warna atas gelombang */
 }
 
 /* 2. HANYA tampilkan yang memiliki kelas 'active' */
@@ -1431,4 +1453,13 @@ body {
 //slider gambar//
 .modal-slider img {
     transition: transform 0.5s ease;
+}
+
+/* bagian gallery */
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #e0f7fa;
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+    margin-bottom: 20px;
 }

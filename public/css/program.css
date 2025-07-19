@@ -8,7 +8,7 @@
 
 .content-text .description {
     font-size: 1rem;
-    line-height: 2.0;
+    line-height: 2;
     color: #000000;
 }
 
@@ -67,10 +67,7 @@
     .layout-right .program-content-container {
         flex-direction: row-reverse;
     }
-
- 
 }
-
 
 /* PENTING: Ini adalah wadah scroll utama */
 .program-content-wrapper {
@@ -240,11 +237,6 @@
 
 /* camp card */
 
-/* Styling Section Camp */
-.camp-section {
-    background-color: #f4f8fb; /* Warna latar belakang abu-abu muda */
-    padding: 80px 0;
-}
 .section-title-camp {
     font-size: 2.5rem;
     font-weight: 700;
@@ -278,7 +270,7 @@
 }
 /* Tambahkan CSS ini */
 .camp-section {
-    background-color: #f4f8fb;
+    background-color: #d0e0e3;
     padding: 80px 0; /* dari 60px */
 }
 
