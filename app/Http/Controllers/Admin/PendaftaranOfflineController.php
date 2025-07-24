@@ -29,6 +29,11 @@ class PendaftaranOfflineController extends Controller
     /**
      * Menampilkan halaman untuk mengedit status pendaftaran.
      */
+ 
+
+    /**
+     * Menampilkan halaman untuk mengedit status pendaftaran.
+     */
     public function edit($id)
     {
         $pendaftaran = PendaftaranProgramOffline::findOrFail($id);
@@ -57,6 +62,7 @@ class PendaftaranOfflineController extends Controller
         $data->delete();
 
         return redirect()->route('admin.pendaftaran.offline.index')->with('success', 'Data pendaftaran berhasil dihapus.');
+   
     }
 
     public function exportCsvOffline()
