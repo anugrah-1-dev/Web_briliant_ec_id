@@ -36,6 +36,8 @@ class PendaftranCampController extends Controller
     /**
      * Menyimpan data pendaftaran awal dan redirect ke halaman pemilihan kamar.
      */
+
+
     public function store(Request $request, ProgramCamp $program)
     {
         $validated = $request->validate([
@@ -47,40 +49,38 @@ class PendaftranCampController extends Controller
             'durasi_paket'   => 'required|in:perhari,satu_minggu,dua_minggu,satu_bulan,dua_bulan,tiga_bulan',
         ]);
 
-        // Generate trx_id unik
         $prefix = 'TRXC-' . now()->format('Ymd') . '-';
         $last = PendaftaranProgramCamp::where('trx_id', 'like', $prefix . '%')->orderBy('id', 'desc')->first();
         $nextNumber = $last ? ((int) str_replace($prefix, '', $last->trx_id) + 1) : 1;
         $trx_id = $prefix . $nextNumber;
 
-        // Simpan data pendaftaran
         $pendaftaran = PendaftaranProgramCamp::create([
-            'trx_id'          => $trx_id,
-            'program_camp_id' => $program->id,
-            'period_id'       => $validated['period_id'],
-            'nama_lengkap'    => $validated['nama_lengkap'],
-            'email'           => $validated['email'],
-            'no_hp'           => $validated['no_hp'],
-            'asal_kota'       => $validated['asal_kota'],
-            'durasi_paket'    => $validated['durasi_paket'],
-            'status'          => 'pending',
+            'nama_lengkap'     => $request->nama_lengkap,
+            'email'            => $request->email,
+            'no_hp'            => $request->no_hp,
+            'asal_kota'        => $request->asal_kota,
+            'program_camp_id'  => $program->id,
+            'period_id'        => $request->period_id,
+            'durasi_paket'     => $request->durasi_paket,
+            'status'           => 'pending',
+            'nama_kamar'       => null,
+            'trx_id'           => $trx_id,
         ]);
 
-        // Arahkan ke halaman pemilihan kamar
-        return redirect()->route('public.pendaftaran.camp.kamar', ['trx_id' => $trx_id])
-            ->with('success', 'Pendaftaran berhasil, silakan pilih kamar.');
+        return redirect()->route('camp.room', ['trx_id' => $pendaftaran->trx_id]);
     }
-    /**
-     * Menampilkan halaman pemilihan kamar setelah pendaftaran awal.
-     */
+
     public function halamanKamar($trx_id)
     {
+        // Logika untuk menampilkan halaman pilih kamar berdasarkan trx_id
         $pendaftaran = PendaftaranProgramCamp::where('trx_id', $trx_id)->firstOrFail();
 
+        // Misal kamu ingin menampilkan daftar kamar juga
         $rooms = Rooms::where('program_camp_id', $pendaftaran->program_camp_id)->get();
 
         return view('camp.room', compact('pendaftaran', 'rooms'));
     }
+
 
 
     public static function filter($rooms, $prefix, $start, $end, $gender = null)

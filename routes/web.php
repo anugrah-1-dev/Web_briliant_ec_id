@@ -37,24 +37,26 @@ Route::get('/camps/{camp:slug}', [CampController::class, 'publicShow'])->name('c
 Route::get('/camp/{slug}/room', [CampController::class, 'room'])->name('camp.room');
 Route::get('/camp/{slug}', [CampController::class, 'show'])->name('camps.show');
 
+// List semua camp
+Route::get('/camps', [CampController::class, 'publicIndex'])->name('camps.index');
 
+// Detail camp (public)
+Route::get('/camps/{camp:slug}', [CampController::class, 'publicShow'])->name('camps.show');
 
-Route::post('/pendaftaran_program_camp/{programCampId}', [CampController::class, 'storePendaftaran'])->name('camp.pendaftaran.store');
-Route::post('/camp/room/{pendaftaranId}', [CampController::class, 'pilihKamar'])->name('camp.pilihKamar');
-Route::get('/camp/pembayaran/{id}', [CampController::class, 'pembayaran'])->name('camp.pembayaran');
-Route::post('/camp/pembayaran/{id}', [CampController::class, 'submitBuktiPembayaran'])->name('camp.submitPembayaran');
-Route::get('/camp/{slug}/room', [CampController::class, 'pilihKamar'])->name('camp.room');
-
-Route::get('/camp/{program}/daftar', [PendaftranCampController::class, 'showCampPublic'])->name('public.camp.show');
-Route::post('/camp/{program}/daftar', [PendaftranCampController::class, 'daftar'])->name('public.pendaftaran.camp.daftar');
-Route::get('/camp/{trx_id}/kamar', [PendaftranCampController::class, 'halamanKamar'])->name('public.pendaftaran.camp.kamar');
-Route::get('/camp/{trx_id}/pembayaran', [PendaftranCampController::class, 'halamanPembayaran'])->name('public.pendaftaran.camp.pembayaran');
-
-
+// Form pendaftaran awal
 Route::get('/camp/{program}/daftar', [PendaftranCampController::class, 'showForm'])->name('camp.pendaftaran.form');
 Route::post('/camp/{program}/daftar', [PendaftranCampController::class, 'store'])->name('camp.pendaftaran.store');
 
+// Halaman pilih kamar berdasarkan trx_id
+Route::get('/camp/room/{trx_id}', [PendaftranCampController::class, 'halamanKamar'])->name('camp.room');
 
+// Halaman pembayaran berdasarkan id pendaftaran
+Route::get('/camp/pembayaran/{id}', [CampController::class, 'pembayaran'])->name('camp.pembayaran');
+Route::post('/camp/pembayaran/{id}', [CampController::class, 'submitBuktiPembayaran'])->name('camp.submitPembayaran');
+
+Route::bind('pendaftaran', function ($value) {
+    return \App\Models\PendaftaranProgramCamp::where('trx_id', $value)->firstOrFail();
+});
 
 // Jika mau tetap pakai LandingPageController untuk tampilan awal bisa begini:
 Route::get('/landing/program-offline/{program:slug}', [LandingPageController::class, 'showOfflinePublic'])->name('landing.program.offline.show');

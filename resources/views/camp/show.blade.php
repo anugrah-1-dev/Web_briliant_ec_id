@@ -155,6 +155,7 @@
                     <h3 class="fw-bold mb-0 text-center">Camp Registration Form</h3>
                 </div>
                 <div class="card-body p-3 p-lg-4">
+
                     <form action="{{ route('camp.pendaftaran.store', $program->id) }}" method="POST">
                         @csrf
                         <input type="hidden" name="program_id" value="{{ $program->id }}">
@@ -244,18 +245,18 @@
                 </div>
             </div>
 
-            
-            <a href="{{ route('camp.room', ['slug' => $program->slug]) }}" class="btn btn-primary mt-3">
+
+            {{-- <a href="{{ route('camp.room', ['slug' => $program->slug]) }}" class="btn btn-primary mt-3">
                 Pilih Kamar Sekarang
-            </a>
+            </a> --}}
 
 
 
-            <!-- Back Button -->
+            {{-- <!-- Back Button -->
             <div class="text-center mb-4 mb-lg-5">
                 <a href="{{ route('camps.index') }}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">
                     <i class="fas fa-arrow-left me-2"></i> Back to Camp List
                 </a>
-            </div>
+            </div> --}}
         </div>
     @endsection
