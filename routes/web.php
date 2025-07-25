@@ -26,6 +26,8 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\PendaftaranProgramCampController;
 use App\Http\Controllers\PendaftranCampController;
+use App\Http\Controllers\PembayaranController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -171,4 +173,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')  ->name('admin.') ->g
     //csv export camp
     Route::get('/pendaftaran-camp/export', [PendaftaranProgramCampController::class, 'exportCsv'])
         ->name('camp.export');
+    // Pembayaran
+    Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+    Route::post('/upload-bukti', [PembayaranController::class, 'uploadBukti'])->name('bukti.upload');
+
 });

@@ -8,12 +8,9 @@
         @endphp
 
 
-
-
         {{-- <form action="{{ route('camp.pendaftaran.store') }}" method="POST">
         @csrf --}}
-
-
+        
         {{-- === Hidden Input untuk Kamar Terpilih === --}}
         <input type="hidden" name="nama_kamar" id="inputNamaKamar">
         <input type="hidden" name="kamar_id" id="inputKamarId">
@@ -194,10 +191,16 @@
         </div>
 
         {{-- TOMBOL DAFTAR --}}
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary px-5">Daftar Sekarang</button>
-        </div>
+        <form action="{{ route('admin.pembayaran.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="nama_kamar" id="inputNamaKamar">
+            <input type="hidden" name="kamar_id" id="inputKamarId">
+        
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-5">Daftar Sekarang</button>
+            </div>
         </form>
+        
     </div>
     <style>
         .room-layout-wrapper {
