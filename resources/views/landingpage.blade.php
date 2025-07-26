@@ -37,9 +37,10 @@
                     Brilliant English Course, tempat di mana potensi Anda menjadi lebih gemilang!
                 </p>
 
-                <a href="#daftar" class="cta-button" data-aos="fade-up" data-aos-delay="200">
+                <a href="#program" class="cta-button" data-aos="fade-up" data-aos-delay="200">
                     DAFTAR SEKARANG
                 </a>
+                
             </div>
             <button class="nav prev">&#10094;</button>
             <button class="nav next">&#10095;</button>
