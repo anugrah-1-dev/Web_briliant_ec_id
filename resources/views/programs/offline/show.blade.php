@@ -56,10 +56,12 @@
                                                 if (is_string($features)) {
                                                     $decoded = json_decode($features, true);
 
+
                                                     $features =
                                                         json_last_error() === JSON_ERROR_NONE && is_array($decoded)
                                                             ? $decoded
                                                             : explode("\n", $features);
+
                                                 }
                                             @endphp
 
