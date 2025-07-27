@@ -27,22 +27,21 @@
                     @csrf
                     @method('PUT')
 
-                    <x-adminlte-input name="name" label="Nama Bank"
-                        placeholder="Contoh: BRI, BCA"
+                    <x-adminlte-input name="name" label="Nama Bank" placeholder="Contoh: BRI, BCA"
                         value="{{ old('name', $bank->name) }}" required />
 
-                    <x-adminlte-input name="owner" label="Nama Pemilik Rekening"
-                        placeholder="Atas nama rekening"
+                    <x-adminlte-input name="owner" label="Nama Pemilik Rekening" placeholder="Atas nama rekening"
                         value="{{ old('owner', $bank->owner) }}" required />
 
-                    <x-adminlte-input name="number" label="Nomor Rekening"
-                        placeholder="Masukkan nomor rekening"
-                        value="{{ old('number', $bank->number) }}"
-                        pattern="\d{10,}" title="Minimal 10 digit angka" required />
+                    <x-adminlte-input name="number" label="Nomor Rekening" placeholder="Masukkan nomor rekening"
+                        value="{{ old('number', $bank->number) }}" pattern="\d{10,}" title="Minimal 10 digit angka"
+                        required />
 
                     <x-adminlte-select name="status" label="Status" required>
-                        <option value="active" {{ old('status', $bank->status) == 'active' ? 'selected' : '' }}>Aktif</option>
-                        <option value="inactive" {{ old('status', $bank->status) == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                        <option value="active" {{ old('status', $bank->status) == 'active' ? 'selected' : '' }}>Aktif
+                        </option>
+                        <option value="inactive" {{ old('status', $bank->status) == 'inactive' ? 'selected' : '' }}>Tidak
+                            Aktif</option>
                     </x-adminlte-select>
 
                     <div class="mt-3">
@@ -57,3 +56,29 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

@@ -5,7 +5,8 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="m-0">Daftar Permission</h1>
-        <x-adminlte-button label="Tambah Permission" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#createPermissionModal" />
+        <x-adminlte-button label="Tambah Permission" theme="primary" icon="fas fa-plus" data-toggle="modal"
+            data-target="#createPermissionModal" />
     </div>
 @stop
 
@@ -21,13 +22,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
-                            <input type="text" id="searchPermissionInput" class="form-control" placeholder="Cari permission...">
+                            <input type="text" id="searchPermissionInput" class="form-control"
+                                placeholder="Cari permission...">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <select class="form-control" id="guardFilter">
                             <option value="">Semua Guard</option>
-                            @foreach($permissions->pluck('guard_name')->unique() as $guard)
+                            @foreach ($permissions->pluck('guard_name')->unique() as $guard)
                                 <option value="{{ $guard }}">{{ $guard }}</option>
                             @endforeach
                         </select>
@@ -47,46 +49,50 @@
                         </thead>
                         <tbody>
                             @forelse($permissions as $permission)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $permission->name }}</td>
-                                <td>{{ $permission->guard_name }}</td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <x-adminlte-button theme="warning" icon="fas fa-edit"
-                                            onclick="window.location='{{ route('admin.permissions.edit', $permission->id) }}'" title="Edit"/>
-                                        <form method="POST" action="{{ route('admin.permissions.destroy', $permission->id) }}" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-adminlte-button theme="danger" icon="fas fa-trash"
-                                                onclick="confirmDelete(event)" title="Hapus"/>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $permission->name }}</td>
+                                    <td>{{ $permission->guard_name }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <x-adminlte-button theme="warning" icon="fas fa-edit"
+                                                onclick="window.location='{{ route('admin.permissions.edit', $permission->id) }}'"
+                                                title="Edit" />
+                                            <form method="POST"
+                                                action="{{ route('admin.permissions.destroy', $permission->id) }}"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-adminlte-button theme="danger" icon="fas fa-trash"
+                                                    onclick="confirmDelete(event)" title="Hapus" />
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="4" class="text-center">Tidak ada data permission.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">Tidak ada data permission.</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                @if($permissions instanceof \Illuminate\Pagination\LengthAwarePaginator && $permissions->hasPages())
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <div class="dataTables_info">
-                            Menampilkan {{ $permissions->firstItem() }} sampai {{ $permissions->lastItem() }} dari {{ $permissions->total() }} entri
+                @if ($permissions instanceof \Illuminate\Pagination\LengthAwarePaginator && $permissions->hasPages())
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="dataTables_info">
+                                Menampilkan {{ $permissions->firstItem() }} sampai {{ $permissions->lastItem() }} dari
+                                {{ $permissions->total() }} entri
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="float-right">
+                                {{ $permissions->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="float-right">
-                            {{ $permissions->links('pagination::bootstrap-4') }}
-                        </div>
-                    </div>
-                </div>
                 @endif
             </x-adminlte-card>
         </div>
@@ -96,14 +102,14 @@
     <x-adminlte-modal id="createPermissionModal" title="Tambah Permission Baru" theme="lightblue" size="md">
         <form action="{{ route('admin.permissions.store') }}" method="POST">
             @csrf
-            <x-adminlte-input name="name" label="Nama Permission" placeholder="Masukkan nama permission" required/>
+            <x-adminlte-input name="name" label="Nama Permission" placeholder="Masukkan nama permission" required />
             <x-adminlte-select name="guard_name" label="Guard" required>
                 <option value="web">web</option>
                 <option value="api">api</option>
             </x-adminlte-select>
             <x-slot name="footerSlot">
-                <x-adminlte-button theme="secondary" label="Batal" data-dismiss="modal"/>
-                <x-adminlte-button type="submit" theme="primary" label="Simpan" icon="fas fa-save"/>
+                <x-adminlte-button theme="secondary" label="Batal" data-dismiss="modal" />
+                <x-adminlte-button type="submit" theme="primary" label="Simpan" icon="fas fa-save" />
             </x-slot>
         </form>
     </x-adminlte-modal>
@@ -114,6 +120,7 @@
         .table thead th {
             vertical-align: middle;
         }
+
         .btn-group-sm .btn {
             padding: 0.25rem 0.5rem;
             font-size: 0.765625rem;
@@ -162,3 +169,29 @@
         });
     </script>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

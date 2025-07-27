@@ -28,17 +28,17 @@
                     <x-adminlte-input name="nama" label="Nama Program" placeholder="Masukkan nama program"
                         value="{{ old('nama') }}" required />
 
-                    <x-adminlte-input name="slug" label="Slug (URL Friendly)"
-                        placeholder="contoh-program-offline" value="{{ old('slug') }}" required />
+                    <x-adminlte-input name="slug" label="Slug (URL Friendly)" placeholder="contoh-program-offline"
+                        value="{{ old('slug') }}" required />
 
-                    <x-adminlte-input name="lama_program" label="Durasi Program"
-                        placeholder="Contoh: 2 bulan / 10 minggu" value="{{ old('lama_program') }}" required />
+                    <x-adminlte-input name="lama_program" label="Durasi Program" placeholder="Contoh: 2 bulan / 10 minggu"
+                        value="{{ old('lama_program') }}" required />
 
                     <x-adminlte-input name="kategori" label="Kategori Program"
                         placeholder="Contoh: Intensif, Reguler, Khusus" value="{{ old('kategori') }}" required />
 
-                    <x-adminlte-input name="harga" label="Harga (Rp)"
-                        placeholder="Contoh: 1500000" type="number" value="{{ old('harga') }}" required />
+                    <x-adminlte-input name="harga" label="Harga (Rp)" placeholder="Contoh: 1500000" type="number"
+                        value="{{ old('harga') }}" required />
 
                     <x-adminlte-textarea name="features_program" label="Fitur Program (Pisahkan dengan enter)"
                         rows="4" placeholder="Contoh:\n✅ Sertifikat\n✅ Materi cetak\n✅ Tutor berpengalaman"
@@ -53,16 +53,16 @@
                     <x-adminlte-input name="jadwal_selesai" label="Jadwal Selesai" type="date"
                         value="{{ old('jadwal_selesai') }}" required />
 
-                    <x-adminlte-input name="kuota" label="Kuota Peserta" type="number"
-                        value="{{ old('kuota') }}" required />
+                    <x-adminlte-input name="kuota" label="Kuota Peserta" type="number" value="{{ old('kuota') }}"
+                        required />
 
                     <x-adminlte-select name="is_active" label="Status Program" required>
                         <option value="1" {{ old('is_active') == '1' ? 'selected' : '' }}>Aktif</option>
                         <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Nonaktif</option>
                     </x-adminlte-select>
 
-                    <x-adminlte-input name="thumbnail" label="Thumbnail Program (Gambar)" type="file"
-                        accept="image/*" required />
+                    <x-adminlte-input name="thumbnail" label="Thumbnail Program (Gambar)" type="file" accept="image/*"
+                        required />
 
                     <div class="mt-3">
                         <x-adminlte-button type="submit" theme="primary" icon="fas fa-save" label="Simpan Program" />
@@ -76,3 +76,29 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

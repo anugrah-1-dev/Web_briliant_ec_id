@@ -4,6 +4,33 @@
 
     @section('content')
         <link rel="stylesheet" href="{{ asset('css/camp.css') }}">
+    <!-- Letakkan di bawah @section('content') atau bagian bawah halaman -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            </script>
+        @endif
+
+        @if (session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            </script>
+        @endif
+
 
         <div class="container my-4 my-lg-5 px-3 px-lg-4">
             <!-- Header Section -->

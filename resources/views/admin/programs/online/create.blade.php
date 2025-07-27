@@ -49,8 +49,8 @@
                         <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Nonaktif</option>
                     </x-adminlte-select>
 
-                    <x-adminlte-input name="thumbnail" label="Thumbnail Program (Gambar)" type="file"
-                        accept="image/*" required />
+                    <x-adminlte-input name="thumbnail" label="Thumbnail Program (Gambar)" type="file" accept="image/*"
+                        required />
 
                     <div class="mt-3">
                         <x-adminlte-button type="submit" theme="primary" icon="fas fa-save" label="Simpan Program" />
@@ -64,3 +64,29 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

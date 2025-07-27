@@ -19,7 +19,8 @@
             <div class="mb-4">
                 <form action="{{ route('admin.pamflet_programs.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan judul program..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control"
+                            placeholder="Cari berdasarkan judul program..." value="{{ request('search') }}">
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
@@ -50,18 +51,22 @@
                                 <td>{{ Str::limit($program->deskripsi, 50, '...') }}</td>
                                 <td>{{ Str::limit($program->keunggulan, 50, '...') }}</td>
                                 <td>
-                                    <img src="{{ asset('uploads/programs/' . $program->gambar) }}" alt="{{ $program->judul }}" class="img-thumbnail" width="100">
+                                    <img src="{{ asset('uploads/programs/' . $program->gambar) }}"
+                                        alt="{{ $program->judul }}" class="img-thumbnail" width="100">
                                 </td>
                                 <td>
-                                    @if($program->status === 'aktif')
+                                    @if ($program->status === 'aktif')
                                         <span class="badge bg-success">Aktif</span>
                                     @else
                                         <span class="badge bg-secondary">Nonaktif</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.pamflet_programs.edit', $program->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('admin.pamflet_programs.destroy', $program->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus program ini?')">
+                                    <a href="{{ route('admin.pamflet_programs.edit', $program->id) }}"
+                                        class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('admin.pamflet_programs.destroy', $program->id) }}"
+                                        method="POST" class="d-inline"
+                                        onsubmit="return confirm('Anda yakin ingin menghapus program ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
@@ -75,15 +80,14 @@
                         @endforelse
                     </tbody>
                     @if ($programs instanceof \Illuminate\Pagination\LengthAwarePaginator && $programs->hasPages())
-    
-@endif
+                    @endif
 
                 </table>
-                
+
             </div>
 
         </div>
-        
+
     </div>
     <div class="d-flex justify-content-center mt-3">
         <ul class="pagination">
@@ -108,74 +112,113 @@
 @stop
 
 @push('css')
-<style>
-    .table-custom-header {
-        background-color: #3c8dbc;
-        color: white;
-    }
+    <style>
+        .table-custom-header {
+            background-color: #3c8dbc;
+            color: white;
+        }
 
-    .scrollable-table-wrapper {
-        max-height: 400px;
-        overflow-y: auto;
-    }
+        .scrollable-table-wrapper {
+            max-height: 400px;
+            overflow-y: auto;
+        }
 
-    /* Atur lebar minimum kolom */
-    table th:nth-child(1), table td:nth-child(1) {
-        min-width: 40px; /* No */
-    }
+        /* Atur lebar minimum kolom */
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            min-width: 40px;
+            /* No */
+        }
 
-    table th:nth-child(2), table td:nth-child(2) {
-        min-width: 180px; /* Judul */
-    }
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            min-width: 180px;
+            /* Judul */
+        }
 
-    table th:nth-child(3), table td:nth-child(3),
-    table th:nth-child(4), table td:nth-child(4) {
-        min-width: 200px; /* Deskripsi, Keunggulan */
-    }
+        table th:nth-child(3),
+        table td:nth-child(3),
+        table th:nth-child(4),
+        table td:nth-child(4) {
+            min-width: 200px;
+            /* Deskripsi, Keunggulan */
+        }
 
-    table th:nth-child(5), table td:nth-child(5) {
-        min-width: 130px; /* Gambar */
-    }
+        table th:nth-child(5),
+        table td:nth-child(5) {
+            min-width: 130px;
+            /* Gambar */
+        }
 
-    table th:nth-child(6), table td:nth-child(6) {
-        min-width: 100px; /* Status */
-    }
+        table th:nth-child(6),
+        table td:nth-child(6) {
+            min-width: 100px;
+            /* Status */
+        }
 
-    table th:nth-child(7), table td:nth-child(7) {
-        min-width: 130px; /* Aksi */
-    }
+        table th:nth-child(7),
+        table td:nth-child(7) {
+            min-width: 130px;
+            /* Aksi */
+        }
 
-    .pagination {
-        list-style: none;
-        padding-left: 0;
-        display: flex;
-        gap: 4px;
-    }
+        .pagination {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            gap: 4px;
+        }
 
-    .pagination .page-item {
-        display: inline-block;
-    }
+        .pagination .page-item {
+            display: inline-block;
+        }
 
-    .pagination .page-link {
-        display: block;
-        padding: 6px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        color: #007bff;
-        text-decoration: none;
-        background-color: #fff;
-    }
+        .pagination .page-link {
+            display: block;
+            padding: 6px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            color: #007bff;
+            text-decoration: none;
+            background-color: #fff;
+        }
 
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
 
-    .pagination .page-item.disabled .page-link {
-        color: #6c757d;
-        pointer-events: none;
-        background-color: #f8f9fa;
-    }
-</style>
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #f8f9fa;
+        }
+    </style>
 @endpush
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

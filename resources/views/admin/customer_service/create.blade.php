@@ -3,9 +3,9 @@
 @section('title', 'Tambah Kontak Customer Service')
 
 @section('content_header')
-<div class="d-flex justify-content-between align-items-center">
-    <h1>Contact Service</h1>
-</div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Contact Service</h1>
+    </div>
 
 @stop
 
@@ -28,12 +28,12 @@
                 <form action="{{ route('admin.customer_services.store') }}" method="POST">
                     @csrf
 
-                    <x-adminlte-input name="nama" label="Nama Kontak"
-                        placeholder="Contoh: Admin A / CS WA" value="{{ old('nama') }}" required />
+                    <x-adminlte-input name="nama" label="Nama Kontak" placeholder="Contoh: Admin A / CS WA"
+                        value="{{ old('nama') }}" required />
 
-                    <x-adminlte-input name="nomor" label="Nomor WhatsApp / HP"
-                        placeholder="Contoh: 08123456789" value="{{ old('nomor') }}"
-                        pattern="\d{10,15}" title="Minimal 10 digit dan maksimal 15 angka" required />
+                    <x-adminlte-input name="nomor" label="Nomor WhatsApp / HP" placeholder="Contoh: 08123456789"
+                        value="{{ old('nomor') }}" pattern="\d{10,15}" title="Minimal 10 digit dan maksimal 15 angka"
+                        required />
 
                     <div class="mt-3">
                         <x-adminlte-button type="submit" theme="primary" icon="fas fa-save" label="Simpan Kontak" />
@@ -47,3 +47,29 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

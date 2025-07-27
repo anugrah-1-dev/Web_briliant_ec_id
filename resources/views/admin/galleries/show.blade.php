@@ -20,7 +20,7 @@
     </div>
 
     <div class="row">
-        @foreach($gallery->images as $image)
+        @foreach ($gallery->images as $image)
             <div class="col-md-3 mb-4">
                 <div class="card">
                     <img src="{{ asset('storage/' . $image->image_path) }}" class="card-img-top" alt="Foto Galeri">
@@ -34,3 +34,28 @@
 
     <a href="{{ route('admin.galleries.index') }}" class="btn btn-secondary">← Kembali</a>
 @stop
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

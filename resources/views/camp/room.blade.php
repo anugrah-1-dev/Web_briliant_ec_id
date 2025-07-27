@@ -8,6 +8,31 @@
             use App\Helpers\RoomDummy as RD;
         @endphp
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            </script>
+        @endif
+
+        @if (session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            </script>
+        @endif
 
 
     @section('content')
@@ -142,7 +167,8 @@
                                         <div class="room-card {{ RD::getStatusClass($kamar) }}"
                                             data-id="{{ $kamar->id }}" data-nama="{{ $kamar->nomor_kamar }}"
                                             data-kamar="{{ $kamar->nomor_kamar }}" data-gender="{{ $kamar->gender }}"
-                                            data-kategori="{{ $kamar->kategori }}" data-kapasitas="{{ $kamar->kapasitas }}"
+                                            data-kategori="{{ $kamar->kategori }}"
+                                            data-kapasitas="{{ $kamar->kapasitas }}"
                                             data-penghuni="{{ $kamar->penghuni }}"
                                             @unless ($isFull) onclick="selectRoom(this)" role="button" @endunless
                                             style="{{ $isFull ? 'cursor: not-allowed; opacity: 0.6;' : '' }}">

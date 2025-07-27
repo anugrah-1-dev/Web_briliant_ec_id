@@ -49,4 +49,9 @@ class PendaftaranProgramOffline extends Model
     {
         return $this->belongsTo(\App\Models\Banks::class, 'bank_id');
     }
+
+    public function programOffline()
+    {
+        return $this->belongsTo(\App\Models\ProgramOffline::class, 'program_offline_id');
+    }
 }

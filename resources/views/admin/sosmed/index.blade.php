@@ -21,7 +21,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
-                            <input type="text" id="searchInput" class="form-control" placeholder="Cari berdasarkan nama sosial media...">
+                            <input type="text" id="searchInput" class="form-control"
+                                placeholder="Cari berdasarkan nama sosial media...">
                         </div>
                     </div>
                 </div>
@@ -49,17 +50,20 @@
                                     </td>
                                     <td>
                                         @if ($sosmed->image_path)
-                                            <img src="{{ asset('storage/' . $sosmed->image_path) }}" alt="Icon" height="32">
+                                            <img src="{{ asset('storage/' . $sosmed->image_path) }}" alt="Icon"
+                                                height="32">
                                         @else
                                             <i class="fas fa-share-alt text-lightblue fa-lg"></i>
                                         @endif
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('admin.sosmed.edit', $sosmed->id) }}" class="btn btn-warning btn-sm mr-1">
+                                            <a href="{{ route('admin.sosmed.edit', $sosmed->id) }}"
+                                                class="btn btn-warning btn-sm mr-1">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.sosmed.destroy', $sosmed->id) }}" method="POST" onsubmit="confirmDelete(event)">
+                                            <form action="{{ route('admin.sosmed.destroy', $sosmed->id) }}" method="POST"
+                                                onsubmit="confirmDelete(event)">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
@@ -78,11 +82,12 @@
                     </table>
                 </div>
 
-                @if($sosmeds instanceof \Illuminate\Pagination\LengthAwarePaginator && $sosmeds->hasPages())
+                @if ($sosmeds instanceof \Illuminate\Pagination\LengthAwarePaginator && $sosmeds->hasPages())
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="dataTables_info">
-                                Menampilkan {{ $sosmeds->firstItem() }} sampai {{ $sosmeds->lastItem() }} dari {{ $sosmeds->total() }} entri
+                                Menampilkan {{ $sosmeds->firstItem() }} sampai {{ $sosmeds->lastItem() }} dari
+                                {{ $sosmeds->total() }} entri
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -128,10 +133,10 @@
             });
         }
 
-        $(document).ready(function () {
-            $('#searchInput').on('keyup', function () {
+        $(document).ready(function() {
+            $('#searchInput').on('keyup', function() {
                 const searchValue = $(this).val().toLowerCase();
-                $('#sosmedTable tbody tr').each(function () {
+                $('#sosmedTable tbody tr').each(function() {
                     const rowText = $(this).text().toLowerCase();
                     $(this).toggle(rowText.includes(searchValue));
                 });
@@ -139,9 +144,35 @@
         });
     </script>
 
-    @if(session('alert'))
-    <script>
-        Swal.fire(@json(session('alert')));
-    </script>
+    @if (session('alert'))
+        <script>
+            Swal.fire(@json(session('alert')));
+        </script>
     @endif
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

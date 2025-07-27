@@ -10,6 +10,31 @@
 
     <!-- jQuery UI Autocomplete Stylesheet -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 </head>
 
 <body class="bg-light">
@@ -27,8 +52,8 @@
                                 @if ($program->thumbnail)
                                     <div class="text-center mb-3">
 
-                                        <img src="{{ asset('storage/' . $program->thumbnail) }}" class="img-fluid rounded"
-                                            alt="{{ $program->nama }}">
+                                        <img src="{{ asset('storage/' . $program->thumbnail) }}"
+                                            class="img-fluid rounded" alt="{{ $program->nama }}">
                                     </div>
                                 @endif
 
@@ -56,12 +81,10 @@
                                                 if (is_string($features)) {
                                                     $decoded = json_decode($features, true);
 
-
                                                     $features =
                                                         json_last_error() === JSON_ERROR_NONE && is_array($decoded)
                                                             ? $decoded
                                                             : explode("\n", $features);
-
                                                 }
                                             @endphp
 
@@ -70,7 +93,6 @@
                                                     @foreach ($features as $fitur)
                                                         <li>{{ \App\Helpers\FeatureHelper::getFeatureIcon($fitur) }}
                                                             {{ trim($fitur) }}</li>
-
                                                     @endforeach
                                                 </ul>
                                             @else
@@ -83,7 +105,6 @@
                                         <th class="bg-light">Status</th>
                                         <td>
                                             @if ($program->is_active)
-
                                                 <span class="badge bg-success">Aktif</span>
                                             @else
                                                 <span class="badge bg-danger">Tidak Aktif</span>
@@ -105,8 +126,7 @@
                                 </p>
                                 <div class="card-body">
 
-                                    @if(session('success'))
-
+                                    @if (session('success'))
                                         <div class="alert alert-success">{{ session('success') }}</div>
                                     @endif
 
@@ -189,7 +209,6 @@
                                                 @endif
                                             </select>
                                             @if (!isset($banks) || $banks->isEmpty())
-
                                                 <div class="form-text text-danger">Pilihan bank tidak tersedia. Hubungi
                                                     admin.</div>
                                             @endif
@@ -226,16 +245,14 @@
                                             @if ($activePeriods->isEmpty())
                                                 <div class="form-text text-danger">Tidak ada periode pendaftaran yang
                                                     aktif saat ini.</div>
-
                                             @endif
                                         </div>
 
                                         <button type="submit" class="btn btn-primary w-100"
-
                                             @if ($activePeriods->isEmpty() || !isset($banks) || $banks->isEmpty()) disabled @endif>
                                             <i class="bi bi-send-fill"></i>
                                             @if ($activePeriods->isNotEmpty() && isset($banks) && $banks->isNotEmpty())
-                                  Daftar Sekarang
+                                                Daftar Sekarang
                                             @else
                                                 Pendaftaran Ditutup
                                             @endif
@@ -264,8 +281,8 @@
 
     <!-- Script Autocomplete -->
     <script>
-        $(function () {
-            $.getJSON('/indonesia-indonesian.json', function (data) {
+        $(function() {
+            $.getJSON('/indonesia-indonesian.json', function(data) {
                 let kotaList = [];
 
                 // Gabungkan semua kota/kab dari semua provinsi jadi satu array
@@ -285,4 +302,3 @@
 </body>
 
 </html>
-

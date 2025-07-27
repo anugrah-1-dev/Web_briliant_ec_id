@@ -34,20 +34,21 @@
                                 <div class="form-group">
                                     <label for="judul">Judul Program</label>
                                     <input type="text" id="judul" name="judul" class="form-control"
-                                           value="{{ old('judul') }}" placeholder="Masukkan judul program" required>
+                                        value="{{ old('judul') }}" placeholder="Masukkan judul program" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="deskripsi">Deskripsi Lengkap Program</label>
-                                    <textarea id="deskripsi" name="deskripsi" class="form-control"
-                                              rows="5" placeholder="Deskripsi detail tentang program" required>{{ old('deskripsi') }}</textarea>
+                                    <textarea id="deskripsi" name="deskripsi" class="form-control" rows="5"
+                                        placeholder="Deskripsi detail tentang program" required>{{ old('deskripsi') }}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="keunggulan">Keunggulan Program</label>
-                                    <small class="form-text text-muted d-block mb-2">Gunakan titik atau enter untuk memisahkan poin keunggulan</small>
-                                    <textarea id="keunggulan" name="keunggulan" class="form-control"
-                                              rows="5" placeholder="Masukkan keunggulan program" required>{{ old('keunggulan') }}</textarea>
+                                    <small class="form-text text-muted d-block mb-2">Gunakan titik atau enter untuk
+                                        memisahkan poin keunggulan</small>
+                                    <textarea id="keunggulan" name="keunggulan" class="form-control" rows="5"
+                                        placeholder="Masukkan keunggulan program" required>{{ old('keunggulan') }}</textarea>
                                 </div>
                             </div>
 
@@ -56,22 +57,26 @@
                                     <label for="gambar">Gambar Program</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="gambar" name="gambar" required>
+                                            <input type="file" class="custom-file-input" id="gambar" name="gambar"
+                                                required>
                                             <label class="custom-file-label" for="gambar">Pilih file</label>
                                         </div>
                                     </div>
                                     <small class="form-text text-muted">Format: JPG, PNG. Maksimal 2MB</small>
                                     <div class="mt-2 text-center">
-                                        <img id="preview-image" src="https://via.placeholder.com/300x200?text=Preview+Gambar"
-                                             alt="Preview Gambar" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                                        <img id="preview-image"
+                                            src="https://via.placeholder.com/300x200?text=Preview+Gambar"
+                                            alt="Preview Gambar" class="img-fluid img-thumbnail" style="max-height: 200px;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="status">Status Program</label>
                                     <select id="status" name="status" class="form-control" required>
-                                        <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                        <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                        <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif
+                                        </option>
+                                        <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>
+                                            Nonaktif</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,6 +127,7 @@
         .custom-file-label::after {
             content: "Browse";
         }
+
         #preview-image {
             border: 1px dashed #ddd;
             padding: 5px;
@@ -129,3 +135,28 @@
         }
     </style>
 @stop
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

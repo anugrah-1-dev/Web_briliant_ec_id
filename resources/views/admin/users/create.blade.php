@@ -13,10 +13,12 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <x-adminlte-input name="name" label="Nama" placeholder="Masukkan nama user" value="{{ old('name') }}" required />
+                    <x-adminlte-input name="name" label="Nama" placeholder="Masukkan nama user"
+                        value="{{ old('name') }}" required />
                 </div>
                 <div class="col-md-6">
-                    <x-adminlte-input name="email" label="Email" type="email" placeholder="Masukkan email user" value="{{ old('email') }}" required />
+                    <x-adminlte-input name="email" label="Email" type="email" placeholder="Masukkan email user"
+                        value="{{ old('email') }}" required />
                 </div>
             </div>
 
@@ -26,8 +28,8 @@
                 </div>
                 <div class="col-md-6">
                     <x-adminlte-select name="roles[]" label="Role" multiple required>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->name }}" @if(collect(old('roles'))->contains($role->name)) selected @endif>
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->name }}" @if (collect(old('roles'))->contains($role->name)) selected @endif>
                                 {{ $role->name }}
                             </option>
                         @endforeach
@@ -40,3 +42,29 @@
         </form>
     </x-adminlte-card>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

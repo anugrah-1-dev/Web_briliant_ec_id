@@ -96,11 +96,12 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('admin.pendaftaran.camp.edit', $data->id) }}" class="btn btn-primary"
-                                            title="Edit Status">
+                                        <a href="{{ route('admin.pendaftaran.camp.edit', $data->id) }}"
+                                            class="btn btn-primary" title="Edit Status">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.pendaftaran.camp.destroy', $data->id) }}" method="POST"
+                                        <form action="{{ route('admin.pendaftaran.camp.destroy', $data->id) }}"
+                                            method="POST"
                                             onsubmit="return confirm('Yakin ingin menghapus pendaftaran ini?');">
                                             @csrf
                                             @method('DELETE')
@@ -122,6 +123,32 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">

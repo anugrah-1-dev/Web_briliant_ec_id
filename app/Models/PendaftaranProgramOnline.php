@@ -22,7 +22,7 @@ class PendaftaranProgramOnline extends Model
         'bukti_pembayaran',
         'status',
         // PERUBAHAN: Tambahkan 'bank_id' agar bisa diisi secara massal
-        'bank_id', 
+        'bank_id',
     ];
 
     // Relasi ke program online
@@ -42,5 +42,10 @@ class PendaftaranProgramOnline extends Model
     public function bank()
     {
         return $this->belongsTo(Banks::class, 'bank_id');
+    }
+
+    public function programOnline()
+    {
+        return $this->belongsTo(ProgramOnline::class, 'program_online_id');
     }
 }

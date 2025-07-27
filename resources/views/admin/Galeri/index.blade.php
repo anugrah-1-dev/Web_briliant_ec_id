@@ -3,16 +3,16 @@
 @section('title', 'Galeri')
 
 @section('content_header')
-<div class="d-flex justify-content-between align-items-center">
-    <h1>Daftar Galeri</h1>
-    <a href="{{ route('admin.galeri.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Tambah Galeri
-    </a>
-</div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Daftar Galeri</h1>
+        <a href="{{ route('admin.galeri.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Galeri
+        </a>
+    </div>
 @stop
 
 @section('content')
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
@@ -49,7 +49,7 @@
                             <td>{{ $i + 1 }}</td>
                             <td>{{ $galeri->title }}</td>
                             <td>
-                                @if($galeri->image_path)
+                                @if ($galeri->image_path)
                                     <img src="{{ asset('storage/' . $galeri->image_path) }}" width="80">
                                 @else
                                     <span class="text-muted">Tidak ada gambar</span>
@@ -61,9 +61,11 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('admin.galeri.edit', $galeri->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('admin.galeri.edit', $galeri->id) }}"
+                                    class="btn btn-sm btn-warning">Edit</a>
 
-                                <form action="{{ route('admin.galeri.destroy', $galeri->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus galeri ini?')">
+                                <form action="{{ route('admin.galeri.destroy', $galeri->id) }}" method="POST"
+                                    class="d-inline" onsubmit="return confirm('Yakin ingin menghapus galeri ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-danger">Hapus</button>
@@ -80,3 +82,29 @@
         </div>
     </div>
 @stop
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

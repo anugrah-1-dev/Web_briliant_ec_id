@@ -39,8 +39,8 @@
                                     </a>
 
                                     <form id="delete-form-{{ $cs->id }}"
-                                        action="{{ route('admin.customer_services.destroy', $cs->id) }}"
-                                        method="POST" class="d-inline">
+                                        action="{{ route('admin.customer_services.destroy', $cs->id) }}" method="POST"
+                                        class="d-inline">
                                         @csrf
                                         @method('DELETE')
 
@@ -64,7 +64,7 @@
 @stop
 
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function confirmDelete(id) {
             Swal.fire({
@@ -86,7 +86,7 @@
 
     {{-- Inisialisasi DataTables --}}
     <script>
-        $(function () {
+        $(function() {
             $('#table_customer_service').DataTable({
                 responsive: true,
                 autoWidth: false,
@@ -108,3 +108,28 @@
         });
     </script>
 @endpush
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+@endif

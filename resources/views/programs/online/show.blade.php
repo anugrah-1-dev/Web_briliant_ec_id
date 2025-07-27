@@ -10,6 +10,31 @@
 
     <!-- jQuery UI Autocomplete Stylesheet -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 </head>
 
 <body class="bg-light">
@@ -48,13 +73,11 @@
                                                 if (is_string($features)) {
                                                     $decoded = json_decode($features, true);
 
-
                                                     $features =
                                                         json_last_error() === JSON_ERROR_NONE && is_array($decoded)
                                                             ? $decoded
                                                             : explode("\n", $features);
-                                                }   
-
+                                                }
 
                                             @endphp
 
@@ -118,7 +141,6 @@
 
                                 <form method="POST"
                                     action="{{ route('public.program.online.daftar', $program->slug) }}"
-
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
@@ -163,7 +185,6 @@
                                         @if (!isset($banks) || $banks->isEmpty())
                                             <div class="form-text text-danger">Pilihan bank tidak tersedia. Hubungi
                                                 admin.</div>
-
                                         @endif
                                     </div>
 
@@ -216,7 +237,6 @@
                                         @if ($activePeriods->isEmpty() || !isset($banks) || $banks->isEmpty()) disabled @endif>
                                         <i class="bi bi-send-fill"></i>
                                         @if ($activePeriods->isNotEmpty() && isset($banks) && $banks->isNotEmpty())
-
                                             Daftar Sekarang
                                         @else
                                             Pendaftaran Ditutup
@@ -243,8 +263,8 @@
 
     <!-- Autocomplete Kota -->
     <script>
-        $(function () {
-            $.getJSON('/indonesia-indonesian.json', function (data) {
+        $(function() {
+            $.getJSON('/indonesia-indonesian.json', function(data) {
                 let kotaList = [];
 
                 for (let provinsi in data) {
@@ -262,4 +282,3 @@
 
 
 </html>
-

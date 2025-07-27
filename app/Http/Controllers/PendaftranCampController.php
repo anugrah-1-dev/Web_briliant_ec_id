@@ -47,29 +47,41 @@ class PendaftranCampController extends Controller
             'asal_kota'      => 'required|string|max:100',
             'period_id'      => 'required|exists:periods,id',
             'durasi_paket'   => 'required|in:perhari,satu_minggu,dua_minggu,satu_bulan,dua_bulan,tiga_bulan',
-            'gender'         => 'required|in:putra,putri', // ← tambah validasi gender
+            'gender'         => 'required|in:putra,putri',
             'bank_id'        => 'required|exists:banks,id',
         ]);
 
+        // Cek stok terlebih dahulu
+        if ($program->stok <= 0) {
+            return redirect()->back()->with('error', 'Stok program camp sudah habis!');
+        }
+
+        // Buat trx_id
         $prefix = 'TRXC-' . now()->format('Ymd') . '-';
-        $last = PendaftaranProgramCamp::where('trx_id', 'like', $prefix . '%')->orderBy('id', 'desc')->first();
+        $last = PendaftaranProgramCamp::where('trx_id', 'like', $prefix . '%')
+            ->orderBy('id', 'desc')
+            ->first();
         $nextNumber = $last ? ((int) str_replace($prefix, '', $last->trx_id) + 1) : 1;
         $trx_id = $prefix . $nextNumber;
 
+        // Simpan pendaftaran
         $pendaftaran = PendaftaranProgramCamp::create([
-            'nama_lengkap'     => $request->nama_lengkap,
-            'email'            => $request->email,
-            'no_hp'            => $request->no_hp,
-            'asal_kota'        => $request->asal_kota,
-            'gender'           => $request->gender, // ← simpan gender
+            'nama_lengkap'     => $validated['nama_lengkap'],
+            'email'            => $validated['email'],
+            'no_hp'            => $validated['no_hp'],
+            'asal_kota'        => $validated['asal_kota'],
+            'gender'           => $validated['gender'],
             'program_camp_id'  => $program->id,
-            'period_id'        => $request->period_id,
-            'durasi_paket'     => $request->durasi_paket,
-            'bank_id'          => $request->bank_id,
+            'period_id'        => $validated['period_id'],
+            'durasi_paket'     => $validated['durasi_paket'],
+            'bank_id'          => $validated['bank_id'],
             'status'           => 'pending',
             'nama_kamar'       => null,
             'trx_id'           => $trx_id,
         ]);
+
+        // Kurangi stok
+        $program->decrement('stok');
 
         return redirect()->route('camp.room', ['trx_id' => $pendaftaran->trx_id]);
     }
@@ -127,7 +139,7 @@ class PendaftranCampController extends Controller
         return view('camp.pembayaran', compact('pendaftaran'));
     }
 
-    
+
 
     public function showPembayaran($id)
     {
