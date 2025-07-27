@@ -131,11 +131,11 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label"><i class="bi bi-bus-front-fill"></i> Transportasi</label>
+                                        <label class="form-label"><i class="bi bi-bus-front-fill"></i> Transportasi (Optional)</label>
                                         <select name="transport_id" class="form-select">
-                                            <option value="">Pilih Transportasi</option>
+                                            <option value="">Pilih Transportasi </option>
                                             @foreach($transports as $transport)
-                                                <option value="{{ $transport->id }}">{{ $transport->nama }}</option>
+                                                <option value="{{ $transport->id }}">{{ $transport->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
