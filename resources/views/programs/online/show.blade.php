@@ -7,6 +7,9 @@
     <title>{{ $program->nama }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- jQuery UI Autocomplete Stylesheet -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 </head>
 
 <body class="bg-light">
@@ -44,11 +47,13 @@
                                                 $features = $program->features_program;
                                                 if (is_string($features)) {
                                                     $decoded = json_decode($features, true);
+
                                                     $features =
                                                         json_last_error() === JSON_ERROR_NONE && is_array($decoded)
                                                             ? $decoded
                                                             : explode("\n", $features);
                                                 }   
+
                                             @endphp
 
                                             @if (!empty($features) && is_array($features))
@@ -108,8 +113,10 @@
                                     $activePeriods = $periods->where('is_active', 1);
                                 @endphp
 
+
                                 <form method="POST"
                                     action="{{ route('public.program.online.daftar', $program->slug) }}"
+
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
@@ -119,6 +126,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label"><i class="bi bi-envelope-fill"></i> Email</label>
+
                                         <input type="email" name="email" class="form-control"
                                             value="{{ old('email') }}" required>
                                     </div>
@@ -126,6 +134,7 @@
                                         <label class="form-label"><i class="bi bi-telephone-fill"></i> No. HP</label>
                                         <input type="text" name="no_hp" class="form-control"
                                             value="{{ old('no_hp') }}" required>
+
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label"><i class="bi bi-geo-alt-fill"></i> Asal Kota</label>
@@ -133,7 +142,6 @@
                                             value="{{ old('asal_kota') }}">
                                     </div>
 
-                                    {{-- PERUBAHAN: Tambah Pilihan Bank --}}
                                     <div class="mb-3">
                                         <label class="form-label"><i class="bi bi-bank"></i> Bank untuk
                                             Pembayaran</label>
@@ -149,9 +157,11 @@
                                                 <option value="" disabled>Tidak ada pilihan bank tersedia</option>
                                             @endif
                                         </select>
+
                                         @if (!isset($banks) || $banks->isEmpty())
                                             <div class="form-text text-danger">Pilihan bank tidak tersedia. Hubungi
                                                 admin.</div>
+
                                         @endif
                                     </div>
 
@@ -191,6 +201,7 @@
                                             @endforeach
                                         </select>
 
+
                                         @if ($activePeriods->isEmpty())
                                             <div class="form-text text-danger">Tidak ada periode pendaftaran yang aktif
                                                 saat ini.</div>
@@ -203,6 +214,7 @@
                                         @if ($activePeriods->isEmpty() || !isset($banks) || $banks->isEmpty()) disabled @endif>
                                         <i class="bi bi-send-fill"></i>
                                         @if ($activePeriods->isNotEmpty() && isset($banks) && $banks->isNotEmpty())
+
                                             Daftar Sekarang
                                         @else
                                             Pendaftaran Ditutup
@@ -219,7 +231,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Script Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery & jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <!-- Autocomplete Kota -->
+    <script>
+        $(function () {
+            $.getJSON('/indonesia-indonesian.json', function (data) {
+                let kotaList = [];
+
+                for (let provinsi in data) {
+                    kotaList = kotaList.concat(data[provinsi]);
+                }
+
+                $('[name="asal_kota"]').autocomplete({
+                    source: kotaList,
+                    minLength: 2
+                });
+            });
+        });
+    </script>
 </body>
 
+
 </html>
+

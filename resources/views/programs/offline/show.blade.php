@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- jQuery UI Autocomplete Stylesheet -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 </head>
 
 <body class="bg-light">
@@ -23,8 +26,9 @@
                             <div class="card-body">
                                 @if ($program->thumbnail)
                                     <div class="text-center mb-3">
-                                        <img src="{{ asset('storage/' . $program->thumbnail) }}"
-                                            class="img-fluid rounded" alt="{{ $program->nama }}">
+
+                                        <img src="{{ asset('storage/' . $program->thumbnail) }}" class="img-fluid rounded"
+                                            alt="{{ $program->nama }}">
                                     </div>
                                 @endif
 
@@ -36,7 +40,9 @@
                                     <tr>
                                         <th class="bg-light">Jadwal</th>
                                         <td>{{ \Carbon\Carbon::parse($program->jadwal_mulai)->format('d M Y') }} -
+
                                             {{ \Carbon\Carbon::parse($program->jadwal_selesai)->format('d M Y') }}</td>
+
                                     </tr>
                                     <tr>
                                         <th class="bg-light">Kuota</th>
@@ -49,6 +55,7 @@
                                                 $features = $program->features_program;
                                                 if (is_string($features)) {
                                                     $decoded = json_decode($features, true);
+
                                                     $features =
                                                         json_last_error() === JSON_ERROR_NONE && is_array($decoded)
                                                             ? $decoded
@@ -61,6 +68,7 @@
                                                     @foreach ($features as $fitur)
                                                         <li>{{ \App\Helpers\FeatureHelper::getFeatureIcon($fitur) }}
                                                             {{ trim($fitur) }}</li>
+
                                                     @endforeach
                                                 </ul>
                                             @else
@@ -73,6 +81,7 @@
                                         <th class="bg-light">Status</th>
                                         <td>
                                             @if ($program->is_active)
+
                                                 <span class="badge bg-success">Aktif</span>
                                             @else
                                                 <span class="badge bg-danger">Tidak Aktif</span>
@@ -93,12 +102,14 @@
                                 <p class="text-muted mb-3">Silakan lengkapi data diri Anda untuk mendaftar program ini.
                                 </p>
                                 <div class="card-body">
-                                    @if (session('success'))
+
+                                    @if(session('success'))
+
                                         <div class="alert alert-success">{{ session('success') }}</div>
                                     @endif
 
                                     @php
-                                        // Filter untuk mendapatkan semua periode yang aktif
+
                                         $activePeriods = $periods->where('is_active', 1);
                                     @endphp
 
@@ -141,6 +152,7 @@
                                         </div>
 
                                         <div class="mb-3">
+
                                             <label class="form-label"><i class="bi bi-bus-front-fill"></i> Transportasi
                                                 (Optional)</label>
                                             <select name="transport_id" class="form-select">
@@ -155,11 +167,13 @@
                                         {{-- ====================================================== --}}
                                         {{-- PERUBAHAN DIMULAI: Tambah Pilihan Bank --}}
                                         {{-- ====================================================== --}}
+
                                         <div class="mb-3">
                                             <label class="form-label"><i class="bi bi-bank"></i> Bank untuk
                                                 Pembayaran</label>
                                             <select name="bank_id" class="form-select" required>
                                                 <option value="">Pilih Bank</option>
+
                                                 {{-- Pastikan Anda mengirimkan variabel $banks dari controller --}}
                                                 {{-- Contoh di Controller: $banks = \App\Models\Bank::where('status', 'active')->get(); --}}
                                                 @if (isset($banks) && $banks->isNotEmpty())
@@ -173,20 +187,18 @@
                                                 @endif
                                             </select>
                                             @if (!isset($banks) || $banks->isEmpty())
+
                                                 <div class="form-text text-danger">Pilihan bank tidak tersedia. Hubungi
                                                     admin.</div>
                                             @endif
                                         </div>
-                                        {{-- ====================================================== --}}
-                                        {{-- PERUBAHAN SELESAI --}}
-                                        {{-- ====================================================== --}}
 
-                                        {{-- LOGIKA YANG DISERDEHANAKAN: SELALU TAMPILKAN DROPDOWN --}}
                                         <div class="mb-3">
                                             <label class="form-label"><i class="bi bi-calendar-check-fill"></i>
                                                 Periode</label>
                                             <select name="period_id" class="form-select" required>
                                                 <option value="">Pilih Periode</option>
+
                                                 @php
                                                     $today = \Carbon\Carbon::now('Asia/Jakarta')->toDateString();
                                                 @endphp
@@ -212,14 +224,16 @@
                                             @if ($activePeriods->isEmpty())
                                                 <div class="form-text text-danger">Tidak ada periode pendaftaran yang
                                                     aktif saat ini.</div>
+
                                             @endif
                                         </div>
 
                                         <button type="submit" class="btn btn-primary w-100"
+
                                             @if ($activePeriods->isEmpty() || !isset($banks) || $banks->isEmpty()) disabled @endif>
                                             <i class="bi bi-send-fill"></i>
                                             @if ($activePeriods->isNotEmpty() && isset($banks) && $banks->isNotEmpty())
-                                                Daftar Sekarang
+                                  Daftar Sekarang
                                             @else
                                                 Pendaftaran Ditutup
                                             @endif
@@ -236,7 +250,37 @@
         </div>
     </div>
 
+
+
+
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery dan jQuery UI (untuk autocomplete) -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <!-- Script Autocomplete -->
+    <script>
+        $(function () {
+            $.getJSON('/indonesia-indonesian.json', function (data) {
+                let kotaList = [];
+
+                // Gabungkan semua kota/kab dari semua provinsi jadi satu array
+                for (let provinsi in data) {
+                    kotaList = kotaList.concat(data[provinsi]);
+                }
+
+                // Inisialisasi autocomplete
+                $('[name="asal_kota"]').autocomplete({
+                    source: kotaList,
+                    minLength: 2
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
+
