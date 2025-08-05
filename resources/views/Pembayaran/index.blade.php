@@ -28,10 +28,6 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6">
 
-                @if (session('success'))
-                    <div class="alert alert-success text-center"><i class="bi bi-check-circle-fill"></i>
-                        {{ session('success') }}</div>
-                @endif
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0">
@@ -49,18 +45,6 @@
                     <div class="card-body p-4">
                         <div class="payment-details text-center mb-4">
                             <h5 class="mb-3">Detail Pendaftaran</h5>
-                            <p class="mb-1"><strong>ID Transaksi:</strong></p>
-
-                            <div class="d-flex justify-content-center align-items-center gap-2">
-                                <h3 class="fw-bold text-primary mb-0">{{ $pendaftaran->trx_id }}</h3>
-                                <button class="btn btn-sm btn-outline-secondary"
-                                    onclick="copyToClipboard('{{ $pendaftaran->trx_id }}', this)"
-                                    title="Salin ID Transaksi">
-                                    <i class="bi bi-clipboard"></i>
-                                    <span class="copy-text d-none">Salin</span>
-                                </button>
-                            </div>
-
                             <hr>
                             <p class="mb-1"><strong>Program:</strong></p>
                             <p class="lead">{{ $pendaftaran->program->nama }}</p>
@@ -87,8 +71,7 @@
                                         </button>
                                     </li>
                                 @else
-                                    <li class="list-group-item text-center text-muted">Informasi bank belum dipilih.
-                                    </li>
+                                    <li class="list-group-item text-center text-muted">Informasi bank belum dipilih.</li>
                                 @endif
                             </ul>
                         </div>
@@ -99,10 +82,23 @@
                             <p class="text-center text-muted small">Setelah transfer, unggah bukti Anda di sini (JPG,
                                 PNG, PDF. Maks 2MB).</p>
 
+                            {{-- Menentukan tipe pendaftaran secara dinamis berdasarkan model --}}
+                            @php
+                                $registrationType = '';
+                                if ($pendaftaran instanceof \App\Models\PendaftaranProgramOnline) {
+                                    $registrationType = 'online';
+                                } elseif ($pendaftaran instanceof \App\Models\PendaftaranProgramOffline) {
+                                    $registrationType = 'offline';
+                                } elseif ($pendaftaran instanceof \App\Models\PendaftaranProgramCamp) {
+                                    $registrationType = 'camp';
+                                }
+                            @endphp
+
                             <form action="{{ route('payment.upload') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $pendaftaran->id }}">
-                                <input type="hidden" name="type" value="offline">
+                                {{-- PERBAIKAN: Nilai 'type' sekarang dinamis sesuai dengan tipe pendaftaran --}}
+                                <input type="hidden" name="type" value="{{ $registrationType }}">
 
                                 <div class="input-group">
                                     <input type="file" class="form-control" name="bukti_pembayaran"
@@ -114,16 +110,13 @@
                             </form>
                         </div>
                         <div class="mt-4 text-center">
-                            {{-- PERUBAHAN: Mengambil nomor dari koleksi $contactServices --}}
                             @php
-                                // Ambil kontak pertama dari koleksi, atau gunakan nomor cadangan jika tidak ada
                                 $waNumber = $contactServices->isNotEmpty()
                                     ? $contactServices->first()->nomor
                                     : '6281234567890';
                             @endphp
                             <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Halo, saya ingin konfirmasi pembayaran untuk ID Transaksi: ' . $pendaftaran->trx_id . ' dengan total Rp ' . number_format($pendaftaran->program->harga, 0, ',', '.')) }}"
-                                class="btn btn-success mb-2" target="_blank"><i class="bi bi-whatsapp"></i> Konfirmasi
-                                via WhatsApp</a>
+                                class="btn btn-success mb-2" target="_blank"><i class="bi bi-whatsapp"></i> Konfirmasi via WhatsApp</a>
                             <a href="{{ url('/') }}" class="btn btn-outline-secondary mb-2"><i
                                     class="bi bi-house-door-fill"></i> Kembali ke Beranda</a>
                         </div>
@@ -133,9 +126,9 @@
         </div>
     </div>
 
+    <!-- Script untuk copy di halaman utama -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Fungsi untuk menyalin teks ke clipboard
         function copyToClipboard(text, buttonElement) {
             const textArea = document.createElement('textarea');
             textArea.value = text;
@@ -143,7 +136,6 @@
             textArea.select();
             try {
                 document.execCommand('copy');
-
                 const copyTextSpan = buttonElement.querySelector('.copy-text');
                 const originalText = copyTextSpan ? copyTextSpan.innerHTML : 'Salin';
                 const icon = buttonElement.querySelector('i');
@@ -172,32 +164,78 @@
             document.body.removeChild(textArea);
         }
     </script>
+
+    <!-- SweetAlert untuk pesan sukses/error -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- SCRIPT BARU UNTUK MENAMPILKAN POP-UP SUKSES DENGAN TOMBOL SALIN --}}
+    @if (session('success_message') && session('trx_id'))
+        <script>
+            // Fungsi ini khusus untuk tombol salin di dalam SweetAlert
+            function copySwalId(text, buttonElement) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const copyTextSpan = buttonElement.querySelector('span');
+                    const icon = buttonElement.querySelector('i');
+
+                    if (copyTextSpan) copyTextSpan.textContent = 'Tersalin!';
+                    icon.classList.remove('bi-clipboard');
+                    icon.classList.add('bi-check-lg');
+                    buttonElement.disabled = true; // Nonaktifkan tombol setelah disalin
+                } catch (err) {
+                    console.error('Gagal menyalin teks: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            const trxId = "{{ session('trx_id') }}";
+            const successMessage = "{{ session('success_message') }}";
+
+            // Membuat konten HTML untuk SweetAlert
+            const alertHtml = `
+                <div class="text-start">
+                    <p>${successMessage}</p>
+                    <div class="mt-3">
+                        <strong>ID Transaksi Anda:</strong>
+                        <div class="input-group mt-1">
+                            <input type="text" class="form-control bg-light" value="${trxId}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="copySwalId('${trxId}', this)">
+                                <i class="bi bi-clipboard"></i>
+                                <span class="copy-text"> Salin</span>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Silakan simpan ID ini untuk referensi Anda.</small>
+                    </div>
+                </div>
+            `;
+
+            // Menampilkan SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                html: alertHtml,
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup'
+            });
+        </script>
+    @endif
+
+    {{-- Menjaga blok error tetap berfungsi --}}
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                html: `{!! nl2br(e(session('error'))) !!}`,
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup'
+            });
+        </script>
+    @endif
+
 </body>
-
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if (session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '{{ session('success') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    </script>
-@endif
-
-@if (session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: '{{ session('error') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    </script>
-@endif
