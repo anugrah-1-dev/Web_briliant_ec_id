@@ -12,43 +12,35 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
-class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithEvents
+
+// 1. Tambahkan kembali WithMapping dan WithDrawings
+class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapping, WithEvents, WithDrawings
 {
-    protected $startDate;
-    protected $endDate;
     protected $pendaftarans;
     protected $row_height = 80;
     protected $column_J_width = 20;
 
+    // Terima parameter dari controller
     public function __construct($startDate, $endDate)
     {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+        // 2. Ambil data SATU KALI di sini dan simpan ke properti.
+        // Ini akan menyelesaikan error 'null'.
+        $this->pendaftarans = PendaftaranProgramOffline::with(['program', 'period', 'transport']) // Jangan lupa eager loading
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->get();
     }
 
+    /**
+     * 3. Method collection() sekarang hanya mengembalikan data yang sudah diambil.
+     */
     public function collection()
     {
-        return PendaftaranProgramOffline::select([
-            'trx_id',
-            'nama_lengkap',
-            'email',
-            'no_hp',
-            'asal_kota',
-            'no_wali',
-            'program_id',
-            'period_id',
-            'transport_id',
-            'bukti_pembayaran',
-            'status',
-        ])
-        ->whereDate('created_at', '>=', $this->startDate)
-        ->whereDate('created_at', '<=', $this->endDate)
-        ->get();
+        return $this->pendaftarans;
     }
 
     public function headings(): array
     {
-        // 2. Ubah heading kolom
         return [
             'ID Transaksi', 'Nama Lengkap', 'Email', 'No HP', 'Asal Kota', 'No Wali',
             'Nama Program', 'Tanggal Periode', 'Transportasi', 'Bukti Pembayaran', 'Status',
@@ -64,15 +56,17 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithEven
             $pendaftaran->no_hp,
             $pendaftaran->asal_kota,
             $pendaftaran->no_wali,
-            $pendaftaran->program ? $pendaftaran->program->nama : 'N/A',
-            $pendaftaran->period ? $pendaftaran->period->date->format('d F Y') : 'N/A',
-            // 3. Ubah bagian ini untuk menampilkan nama transportasi
-            $pendaftaran->transport ? $pendaftaran->transport->name : 'N/A',
+            $pendaftaran->program ? $pendaftaran->program->nama : '-',
+            $pendaftaran->period ? $pendaftaran->period->date->format('d F Y') : '-',
+            $pendaftaran->transport ? $pendaftaran->transport->name : '-',
             '', // Kolom Bukti Pembayaran dikosongkan
             $pendaftaran->status,
         ];
     }
 
+    /**
+     * Method ini sekarang akan berjalan karena $this->pendaftarans sudah berisi data.
+     */
     public function drawings()
     {
         $drawings = [];
@@ -104,6 +98,9 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithEven
         return $drawings;
     }
 
+    /**
+     * Method ini juga akan berjalan karena $this->pendaftarans sudah berisi data.
+     */
     public function registerEvents(): array
     {
         return [
@@ -113,11 +110,8 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithEven
                 $highestColumn = $sheet->getDelegate()->getHighestColumn();
                 $cellRange = 'A1:' . $highestColumn . $highestRow;
 
-            // PERUBAHAN: Mengatur alignment horizontal dan vertikal ke tengah untuk SEMUA sel
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-
-                // Mengatur font bold hanya untuk header
                 $sheet->getStyle('A1:' . $highestColumn.'1')->getFont()->setBold(true);
 
                 foreach ($this->pendaftarans as $key => $pendaftaran) {
@@ -133,10 +127,9 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithEven
                 foreach (range('K', $highestColumn) as $col) { $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true); }
                 $sheet->getDelegate()->getColumnDimension('J')->setWidth($this->column_J_width);
 
-                 $sheet->getStyle($cellRange)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+                $sheet->getStyle($cellRange)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
                 $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
             },
         ];
     }
-
 }

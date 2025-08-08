@@ -13,43 +13,34 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
+// 2. Tambahkan kembali WithMapping dan WithDrawings
 class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMapping, WithEvents, WithDrawings
 {
-    protected $startDate;
-    protected $endDate;
     protected $pendaftarans;
     // --- PENGATURAN TAMPILAN ---
     protected $row_height = 80;
-    protected $column_H_width = 20;
+    protected $column_H_width = 20; // Kolom gambar sekarang H
 
+    // Terima parameter dari controller
     public function __construct($startDate, $endDate)
     {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
-
+        // 3. Ambil data SATU KALI di sini dan simpan ke properti.
+        $this->pendaftarans = PendaftaranProgramOnline::with(['program', 'period']) // Eager loading relasi
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->get();
     }
 
+    /**
+     * 4. Method collection() sekarang hanya mengembalikan data yang sudah diambil.
+     */
     public function collection()
     {
-        return PendaftaranProgramOnline::select([
-            'trx_id',
-            'nama_lengkap',
-            'email',
-            'no_hp',
-            'asal_kota',
-            'program_id',
-            'period_id',
-            'bukti_pembayaran',
-            'status',
-        ])
-            ->whereDate('created_at', '>=', $this->startDate)
-            ->whereDate('created_at', '<=', $this->endDate)
-            ->get();
+        return $this->pendaftarans;
     }
 
     public function headings(): array
     {
-        // 3. Headings disesuaikan untuk versi Online
         return [
             'ID Transaksi',
             'Nama Lengkap',
@@ -65,7 +56,6 @@ class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMappi
 
     public function map($pendaftaran): array
     {
-        // 4. Mapping disesuaikan untuk versi Online
         return [
             $pendaftaran->trx_id,
             $pendaftaran->nama_lengkap,
@@ -95,7 +85,7 @@ class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMappi
                 $drawing->setName('Bukti Pembayaran');
                 $drawing->setDescription($pendaftaran->nama_lengkap);
                 $drawing->setPath($pathToFile);
-                // 5. Koordinat diubah ke kolom 'H'
+                // Koordinat diubah ke kolom 'H'
                 $drawing->setCoordinates('H' . ($key + 2));
 
                 // Logika untuk posisi tengah
@@ -121,28 +111,25 @@ class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMappi
                 $highestColumn = $sheet->getDelegate()->getHighestColumn();
                 $cellRange = 'A1:' . $highestColumn . $highestRow;
 
-                $sheet->getStyle($cellRange)->applyFromArray([
-                    'borders' => [
-                        'allBorders' => ['borderStyle' => Border::BORDER_THIN],
-                    ],
-                    'alignment' => [
-                        'horizontal' => Alignment::HORIZONTAL_CENTER,
-                        'vertical' => Alignment::VERTICAL_CENTER,
-                        'wrapText' => true,
-                    ],
-                ]);
+                $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A1:' . $highestColumn.'1')->getFont()->setBold(true);
 
-                for ($row = 1; $row <= $highestRow; $row++) {
-                    $sheet->getDelegate()->getRowDimension($row)->setRowHeight(25);
+                foreach ($this->pendaftarans as $key => $pendaftaran) {
+                    $rowNumber = $key + 2;
+                    if ($pendaftaran->bukti_pembayaran && file_exists(public_path('storage/' . $pendaftaran->bukti_pembayaran))) {
+                        $sheet->getDelegate()->getRowDimension($rowNumber)->setRowHeight($this->row_height);
+                    } else {
+                        $sheet->getDelegate()->getRowDimension($rowNumber)->setRowHeight(25);
+                    }
                 }
 
-                foreach (range('A', $highestColumn) as $col) {
-                    $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true);
-                }
+                // Pengaturan lebar kolom disesuaikan untuk versi Online
+                foreach (range('A', 'G') as $col) { $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true); }
+                $sheet->getDelegate()->getColumnDimension('I')->setAutoSize(true);
+                $sheet->getDelegate()->getColumnDimension('H')->setWidth($this->column_H_width);
 
-                $sheet->getStyle('A1:' . $highestColumn . '1')->applyFromArray([
-                    'font' => ['bold' => true],
-                ]);
+                $sheet->getStyle($cellRange)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
                 $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
             },
         ];
