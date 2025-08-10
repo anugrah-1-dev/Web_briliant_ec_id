@@ -7,9 +7,8 @@ use App\Models\ProgramOffline;
 use App\Models\Transports;
 use App\Models\Period;
 use App\Models\PendaftaranProgramOffline;
-use App\Models\Bank; // Menggunakan nama model 'Bank' sesuai standar Laravel
 use App\Models\Banks;
-use App\Models\Customer_Service; // 1. PASTIKAN MODEL INI DI-IMPORT
+use App\Models\Customer_Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -24,11 +23,8 @@ class ProgramOfflinePublicController extends Controller
         $transports = Transports::all();
         $periods = Period::where('is_active', 1)->get();
         $banks = Banks::where('status', 'active')->get();
-
-        // PERUBAHAN: Ambil semua data kontak untuk widget WA
         $contactServices = Customer_Service::all();
 
-        // PERUBAHAN: Kirim variabel $banks dan $contactServices ke view
         return view('programs.offline.show', compact('program', 'transports', 'periods', 'banks', 'contactServices'));
     }
 
@@ -37,6 +33,7 @@ class ProgramOfflinePublicController extends Controller
      */
     public function daftar(Request $request, ProgramOffline $program)
     {
+        // Validasi
         $validated = $request->validate([
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email',
@@ -45,26 +42,20 @@ class ProgramOfflinePublicController extends Controller
             'no_wali' => 'nullable|string|max:20',
             'period_id' => 'required|exists:periods,id',
             'transport_id' => 'nullable|exists:transports,id',
-            'bank_id' => 'required|exists:banks,id',
+            'payment_type' => 'required|in:tunai,transfer',
+            'bank_id' => 'required_if:payment_type,transfer|nullable|exists:banks,id',
         ]);
 
-        // Cek kuota (langsung pakai $program dari parameter)
+        // Cek kuota
         if ($program->kuota <= 0) {
-            return redirect()->back()->with('error', 'Kuota program sudah habis!');
+            return redirect()->back()->with('error', 'Kuota untuk program ini sudah habis!');
         }
 
-        // --- Logika TRX-ID ---
+        // Logika TRX-ID
         $today = Carbon::now()->format('Ymd');
-        $prefix = 'TRX-' . $today . '-';
-
-        $lastRegistration = PendaftaranProgramOffline::where('trx_id', 'like', $prefix . '%')
-            ->orderBy('id', 'desc')
-            ->first();
-
-        $nextSequence = $lastRegistration
-            ? (int) str_replace($prefix, '', $lastRegistration->trx_id) + 1
-            : 1;
-
+        $prefix = 'TRX-OFF-' . $today . '-';
+        $lastRegistration = PendaftaranProgramOffline::where('trx_id', 'like', $prefix . '%')->orderBy('id', 'desc')->first();
+        $nextSequence = $lastRegistration ? (int) str_replace($prefix, '', $lastRegistration->trx_id) + 1 : 1;
         $newTrxId = $prefix . $nextSequence;
 
         // Simpan data pendaftaran
@@ -73,20 +64,28 @@ class ProgramOfflinePublicController extends Controller
             'program_id' => $program->id,
             'period_id' => $validated['period_id'],
             'transport_id' => $validated['transport_id'] ?? null,
-            'bank_id' => $validated['bank_id'],
             'nama_lengkap' => $validated['nama_lengkap'],
             'email' => $validated['email'],
             'no_hp' => $validated['no_hp'],
             'asal_kota' => $validated['asal_kota'] ?? null,
             'no_wali' => $validated['no_wali'] ?? null,
             'status' => 'pending',
+            'payment_type' => $validated['payment_type'],
+            'bank_id' => $validated['bank_id'] ?? null,
         ]);
 
         // Kurangi kuota
         $program->decrement('kuota');
 
-        return redirect()->route('public.pendaftaran.offline.pembayaran', ['trx_id' => $newTrxId])
-            ->with('success', 'Pendaftaran awal berhasil! Silakan lanjutkan ke tahap pembayaran.');
+        // --- PERUBAHAN LOGIKA PENGALIHAN (REDIRECT) ---
+        if ($pendaftaran->payment_type === 'tunai') {
+            // Jika memilih Bayar Tunai, arahkan ke halaman sukses khusus untuk tunai
+            return redirect()->route('public.pendaftaran.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+        } else {
+            // Jika memilih Transfer Bank, arahkan ke halaman pembayaran seperti sebelumnya
+            return redirect()->route('public.pendaftaran.offline.pembayaran', ['trx_id' => $newTrxId])
+                ->with('success_message', 'Pendaftaran awal berhasil! Silakan lanjutkan ke tahap pembayaran.');
+        }
     }
 
     /**
@@ -94,15 +93,30 @@ class ProgramOfflinePublicController extends Controller
      */
     public function halamanPembayaran($trx_id)
     {
-        // Muat relasi 'program' dan 'bank' saat mengambil data pendaftaran.
+        // PERBAIKAN TYPO: $trxa_id diubah menjadi $trx_id
         $pendaftaran = PendaftaranProgramOffline::with(['program', 'bank'])
             ->where('trx_id', $trx_id)
             ->firstOrFail();
+        
+        if ($pendaftaran->payment_type === 'tunai') {
+            return redirect()->route('public.pendaftaran.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+        }
 
-        // PERUBAHAN: Ambil semua data kontak dan gunakan variabel jamak ($contactServices)
         $contactServices = Customer_Service::all();
-
-        // Tampilkan view pembayaran dan kirim data pendaftaran (yang sudah berisi detail bank) dan kontak
         return view('pembayaran.index', compact('pendaftaran', 'contactServices'));
+    }
+
+    /**
+     * METHOD BARU: Menampilkan halaman sukses untuk pembayaran tunai.
+     */
+    public function halamanSuksesTunai($trx_id)
+    {
+        $pendaftaran = PendaftaranProgramOffline::with('program')
+            ->where('trx_id', $trx_id)
+            ->where('payment_type', 'tunai') // Pastikan ini adalah pendaftaran tunai
+            ->firstOrFail();
+
+        // Tampilkan view baru untuk sukses tunai
+        return view('pembayaran.sukses_tunai', compact('pendaftaran'));
     }
 }

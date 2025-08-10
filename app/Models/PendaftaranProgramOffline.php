@@ -23,7 +23,8 @@ class PendaftaranProgramOffline extends Model
         'transport_id',
         'bukti_pembayaran',
         'status',
-        'bank_id', // ✅ digunakan untuk relasi bank
+        'bank_id',
+        'payment_type', // <-- Kolom baru tetap ada di sini
     ];
 
     // Relasi ke program offline
@@ -41,15 +42,19 @@ class PendaftaranProgramOffline extends Model
     // Relasi ke transportasi
     public function transport()
     {
+        // Pastikan nama model Transports sudah benar
         return $this->belongsTo(Transports::class, 'transport_id');
     }
 
-    // ✅ Relasi ke bank (fix nama model)
+    // Relasi ke bank
     public function bank()
     {
+        // Pastikan nama model Banks sudah benar
         return $this->belongsTo(\App\Models\Banks::class, 'bank_id');
     }
 
+    // Anda sepertinya punya dua relasi ke program, mungkin salah satunya bisa dihapus?
+    // Jika 'program_offline_id' tidak ada di tabel, relasi ini tidak akan berfungsi.
     public function programOffline()
     {
         return $this->belongsTo(\App\Models\ProgramOffline::class, 'program_offline_id');

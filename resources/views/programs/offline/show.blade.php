@@ -11,6 +11,7 @@
     <!-- jQuery UI Autocomplete Stylesheet -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     @if (session('success'))
         <script>
@@ -190,29 +191,60 @@
                                         {{-- PERUBAHAN DIMULAI: Tambah Pilihan Bank --}}
                                         {{-- ====================================================== --}}
 
-                                        <div class="mb-3">
-                                            <label class="form-label"><i class="bi bi-bank"></i> Bank untuk
-                                                Pembayaran</label>
-                                            <select name="bank_id" class="form-select" required>
-                                                <option value="">Pilih Bank</option>
+                                         {{-- ====================================================== --}}
+                                         <!-- Tambahkan sebelum </body> -->
+{{-- Metode Pembayaran --}}
+<div class="mb-3">
+    <label class="form-label fw-bold"><i class="bi bi-wallet2"></i> Metode Pembayaran</label>
+    <div class="d-flex flex-wrap gap-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="payment_type" id="pay_tunai" value="tunai" 
+                   {{ old('payment_type') == 'tunai' ? 'checked' : '' }} required>
+            <label class="form-check-label" for="pay_tunai">Bayar Tunai (Cash)</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="payment_type" id="pay_transfer" value="transfer"
+                   {{ old('payment_type') == 'transfer' ? 'checked' : '' }} required>
+            <label class="form-check-label" for="pay_transfer">Transfer Bank</label>
+        </div>
+    </div>
+</div>
 
-                                                {{-- Pastikan Anda mengirimkan variabel $banks dari controller --}}
-                                                {{-- Contoh di Controller: $banks = \App\Models\Bank::where('status', 'active')->get(); --}}
-                                                @if (isset($banks) && $banks->isNotEmpty())
-                                                    @foreach ($banks as $bank)
-                                                        <option value="{{ $bank->id }}">{{ $bank->name }}
-                                                        </option>
-                                                    @endforeach
-                                                @else
-                                                    <option value="" disabled>Tidak ada pilihan bank tersedia
-                                                    </option>
-                                                @endif
-                                            </select>
-                                            @if (!isset($banks) || $banks->isEmpty())
-                                                <div class="form-text text-danger">Pilihan bank tidak tersedia. Hubungi
-                                                    admin.</div>
-                                            @endif
-                                        </div>
+<div class="mb-3" id="bankDropdown" style="display: none;">
+    <label class="form-label fw-bold"><i class="bi bi-bank"></i> Pilih Bank Tujuan</label>
+    <select name="bank_id" class="form-select" {{ old('payment_type') == 'transfer' ? 'required' : '' }}>
+        <option value="">-- Pilih Bank --</option>
+        @if (isset($banks) && $banks->isNotEmpty())
+            @foreach ($banks as $bank)
+                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : '' }}>
+                    {{ $bank->name }}
+                </option>
+            @endforeach
+        @endif
+    </select>
+</div>
+
+<script>
+$(document).ready(function(){
+    toggleBankDropdown();
+
+    $('input[name="payment_type"]').change(function(){
+        toggleBankDropdown();
+    });
+
+    function toggleBankDropdown(){
+        if($('input[name="payment_type"]:checked').val() === 'transfer'){
+            $('#bankDropdown').slideDown();
+            $('select[name="bank_id"]').attr('required', true);
+        } else {
+            $('#bankDropdown').slideUp();
+            $('select[name="bank_id"]').removeAttr('required');
+        }
+    }
+});
+</script>
+
+
 
                                         <div class="mb-3">
                                             <label class="form-label"><i class="bi bi-calendar-check-fill"></i>

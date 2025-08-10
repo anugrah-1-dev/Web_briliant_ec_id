@@ -73,6 +73,8 @@ Route::get('/program/offline/{program:slug}', [ProgramOfflinePublicController::c
 Route::post('/program/offline/{program:slug}/daftar', [ProgramOfflinePublicController::class, 'daftar'])->name('public.program.offline.daftar');
 // Route Halaman Pembayaran Offline
 Route::get('/pendaftaran/offline/pembayaran/{trx_id}', [ProgramOfflinePublicController::class, 'halamanPembayaran'])->name('public.pendaftaran.offline.pembayaran');
+// ROUTE BARU: Halaman sukses untuk pembayaran tunai
+Route::get('/pendaftaran/sukses-tunai/{trx_id}', [ProgramOfflinePublicController::class, 'halamanSuksesTunai'])->name('public.pendaftaran.sukses.tunai');
 
 
 // === PROGRAM ONLINE ===

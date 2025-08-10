@@ -17,12 +17,9 @@
         <button class="btn btn-success btn-sm ml-md-2" data-toggle="modal" data-target="#exportModal">
             <i class="fas fa-file-csv mr-1"></i> Export CSV
         </button>
-
     </div>
 </div>
 @stop
-
-
 
 @section('content')
 @if (session('success'))
@@ -33,6 +30,7 @@
         </button>
     </div>
 @endif
+
 <!-- Modal Export -->
 <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
     aria-hidden="true">
@@ -45,7 +43,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Dari Tanggal:</label>
@@ -56,7 +53,6 @@
                         <input type="date" name="end_date" class="form-control" required>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Export</button>
                 </div>
@@ -64,25 +60,25 @@
         </form>
     </div>
 </div>
+
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">Data Pendaftar</h3>
     </div>
-
     <div class="card-body p-0">
         <div class="table-responsive">
             <table id="pendaftarTable" class="table table-hover table-bordered mb-0">
                 <thead>
                     <tr>
-                        <th width="5%"></th>
+                        <th width="5%">No</th>
                         <th>TRX ID</th>
                         <th>Nama</th>
                         <th>Email</th>
                         <th>No HP</th>
                         <th>Program</th>
                         <th>Periode</th>
-                        {{-- PERUBAHAN: Menambahkan kolom Bank --}}
-                        <th>Bank</th>
+                        <th>Tipe Pembayaran</th> {{-- KOLOM BARU --}}
+                        <th>Bank Tujuan</th>   {{-- NAMA KOLOM DISESUAIKAN --}}
                         <th>Status</th>
                         <th>Bukti Pembayaran</th>
                         <th width="10%">Aksi</th>
@@ -111,32 +107,37 @@
                                     -
                                 @endif
                             </td>
-
-
-                            {{-- PERUBAHAN: Menampilkan nama bank dari relasi --}}
-                            <td>{{ $data->bank->name ?? '-' }}</td>
-
+                            {{-- LOGIKA UNTUK KOLOM BARU TIPE PEMBAYARAN --}}
+                            <td>
+                                @if ($data->payment_type == 'tunai')
+                                    <span class="badge badge-success">Bayar Tunai</span>
+                                @elseif ($data->payment_type == 'transfer')
+                                    <span class="badge badge-info">Transfer Bank</span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            {{-- LOGIKA UNTUK KOLOM BANK TUJUAN --}}
+                            <td>
+                                @if ($data->payment_type == 'transfer')
+                                    {{ $data->bank->name ?? '-' }}
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>
                                 @php
                                     $statusClass = 'secondary';
-                                    if ($data->status === 'pending') {
-                                        $statusClass = 'warning';
-                                    }
-                                    if ($data->status === 'diterima') {
-                                        $statusClass = 'success';
-                                    }
-                                    if ($data->status === 'ditolak') {
-                                        $statusClass = 'danger';
-                                    }
+                                    if ($data->status === 'pending') $statusClass = 'warning';
+                                    if ($data->status === 'diterima') $statusClass = 'success';
+                                    if ($data->status === 'ditolak') $statusClass = 'danger';
                                 @endphp
                                 <span class="badge badge-{{ $statusClass }}">{{ ucfirst($data->status) }}</span>
                             </td>
                             <td>
                                 @if ($data->bukti_pembayaran)
-                                    <a href="{{ asset('storage/' . $data->bukti_pembayaran) }}" target="_blank"
-                                        title="Lihat Bukti">
-                                        <img src="{{ asset('storage/' . $data->bukti_pembayaran) }}" alt="Bukti"
-                                            class="img-thumbnail" style="max-width: 60px; height: auto;">
+                                    <a href="{{ asset('storage/' . $data->bukti_pembayaran) }}" target="_blank" title="Lihat Bukti">
+                                        <img src="{{ asset('storage/' . $data->bukti_pembayaran) }}" alt="Bukti" class="img-thumbnail" style="max-width: 60px; height: auto;">
                                     </a>
                                 @else
                                     <span class="text-muted" style="font-size: 0.85em;">Belum ada</span>
@@ -144,13 +145,10 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('admin.pendaftaran.offline.edit', $data->id) }}"
-                                        class="btn btn-primary btn-action" title="Edit Status">
+                                    <a href="{{ route('admin.pendaftaran.offline.edit', $data->id) }}" class="btn btn-primary btn-action" title="Edit Status">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <form action="{{ route('admin.pendaftaran.offline.destroy', $data->id) }}" method="POST"
-                                        onsubmit="return confirm('Anda yakin ingin menghapus pendaftaran ini secara permanen?');"
-                                        class="d-inline">
+                                    <form action="{{ route('admin.pendaftaran.offline.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus pendaftaran ini secara permanen?');" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-action" title="Hapus">
@@ -159,19 +157,16 @@
                                     </form>
                                 </div>
                             </td>
-
                         </tr>
                     @empty
                         <tr>
-                            {{-- PERUBAHAN: Menyesuaikan colspan --}}
-                            <td colspan="11" class="text-center py-4">Belum ada pendaftar.</td>
+                            <td colspan="12" class="text-center py-4">Belum ada pendaftar.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-
     @if ($pendaftar->hasPages())
         <div class="card-footer bg-light">
             {{ $pendaftar->links('vendor.pagination.bootstrap-4') }}

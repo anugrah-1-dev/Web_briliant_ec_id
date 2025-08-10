@@ -13,42 +13,52 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-// 1. Tambahkan kembali WithMapping dan WithDrawings
 class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapping, WithEvents, WithDrawings
 {
     protected $pendaftarans;
     protected $row_height = 80;
-    protected $column_J_width = 20;
+    protected $image_column_width = 25;
 
-    // Terima parameter dari controller
     public function __construct($startDate, $endDate)
     {
-        // 2. Ambil data SATU KALI di sini dan simpan ke properti.
-        // Ini akan menyelesaikan error 'null'.
-        $this->pendaftarans = PendaftaranProgramOffline::with(['program', 'period', 'transport']) // Jangan lupa eager loading
+        // Mengambil data pendaftar dari database, lengkap dengan relasinya (program, periode, bank, dll.)
+        $this->pendaftarans = PendaftaranProgramOffline::with(['program', 'period', 'transport', 'bank'])
             ->whereDate('created_at', '>=', $startDate)
             ->whereDate('created_at', '<=', $endDate)
             ->get();
     }
 
-    /**
-     * 3. Method collection() sekarang hanya mengembalikan data yang sudah diambil.
-     */
     public function collection()
     {
+        // Mengembalikan data yang sudah diambil di constructor
         return $this->pendaftarans;
     }
 
     public function headings(): array
     {
+        // Menentukan judul untuk setiap kolom di file Excel
         return [
             'ID Transaksi', 'Nama Lengkap', 'Email', 'No HP', 'Asal Kota', 'No Wali',
-            'Nama Program', 'Tanggal Periode', 'Transportasi', 'Bukti Pembayaran', 'Status',
+            'Nama Program', 'Tanggal Periode', 'Transportasi', 
+            'Tipe Pembayaran', // Kolom baru
+            'Bank Tujuan',     // Kolom baru
+            'Bukti Pembayaran', 
+            'Status',
         ];
     }
 
     public function map($pendaftaran): array
     {
+        // Mengatur data apa saja yang akan ditampilkan di setiap baris
+        $periodText = '-';
+        if ($pendaftaran->period) {
+            $tanggalMulai = $pendaftaran->period->tanggal_mulai ?? $pendaftaran->period->date;
+            $tanggalSelesai = $pendaftaran->period->tanggal_selesai ?? $pendaftaran->period->date;
+            $startDate = \Carbon\Carbon::parse($tanggalMulai);
+            $endDate = \Carbon\Carbon::parse($tanggalSelesai);
+            $periodText = $startDate->isSameDay($endDate) ? $startDate->translatedFormat('d F Y') : $startDate->translatedFormat('d M Y') . ' - ' . $endDate->translatedFormat('d M Y');
+        }
+
         return [
             $pendaftaran->trx_id,
             $pendaftaran->nama_lengkap,
@@ -56,24 +66,27 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapp
             $pendaftaran->no_hp,
             $pendaftaran->asal_kota,
             $pendaftaran->no_wali,
-            $pendaftaran->program ? $pendaftaran->program->nama : '-',
-            $pendaftaran->period ? $pendaftaran->period->date->format('d F Y') : '-',
-            $pendaftaran->transport ? $pendaftaran->transport->name : '-',
-            '', // Kolom Bukti Pembayaran dikosongkan
+            $pendaftaran->program->nama ?? '-',
+            $periodText,
+            $pendaftaran->transport->name ?? '-',
+            // Logika untuk kolom 'Tipe Pembayaran'
+            ucfirst($pendaftaran->payment_type), // Menjadi 'Tunai' atau 'Transfer'
+            // Logika untuk kolom 'Bank Tujuan'
+            $pendaftaran->payment_type == 'transfer' ? ($pendaftaran->bank->name ?? '-') : '-',
+            // Logika untuk kolom 'Bukti Pembayaran'
+            $pendaftaran->payment_type == 'tunai' ? 'Tunai / Cash' : '', // Tulis 'Tunai / Cash' jika tunai, kosongkan jika transfer
             $pendaftaran->status,
         ];
     }
 
-    /**
-     * Method ini sekarang akan berjalan karena $this->pendaftarans sudah berisi data.
-     */
     public function drawings()
     {
         $drawings = [];
-        $columnWidthInPixels = $this->column_J_width * 7.5;
+        $columnWidthInPixels = $this->image_column_width * 7.5;
 
         foreach ($this->pendaftarans as $key => $pendaftaran) {
-            if ($pendaftaran->bukti_pembayaran) {
+            // Logika ini memastikan gambar hanya ditambahkan jika tipe pembayaran adalah 'transfer'
+            if ($pendaftaran->payment_type === 'transfer' && $pendaftaran->bukti_pembayaran) {
                 $pathToFile = public_path('storage/' . $pendaftaran->bukti_pembayaran);
                 if (!file_exists($pathToFile)) {
                     continue;
@@ -83,8 +96,10 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapp
                 $drawing->setName('Bukti Pembayaran');
                 $drawing->setDescription($pendaftaran->nama_lengkap);
                 $drawing->setPath($pathToFile);
-                $drawing->setCoordinates('J' . ($key + 2));
+                // Menempatkan gambar di kolom L (kolom ke-12)
+                $drawing->setCoordinates('L' . ($key + 2)); 
 
+                // Mengatur ukuran dan posisi gambar agar pas di tengah sel
                 list($originalWidth, $originalHeight) = getimagesize($pathToFile);
                 $newHeight = $this->row_height - 10;
                 $drawing->setHeight($newHeight);
@@ -98,11 +113,9 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapp
         return $drawings;
     }
 
-    /**
-     * Method ini juga akan berjalan karena $this->pendaftarans sudah berisi data.
-     */
     public function registerEvents(): array
     {
+        // Mengatur style (tinggi baris, lebar kolom, border, dll) setelah file dibuat
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet;
@@ -110,25 +123,33 @@ class PendaftaranOfflineExport implements FromCollection, WithHeadings, WithMapp
                 $highestColumn = $sheet->getDelegate()->getHighestColumn();
                 $cellRange = 'A1:' . $highestColumn . $highestRow;
 
-                $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                // Pengaturan umum
                 $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 $sheet->getStyle('A1:' . $highestColumn.'1')->getFont()->setBold(true);
+                $sheet->getStyle('A1:' . $highestColumn.'1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
 
+                // Pengaturan per baris
                 foreach ($this->pendaftarans as $key => $pendaftaran) {
                     $rowNumber = $key + 2;
-                    if ($pendaftaran->bukti_pembayaran && file_exists(public_path('storage/' . $pendaftaran->bukti_pembayaran))) {
+                    if ($pendaftaran->payment_type === 'transfer' && $pendaftaran->bukti_pembayaran && file_exists(public_path('storage/' . $pendaftaran->bukti_pembayaran))) {
                         $sheet->getDelegate()->getRowDimension($rowNumber)->setRowHeight($this->row_height);
                     } else {
                         $sheet->getDelegate()->getRowDimension($rowNumber)->setRowHeight(25);
                     }
+                    // Logika ini menengahkan tulisan 'Tunai / Cash' di selnya
+                    if ($pendaftaran->payment_type === 'tunai') {
+                        $sheet->getStyle('L' . $rowNumber)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    }
                 }
 
-                foreach (range('A', 'I') as $col) { $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true); }
-                foreach (range('K', $highestColumn) as $col) { $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true); }
-                $sheet->getDelegate()->getColumnDimension('J')->setWidth($this->column_J_width);
+                // Pengaturan lebar kolom
+                foreach (range('A', 'K') as $col) { $sheet->getDelegate()->getColumnDimension($col)->setAutoSize(true); }
+                $sheet->getDelegate()->getColumnDimension('M')->setAutoSize(true);
+                $sheet->getDelegate()->getColumnDimension('L')->setWidth($this->image_column_width); // Kolom untuk gambar/teks bukti
 
+                // Pengaturan border
                 $sheet->getStyle($cellRange)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
-                $sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
             },
         ];
     }
