@@ -80,7 +80,7 @@ class ProgramOfflinePublicController extends Controller
         // --- PERUBAHAN LOGIKA PENGALIHAN (REDIRECT) ---
         if ($pendaftaran->payment_type === 'tunai') {
             // Jika memilih Bayar Tunai, arahkan ke halaman sukses khusus untuk tunai
-            return redirect()->route('public.pendaftaran.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+            return redirect()->route('public.pendaftaran.offline.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
         } else {
             // Jika memilih Transfer Bank, arahkan ke halaman pembayaran seperti sebelumnya
             return redirect()->route('public.pendaftaran.offline.pembayaran', ['trx_id' => $newTrxId])

@@ -21,24 +21,20 @@ class PendaftaranProgramOnline extends Model
         'period_id',
         'bukti_pembayaran',
         'status',
-        // PERUBAHAN: Tambahkan 'bank_id' agar bisa diisi secara massal
-        'bank_id',
+        'bank_id',       // sudah ada
+        'payment_type',  // tambahkan agar bisa diisi massal
     ];
 
-    // Relasi ke program online
     public function program()
     {
         return $this->belongsTo(ProgramOnline::class, 'program_id');
     }
 
-    // Relasi ke periode
     public function period()
     {
         return $this->belongsTo(Period::class, 'period_id');
     }
 
-    // PERUBAHAN: Tambahkan relasi ke model Bank
-    // Ini memungkinkan Anda untuk memanggil $pendaftaran->bank di controller dan view
     public function bank()
     {
         return $this->belongsTo(Banks::class, 'bank_id');

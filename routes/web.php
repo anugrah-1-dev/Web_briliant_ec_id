@@ -29,6 +29,7 @@ use App\Http\Controllers\PendaftranCampController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\TrackingController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,17 +75,18 @@ Route::post('/program/offline/{program:slug}/daftar', [ProgramOfflinePublicContr
 // Route Halaman Pembayaran Offline
 Route::get('/pendaftaran/offline/pembayaran/{trx_id}', [ProgramOfflinePublicController::class, 'halamanPembayaran'])->name('public.pendaftaran.offline.pembayaran');
 // ROUTE BARU: Halaman sukses untuk pembayaran tunai
-Route::get('/pendaftaran/sukses-tunai/{trx_id}', [ProgramOfflinePublicController::class, 'halamanSuksesTunai'])->name('public.pendaftaran.sukses.tunai');
+Route::get('/pendaftaran/offline/sukses-tunai/{trx_id}', [ProgramOfflinePublicController::class, 'halamanSuksesTunai'])->name('public.pendaftaran.offline.sukses.tunai');
 
 
 // === PROGRAM ONLINE ===
 Route::get('/program/online/{program:slug}', [ProgramOnlinePublicController::class, 'show'])
     ->name('public.program.online.show');
-
 Route::post('/program/online/{program:slug}/daftar', [ProgramOnlinePublicController::class, 'daftar'])
     ->name('public.program.online.daftar');
 // Route Halaman Pembayaran Online
 Route::get('/pendaftaran/online/pembayaran/{trx_id}', [ProgramOnlinePublicController::class, 'halamanPembayaran'])->name('public.pendaftaran.online.pembayaran');
+// ROUTE BARU: Halaman sukses untuk pembayaran tunai
+Route::get('/pendaftaran/online/sukses-tunai/{trx_id}', [ProgramOnlinePublicController::class, 'halamanSuksesTunai'])->name('public.pendaftaran.online.sukses.tunai');
 
 
 // ===== ROUTE UNTUK UPLOAD BUKTI PEMBAYARAN =====

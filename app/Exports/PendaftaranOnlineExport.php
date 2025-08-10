@@ -51,6 +51,7 @@ class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMappi
             'Tanggal Periode',
             'Bukti Pembayaran',
             'Status',
+            'Tipe Pembayaran',
         ];
     }
 
@@ -66,6 +67,7 @@ class PendaftaranOnlineExport implements FromCollection, WithHeadings, WithMappi
             $pendaftaran->period ? $pendaftaran->period->date->format('d F Y') : 'N/A',
             '', // Kolom Bukti Pembayaran dikosongkan
             $pendaftaran->status,
+            $pendaftaran->payment_type,  // <-- Data kolom baru
         ];
     }
 

@@ -166,10 +166,29 @@
                                             value="{{ old('asal_kota') }}">
                                     </div>
 
+                                    {{-- Metode Pembayaran --}}
+<div class="mb-3">
+    <label class="form-label fw-bold"><i class="bi bi-wallet2"></i> Metode Pembayaran</label>
+    <div class="d-flex flex-wrap gap-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="payment_type" id="pay_tunai" value="tunai" 
+                   {{ old('payment_type') == 'tunai' ? 'checked' : '' }} required>
+            <label class="form-check-label" for="pay_tunai">Bayar Tunai (Cash)</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="payment_type" id="pay_transfer" value="transfer"
+                   {{ old('payment_type') == 'transfer' ? 'checked' : '' }} required>
+            <label class="form-check-label" for="pay_transfer">Transfer Bank</label>
+        </div>
+    </div>
+</div>
+
                                     <div class="mb-3">
                                         <label class="form-label"><i class="bi bi-bank"></i> Bank untuk
                                             Pembayaran</label>
-                                        <select name="bank_id" class="form-select" required>
+                                        <select name="bank_id" class="form-select" 
+    @if(old('payment_type') === 'transfer') required @endif>
+
                                             <option value="">Pilih Bank</option>
                                             @if (isset($banks) && $banks->isNotEmpty())
                                                 @foreach ($banks as $bank)
@@ -269,6 +288,34 @@
             });
         });
     </script>
+
+{{-- pilihan bank --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const paymentRadios = document.querySelectorAll('input[name="payment_type"]');
+        const bankField = document.querySelector('select[name="bank_id"]').closest('.mb-3');
+
+        // Fungsi untuk toggle tampilan bank
+        function toggleBankField() {
+            const selected = document.querySelector('input[name="payment_type"]:checked');
+            if (selected && selected.value === 'transfer') {
+                bankField.style.display = '';
+            } else {
+                bankField.style.display = 'none';
+                bankField.querySelector('select').value = ''; // reset pilihan
+            }
+        }
+
+        // Saat load pertama
+        toggleBankField();
+
+        // Saat radio berubah
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', toggleBankField);
+        });
+    });
+</script>
+
 </body>
 
 

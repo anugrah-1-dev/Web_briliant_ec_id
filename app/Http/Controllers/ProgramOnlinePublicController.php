@@ -6,7 +6,7 @@ use App\Models\ProgramOnline;
 use App\Models\Period;
 use App\Models\PendaftaranProgramOnline;
 use App\Models\Banks;
-use App\Models\Customer_Service; // 1. PASTIKAN MODEL INI DI-IMPORT
+use App\Models\Customer_Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -23,11 +23,8 @@ class ProgramOnlinePublicController extends Controller
         }
         $periods = Period::where('is_active', 1)->get();
         $banks = Banks::where('status', 'active')->get();
+        $contactServices = Customer_Service::all();
 
-        // PERUBAHAN: Ambil semua data kontak untuk widget WA
-        $contactServices = Customer_Service::all(); 
-
-        // Kirim semua variabel ke view
         return view('programs.online.show', compact('program', 'periods', 'banks', 'contactServices'));
     }
 
@@ -37,44 +34,53 @@ class ProgramOnlinePublicController extends Controller
     public function daftar(Request $request, ProgramOnline $program)
     {
         $validated = $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'email' => 'required|email',
-            'no_hp' => 'required|string|max:20',
-            'asal_kota' => 'nullable|string|max:100',
-            'period_id' => 'required|exists:periods,id',
-            'bank_id' => 'required|exists:banks,id',
+            'nama_lengkap'    => 'required|string|max:255',
+            'email'           => 'required|email',
+            'no_hp'           => 'required|string|max:20',
+            'asal_kota'       => 'nullable|string|max:100',
+            'period_id'       => 'required|exists:periods,id',
+            'payment_type'    => 'required|in:tunai,transfer',
+            'bank_id'         => 'required_if:payment_type,transfer|nullable|exists:banks,id',
         ]);
 
-        // --- Logika untuk membuat trx_id ---
+        // Membuat trx_id unik per hari
         $today = Carbon::now()->format('Ymd');
         $prefix = 'TRX-ONL-' . $today . '-';
 
         $lastRegistration = PendaftaranProgramOnline::where('trx_id', 'like', $prefix . '%')
-                                            ->orderBy('id', 'desc')
-                                            ->first();
+                                ->orderBy('id', 'desc')
+                                ->first();
+
         $nextSequence = 1;
         if ($lastRegistration) {
             $lastSequence = (int) str_replace($prefix, '', $lastRegistration->trx_id);
             $nextSequence = $lastSequence + 1;
         }
         $newTrxId = $prefix . $nextSequence;
-        // --- Akhir logika trx_id ---
 
+        // Simpan data pendaftaran
         $pendaftaran = PendaftaranProgramOnline::create([
-            'trx_id' => $newTrxId,
-            'program_id' => $program->id,
-            'period_id' => $validated['period_id'],
-            'bank_id' => $validated['bank_id'], // Simpan bank_id yang dipilih
+            'trx_id'       => $newTrxId,
+            'program_id'   => $program->id,
+            'period_id'    => $validated['period_id'],
+            'bank_id'      => $validated['bank_id'] ?? null,
             'nama_lengkap' => $validated['nama_lengkap'],
-            'email' => $validated['email'],
-            'no_hp' => $validated['no_hp'],
-            'asal_kota' => $validated['asal_kota'] ?? null,
-            'status' => 'pending',
+            'email'        => $validated['email'],
+            'no_hp'        => $validated['no_hp'],
+            'asal_kota'    => $validated['asal_kota'] ?? null,
+            'payment_type' => $validated['payment_type'],
+            'status'       => 'pending',
         ]);
 
-        // Arahkan ke halaman pembayaran online
-        return redirect()->route('public.pendaftaran.online.pembayaran', ['trx_id' => $newTrxId])
-                         ->with('success', 'Pendaftaran awal berhasil! Silakan lanjutkan ke tahap pembayaran.');
+        // Redirect sesuai metode pembayaran
+        if ($pendaftaran->payment_type === 'tunai') {
+            // Jika bayar tunai, arahkan ke halaman sukses khusus tunai
+            return redirect()->route('public.pendaftaran.online.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+        } else {
+            // Jika transfer bank, arahkan ke halaman pembayaran
+            return redirect()->route('public.pendaftaran.online.pembayaran', ['trx_id' => $newTrxId])
+                             ->with('success_message', 'Pendaftaran awal berhasil! Silakan lanjutkan ke tahap pembayaran.');
+        }
     }
 
     /**
@@ -82,15 +88,30 @@ class ProgramOnlinePublicController extends Controller
      */
     public function halamanPembayaran($trx_id)
     {
-        // Muat relasi 'program' dan 'bank' saat mengambil data pendaftaran.
         $pendaftaran = PendaftaranProgramOnline::with(['program', 'bank'])
-                                                ->where('trx_id', $trx_id)
-                                                ->firstOrFail();
+                            ->where('trx_id', $trx_id)
+                            ->firstOrFail();
 
-        // PERUBAHAN: Ambil semua data kontak dan gunakan variabel jamak ($contactServices)
-        $contactServices = Customer_Service::all(); 
+        // Jika metode pembayaran tunai, langsung redirect ke halaman sukses tunai
+        if ($pendaftaran->payment_type === 'tunai') {
+            return redirect()->route('public.pendaftaran.online.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+        }
 
-        // Kirim data pendaftaran dan kontak ke view
+        $contactServices = Customer_Service::all();
+
         return view('pembayaran.index', compact('pendaftaran', 'contactServices'));
+    }
+
+    /**
+     * Menampilkan halaman sukses untuk pembayaran tunai.
+     */
+    public function halamanSuksesTunai($trx_id)
+    {
+        $pendaftaran = PendaftaranProgramOnline::with('program')
+            ->where('trx_id', $trx_id)
+            ->where('payment_type', 'tunai')
+            ->firstOrFail();
+
+        return view('pembayaran.sukses_tunai', compact('pendaftaran'));
     }
 }
