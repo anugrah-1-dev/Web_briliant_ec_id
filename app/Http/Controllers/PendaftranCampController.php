@@ -66,7 +66,7 @@ class PendaftranCampController extends Controller
             ->first();
         $nextNumber = $last ? ((int) str_replace($prefix, '', $last->trx_id) + 1) : 1;
         $trx_id = $prefix . $nextNumber;
-        
+
 
         // Simpan pendaftaran
         $pendaftaran = PendaftaranProgramCamp::create([
@@ -79,7 +79,7 @@ class PendaftranCampController extends Controller
             'period_id'        => $validated['period_id'],
             'durasi_paket'     => $validated['durasi_paket'],
             'bank_id'          => $validated['bank_id'],
-            'payment_type'     => $validated['payment_type'], 
+            'payment_type'     => $validated['payment_type'],
             'status'           => 'pending',
             'nama_kamar'       => null,
             'trx_id'           => $trx_id,
@@ -189,7 +189,7 @@ class PendaftranCampController extends Controller
         ]);
 
         $room->increment('penghuni', 1);
-        
+
         // Kurangi stok jika setelah ditambahkan jumlah penghuni = kapasitas
         if ($penghuniAktif + 1 >= $room->kapasitas) {
             $program = ProgramCamp::findOrFail($room->program_camp_id);
@@ -208,19 +208,19 @@ class PendaftranCampController extends Controller
         $pendaftaran = PendaftaranProgramCamp::with('bank')
             ->where('trx_id', $trx_id)
             ->firstOrFail();
-        
+
         $paymentType = $pendaftaran->payment_type; // ambil langsung dari kolom payment_type
-        
+
         if ($paymentType === 'tunai') {
             return view('camp.tunai', compact('pendaftaran'));
         }
-    
+
         return view('camp.pembayaran', compact('pendaftaran'));
     }
-    
-    
-    
-    
+
+
+
+
 
 
     // public function showPembayaran($id)
@@ -230,7 +230,7 @@ class PendaftranCampController extends Controller
 
     // }
 
-    
+
     public function uploadBukti(Request $request)
 {
     $request->validate([

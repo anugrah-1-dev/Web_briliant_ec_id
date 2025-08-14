@@ -27,6 +27,14 @@ class ProgramCamp extends Model
         'harga_enam_bulan',
         'harga_satu_tahun',
         'fasilitas',
-        'thumbnail',
+        'thumbnail_id'
     ];
+
+    public function thumbnails()
+    {
+        return $this->hasMany(Thumbnail::class, 'program_camp_id');
+    }
 }
+
+
+

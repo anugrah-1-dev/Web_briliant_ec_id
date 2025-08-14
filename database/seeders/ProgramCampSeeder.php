@@ -12,11 +12,11 @@ class ProgramCampSeeder extends Seeder
     {
         $data = [
             [
-                'nama' => 'BIE+ Camp [VVIP] ',
+                'nama' => 'BIE+ Camp [VVIP]',
                 'slug' => Str::slug('Camp VVIP Putra Putri'),
                 'kategori' => 'VVIP',
                 'stok' => 10,
-                //20
+                // 20
                 'harga_perhari' => 250000,
                 'harga_satu_minggu' => 1500000,
                 'harga_dua_minggu' => 2800000,
@@ -27,7 +27,7 @@ class ProgramCampSeeder extends Seeder
                 'harga_enam_bulan' => 25000000,
                 'harga_satu_tahun' => 45000000,
                 'fasilitas' => json_encode(['AC', 'Kamar Mandi Dalam', 'Lemari', 'Dispenser']),
-                'thumbnail' => null,
+                'thumbnail_id' => null,
             ],
             [
                 'nama' => 'BIE+ Camp [VIP]',
@@ -45,14 +45,14 @@ class ProgramCampSeeder extends Seeder
                 'harga_enam_bulan' => 21000000,
                 'harga_satu_tahun' => 39000000,
                 'fasilitas' => json_encode(['Kipas Angin', 'WiFi', 'Ruang Belajar']),
-                'thumbnail' => null,
+                'thumbnail_id' => null,
             ],
             [
                 'nama' => 'BIE+ Camp [Barack]',
                 'slug' => Str::slug('Camp Barack Putra Putri'),
                 'kategori' => 'Barack',
                 'stok' => 2,
-                //12
+                // 12
                 'harga_perhari' => 150000,
                 'harga_satu_minggu' => 900000,
                 'harga_dua_minggu' => 1700000,
@@ -63,7 +63,7 @@ class ProgramCampSeeder extends Seeder
                 'harga_enam_bulan' => 16000000,
                 'harga_satu_tahun' => 30000000,
                 'fasilitas' => json_encode(['Kasur', 'Kamar Bersama', 'Toilet Luar']),
-                'thumbnail' => null,
+                'thumbnail_id' => null,
             ],
         ];
 
@@ -72,7 +72,7 @@ class ProgramCampSeeder extends Seeder
                 ['slug' => $item['slug']], // Unik berdasarkan slug
                 array_merge($item, [
                     'updated_at' => now(),
-                    'created_at' => now(), // Tidak akan terpakai jika sudah ada
+                    'created_at' => now(), // Tidak dipakai kalau data sudah ada
                 ])
             );
         }

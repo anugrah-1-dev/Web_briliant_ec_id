@@ -62,13 +62,47 @@
                                     <td class="text-center">
                                         {{ ($programs->currentPage() - 1) * $programs->perPage() + $index + 1 }}</td>
                                     <td class="text-center">
-                                        @if ($program->thumbnail && file_exists(public_path('upload/camp/' . $program->thumbnail)))
-                                            <img src="{{ asset('upload/camp/' . $program->thumbnail) }}" alt="Thumbnail"
-                                                class="img-thumbnail" style="max-width: 80px; max-height: 60px;">
+                                        @if ($program->thumbnails->count() > 0)
+                                            <div id="thumb-grid-{{ $program->id }}"
+                                                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 5px;">
+                                                @foreach ($program->thumbnails as $index => $thumb)
+                                                    <div
+                                                        class="{{ $index >= 1 ? 'extra-thumb-' . $program->id . ' d-none' : '' }}">
+                                                        <img src="{{ asset($thumb->image) }}" alt="Thumbnail"
+                                                            class="img-thumbnail"
+                                                            style="width: 100%; height: 80px; object-fit: cover;">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                            @if ($program->thumbnails->count() > 1)
+                                                <button class="btn btn-link p-0 mt-2"
+                                                    onclick="toggleThumbnails({{ $program->id }}, this)">
+                                                    Lihat Selengkapnya
+                                                </button>
+                                            @endif
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
+
+
+
+
                                     </td>
+
+                                    <script>
+                                        function toggleThumbnails(id, btn) {
+                                            const extraThumbs = document.querySelectorAll('.extra-thumb-' + id);
+                                            const hidden = [...extraThumbs].some(el => el.classList.contains('d-none'));
+                                            extraThumbs.forEach(el => el.classList.toggle('d-none', !hidden));
+                                            btn.textContent = hidden ? 'Sembunyikan' : 'Lihat Selengkapnya';
+                                        }
+                                    </script>
+
+
+
+
+
                                     <td>
                                         <strong>{{ $program->nama }}</strong><br>
                                         <small class="text-muted">Slug: {{ $program->slug ?? '-' }}</small>

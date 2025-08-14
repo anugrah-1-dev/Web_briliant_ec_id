@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\PendaftaranProgramCampController;
 use App\Http\Controllers\PendaftranCampController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\Admin\ThumbnailController;
 
 
 /*
@@ -145,6 +146,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/programs/camp/sync-all-stok-from-rooms', [ProgramCampController::class, 'syncAllStokFromRoomsAjax'])->name('programs.camp.syncAllStokFromRoomsAjax');
 
     Route::post('/programs/camp/sync-stok', [ProgramCampController::class, 'syncStokWithPenghuni'])->name('programs.camp.syncStokWithPenghuni');
+    Route::delete('/thumbnails/{thumbnail}', [ThumbnailController::class, 'destroy'])
+        ->name('thumbnails.destroy');
 
 
     Route::resource('rooms', RoomController::class);

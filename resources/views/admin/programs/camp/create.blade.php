@@ -80,13 +80,12 @@
                         <h4 class="mt-4">Thumbnail</h4>
                         <div class="row">
                             <div class="col-md-6">
-                                <x-adminlte-input-file name="thumbnail" label="Upload Thumbnail" accept="image/*" />
-                                <div class="mt-2">
-                                    <img id="preview-thumbnail" class="img-fluid d-none" style="max-height: 200px;"
-                                        alt="Thumbnail Preview">
-                                </div>
+                                <x-adminlte-input type="file" name="thumbnail[]" label="Thumbnail" multiple />
+                                <div class="mt-2 d-flex flex-wrap gap-2" id="preview-thumbnails"></div>
                             </div>
                         </div>
+
+
                     </div>
                     <div class="card-footer">
                         <x-adminlte-button label="Simpan" theme="success" icon="fas fa-save" type="submit" />
@@ -99,22 +98,32 @@
     </div>
 @stop
 
+
 @section('js')
     <script>
-        // Preview thumbnail sebelum upload
-        document.querySelector('input[name="thumbnail"]').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('preview-thumbnail');
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('d-none');
-            } else {
-                preview.src = '';
-                preview.classList.add('d-none');
+        document.querySelector('input[name="thumbnail[]"]').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const previewContainer = document.getElementById('preview-thumbnails');
+            previewContainer.innerHTML = ''; // Hapus preview lama
+
+            if (files.length > 5) {
+                alert("Maksimal 5 gambar saja!");
+                e.target.value = ""; // Reset input
+                return;
             }
+
+            Array.from(files).forEach(file => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.classList.add('img-fluid', 'rounded', 'border');
+                img.style.maxHeight = '150px';
+                img.style.objectFit = 'cover';
+                previewContainer.appendChild(img);
+            });
         });
     </script>
 @stop
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

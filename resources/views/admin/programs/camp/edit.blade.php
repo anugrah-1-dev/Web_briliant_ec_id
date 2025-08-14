@@ -13,7 +13,8 @@
                 <div class="card-header bg-primary">
                     <h3 class="card-title">Form Edit Program Camp</h3>
                 </div>
-                <form action="{{ route('admin.programs.camp.update', $program->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.programs.camp.update', $program->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
@@ -48,16 +49,16 @@
                         </div>
                         <div class="row">
                             @foreach ([
-                                'harga_perhari' => 'Per Hari',
-                                'harga_satu_minggu' => '1 Minggu',
-                                'harga_dua_minggu' => '2 Minggu',
-                                'harga_tiga_minggu' => '3 Minggu',
-                                'harga_satu_bulan' => '1 Bulan',
-                                'harga_dua_bulan' => '2 Bulan',
-                                'harga_tiga_bulan' => '3 Bulan',
-                                'harga_enam_bulan' => '6 Bulan',
-                                'harga_satu_tahun' => '1 Tahun',
-                            ] as $field => $label)
+            'harga_perhari' => 'Per Hari',
+            'harga_satu_minggu' => '1 Minggu',
+            'harga_dua_minggu' => '2 Minggu',
+            'harga_tiga_minggu' => '3 Minggu',
+            'harga_satu_bulan' => '1 Bulan',
+            'harga_dua_bulan' => '2 Bulan',
+            'harga_tiga_bulan' => '3 Bulan',
+            'harga_enam_bulan' => '6 Bulan',
+            'harga_satu_tahun' => '1 Tahun',
+        ] as $field => $label)
                                 <div class="col-md-4 col-sm-6">
                                     <x-adminlte-input name="{{ $field }}" label="Harga {{ $label }}"
                                         type="number" min="0" placeholder="0" fgroup-class="mb-3"
@@ -73,39 +74,50 @@
                         <div class="row">
                             <div class="col-12">
                                 <x-adminlte-textarea name="fasilitas" label="Fasilitas"
-                                    placeholder="Pisahkan dengan koma (contoh: WiFi, Makan 3x, Transportasi)"
-                                    rows="4" fgroup-class="mb-3">
+                                    placeholder="Pisahkan dengan koma (contoh: WiFi, Makan 3x, Transportasi)" rows="4"
+                                    fgroup-class="mb-3">
                                     {{ old('fasilitas', $program->fasilitas) }}
                                 </x-adminlte-textarea>
                             </div>
                         </div>
 
-                        <!-- Thumbnail -->
                         <div class="section-header mb-4">
                             <h4><i class="fas fa-image mr-2"></i>Thumbnail</h4>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
-                                @if ($program->thumbnail)
+                                @if ($program->thumbnails->count())
                                     <div class="form-group">
                                         <label>Thumbnail Saat Ini</label>
-                                        <div class="mb-2 p-2 border rounded">
-                                            <img src="{{ asset('storage/' . $program->thumbnail) }}"
-                                                class="img-fluid img-thumbnail"
-                                                style="max-height: 200px;"
-                                                alt="Current Thumbnail">
+                                        <div class="d-flex flex-wrap gap-3">
+                                            @foreach ($program->thumbnails as $thumb)
+                                                <div class="thumbnail-item text-center" id="thumb-{{ $thumb->id }}">
+                                                    <img src="{{ asset($thumb->image) }}" class="img-thumbnail"
+                                                        style="width: 300px; height: 150px; object-fit: contain; background-color: #f0f0f0; display: block; margin: 0 auto;">
+
+                                                    <div class="mt-2">
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm btn-delete-thumbnail"
+                                                            data-thumbnail-id="{{ $thumb->id }}">
+                                                            Hapus
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
                                         </div>
                                     </div>
                                 @endif
-                                <x-adminlte-input-file name="thumbnail" label="Ganti Thumbnail (opsional)"
-                                    accept="image/*" fgroup-class="mb-3" />
-                                <div class="preview-container mt-2">
-                                    <img id="preview-thumbnail" class="img-fluid img-thumbnail d-none"
-                                        style="max-height: 200px;"
-                                        alt="Thumbnail Preview">
-                                </div>
+
+                                <x-adminlte-input-file name="thumbnail[]" label="Ganti Thumbnail (opsional)"
+                                    accept="image/*" fgroup-class="mb-3" igroup-size="sm" multiple />
+
+                                <div id="preview-container" class="d-flex gap-2 mt-2 flex-wrap"></div>
                             </div>
                         </div>
+
                     </div>
                     <div class="card-footer text-right">
                         <x-adminlte-button label="Batal" theme="outline-danger" icon="fas fa-times"
@@ -118,6 +130,8 @@
     </div>
 @stop
 
+
+
 @section('css')
     <style>
         .section-header {
@@ -125,14 +139,25 @@
             border-bottom: 1px solid #eee;
             margin-bottom: 20px;
         }
+
         .section-header h4 {
             color: #444;
             font-weight: 600;
         }
+
+        .thumbnail-item {
+            width: 120px;
+        }
+
+        .thumbnail-item img {
+            border-radius: 5px;
+        }
+
         .img-thumbnail {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
         }
+
         .preview-container {
             border: 2px dashed #ddd;
             padding: 10px;
@@ -145,17 +170,50 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Preview thumbnail sebelum upload
-        document.querySelector('input[name="thumbnail"]').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('preview-thumbnail');
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('d-none');
-            } else {
-                preview.src = '';
-                preview.classList.add('d-none');
+        document.querySelector('input[name="thumbnail[]"]').addEventListener('change', function(e) {
+            const previewContainer = document.getElementById('preview-container');
+            previewContainer.innerHTML = ''; // reset preview
+
+            const files = e.target.files;
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.classList.add('img-thumbnail');
+                    img.style.maxHeight = '120px';
+                    img.style.objectFit = 'cover';
+                    previewContainer.appendChild(img);
+                });
             }
+        });
+
+        $(document).on('click', '.btn-delete-thumbnail', function() {
+            let thumbId = $(this).data('thumbnail-id');
+
+            Swal.fire({
+                title: 'Yakin hapus gambar ini?',
+                text: "Data yang dihapus tidak bisa dikembalikan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/thumbnails/' + thumbId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(res) {
+                            if (res.success) {
+                                $('#thumb-' + thumbId).remove();
+                                Swal.fire('Berhasil', res.message, 'success');
+                            }
+                        }
+                    });
+                }
+            });
         });
 
         @if (session('success'))
