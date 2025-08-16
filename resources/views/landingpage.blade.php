@@ -37,14 +37,89 @@
                     Brilliant English Course, tempat di mana potensi Anda menjadi lebih gemilang!
                 </p>
 
-                <a href="#program" class="cta-button" data-aos="fade-up" data-aos-delay="200">
+              
+                <a href="#" id="openPopupBtn" class="cta-button" data-aos="fade-up" data-aos-delay="200">
                     DAFTAR SEKARANG
                 </a>
-
             </div>
             <button class="nav prev">&#10094;</button>
             <button class="nav next">&#10095;</button>
-        </div>
+            </div>
+            <div id="programPopup" class="popup1-overlay">
+                <div class="popup1-content">
+                    <div class="popup1-header">
+                        <h2>Pilih Program</h2>
+                        <button id="closePopupBtn" class="close1-button">&times;</button>
+                    </div>
+                    
+                    <div class="program1-grid">
+                        <div class="program1-card">
+                            <div class="program1-icon icon-inggris">A文</div>
+                            <h3>Bahasa Inggris</h3>
+                            <a href="#program" class="pilih1-button">Pilih</a>
+                        </div>
+        
+                        <div class="program1-card">
+                            <div class="program1-icon icon-mandarin">A文</div>
+                            <h3>Bahasa Mandarin</h3>
+                            <a href="#program" class="pilih1-button">Pilih</a>
+                        </div>
+        
+                        <div class="program1-card">
+                            <div class="program1-icon icon-jerman">AÜ</div>
+                            <h3>Bahasa Jerman</h3>
+                            <a href="#program" class="pilih1-button">Pilih</a>
+                        </div>
+        
+                        <div class="program1-card">
+                            <div class="program1-icon icon-arab">Aع</div>
+                            <h3>Bahasa Arab</h3>
+                            <a href="#program" class="pilih1-button">Pilih</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <script>
+                // Get the necessary elements
+                const openPopupButton = document.getElementById('openPopupBtn');
+                const closePopupButton = document.getElementById('closePopupBtn');
+                const programPopup = document.getElementById('programPopup');
+                const pilihButtons = document.querySelectorAll('.pilih-button');
+        
+                // Function to show the popup
+                function showPopup() {
+                    programPopup.classList.add('show');
+                }
+        
+                // Function to hide the popup
+                function hidePopup() {
+                    programPopup.classList.remove('show');
+                }
+        
+                // --- Event Listeners ---
+        
+                // Open popup when "DAFTAR SEKARANG" is clicked
+                openPopupButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevents the page from jumping to the top
+                    showPopup();
+                });
+        
+                // Close popup when the 'X' button is clicked
+                closePopupButton.addEventListener('click', hidePopup);
+        
+                // Close popup when clicking on the dark overlay background
+                programPopup.addEventListener('click', function(event) {
+                    if (event.target === programPopup) {
+                        hidePopup();
+                    }
+                });
+        
+                // Close popup when any of the "Pilih" buttons are clicked
+                pilihButtons.forEach(function(button) {
+                    button.addEventListener('click', hidePopup);
+                });
+            </script>
     </section>
 
     {{-- ✅ Section "Tentang Kami" dengan animasi --}}
