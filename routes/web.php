@@ -30,6 +30,10 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Admin\ThumbnailController;
 
+use App\Http\Controllers\ProgramInggrisController;
+use App\Http\Controllers\ProgramJermanController;
+use App\Http\Controllers\ProgramArabController;
+use App\Http\Controllers\ProgramMandarinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +94,17 @@ Route::get('/pendaftaran/online/pembayaran/{trx_id}', [ProgramOnlinePublicContro
 Route::get('/pendaftaran/online/sukses-tunai/{trx_id}', [ProgramOnlinePublicController::class, 'halamanSuksesTunai'])->name('public.pendaftaran.online.sukses.tunai');
 
 
+
+Route::get('/program/bahasa/inggris', [ProgramInggrisController::class, 'showInggris'])
+    ->name('program.inggris');
+
+ Route::get('/program/bahasa/jerman', [ProgramJermanController::class, 'showJerman'])->name('program.jerman');
+
+
+Route::get('/program/bahasa/arab', [ProgramArabController::class, 'showArab'])->name('program.arab');
+Route::get('/program/bahasa/mandarin', [ProgramMandarinController::class, 'showMandarin'])->name('program.mandarin');
+
+
 // ===== ROUTE UNTUK UPLOAD BUKTI PEMBAYARAN =====
 Route::post('/payment/upload', [PaymentController::class, 'uploadProof'])->name('payment.upload');
 
@@ -97,11 +112,7 @@ Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.in
 Route::post('/tracking', [TrackingController::class, 'search'])->name('tracking.search');
 
 
-// Route spesifik untuk setiap halaman bahasa
-Route::get('/program/bahasa-inggris', [ProgramController::class, 'showInggris'])->name('program.inggris');
-Route::get('/program/bahasa-jerman', [ProgramController::class, 'showJerman'])->name('program.jerman');
-Route::get('/program/bahasa-arab', [ProgramController::class, 'showArab'])->name('program.arab');
-Route::get('/program/bahasa-mandarin', [ProgramController::class, 'showMandarin'])->name('program.mandarin');
+
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 
@@ -179,7 +190,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/pendaftaran/program-online', [PendaftaranOnlineController::class, 'store'])->name('pendaftaran.program_online.store');
 
 
-   
+
 
     // Pendaftaran Program Offline
     Route::get('pendaftaran/offline', [PendaftaranOfflineController::class, 'index'])->name('pendaftaran.offline.index');
