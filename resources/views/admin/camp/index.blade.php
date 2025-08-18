@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </form>
-            
+
         </div>
     </div>
 
@@ -75,6 +75,7 @@
                         <tr>
                             <th>#</th>
                             <th>Nama</th>
+                            <th>Gender</th>
                             <th>Email</th>
                             <th>No HP</th>
                             <th>Kota</th>
@@ -95,6 +96,7 @@
                                 <td>{{ ($pendaftar->currentPage() - 1) * $pendaftar->perPage() + $index + 1 }}</td>
 
                                 <td>{{ $data->nama_lengkap }}</td>
+                                <td>{{ $data->gender }}</td>
                                 <td>{{ $data->email }}</td>
                                 <td>{{ $data->no_hp }}</td>
                                 <td>{{ $data->asal_kota }}</td>
@@ -124,7 +126,7 @@
                                         <span style="color: blue; font-weight: bold;">Non Tunai</span>
                                     @endif
                                 </td>
-                                
+
                                 <td>
                                     @if ($data->bukti_pembayaran)
                                         <a href="{{ route('admin.pendaftaran.camp.bukti', $data->id) }}" target="_blank"
@@ -211,10 +213,10 @@
                         @endforelse
                     </tbody>
                 </table>
-               
-</div>
- <div class="mt-3 d-flex justify-content-center">
-    {{ $pendaftar->links('pagination::bootstrap-4') }}
+
+            </div>
+            <div class="mt-3 d-flex justify-content-center">
+                {{ $pendaftar->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
