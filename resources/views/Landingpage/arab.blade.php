@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    @include('navbar.navbar')
+    @include('navbar.nav')
     <!-- Hero Carousel -->
     <section class="hero">
         <div class="carousel">
