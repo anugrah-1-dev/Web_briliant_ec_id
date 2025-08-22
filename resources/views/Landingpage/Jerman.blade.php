@@ -22,13 +22,13 @@
         <div class="carousel">
             <div class="slides">
                 <div class="slide active">
-                    <img src="{{ asset('asset/img/jerman.jpg') }}" alt="Belajar Bahasa Jerman di Berlin">
+                    <img src="{{ asset('asset/img/brilliantclass6.jpg') }}" alt="Belajar Bahasa Jerman di Berlin">
                 </div>
                 <div class="slide">
-                    <img src="{{ asset('asset/img/jerman1.jpg') }}" alt="Kelas Bahasa Jerman yang Interaktif">
+                    <img src="{{ asset('asset/img/brilliantclass7.jpg') }}" alt="Kelas Bahasa Jerman yang Interaktif">
                 </div>
                 <div class="slide">
-                    <img src="{{ asset('asset/img/jerman2.jpg') }}" alt="Pemandangan Kastil Jerman">
+                    <img src="{{ asset('asset/img/brilliantcourse8.jpg') }}" alt="Pemandangan Kastil Jerman">
                 </div>
             </div>
             <button class="prev">&#10094;</button>
@@ -41,7 +41,7 @@
             <a href="#program" class="cta-button">Lihat Program Kami</a>
         </div>
     </section>
-<section class="program-section bg-light py-5" id="program">
+    <section class="program-section bg-light py-5" id="program">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
                 <h2>PILIHAN PROGRAM DEUTSCH</h2>
@@ -58,9 +58,8 @@
                     <div class="program-item offline" data-aos="fade-up" data-aos-delay="{{ 100 * ($index + 1) }}">
                         <div class="program-card">
                             <div class="program-card-image-wrapper">
-                                <img src="{{ asset('storage/' . $program->thumbnail) }}"
-                                     class="program-card-img"
-                                     alt="{{ $program->nama }}">
+                                <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img"
+                                    alt="{{ $program->nama }}">
                                 @if ($program->is_active)
                                     <span class="badge bg-success program-badge">Tersedia</span>
                                 @endif
@@ -76,7 +75,7 @@
                                     Rp {{ number_format($program->harga, 0, ',', '.') }}
                                 </p>
                                 <a href="{{ route('public.program.offline.show', $program->slug) }}"
-                                   class="btn btn-primary mt-auto">Lihat Detail</a>
+                                    class="btn btn-primary mt-auto">Lihat Detail</a>
                             </div>
                         </div>
                     </div>
@@ -90,9 +89,8 @@
                     <div class="program-item online" data-aos="fade-up" data-aos-delay="{{ 100 * ($index + 1) }}">
                         <div class="program-card">
                             <div class="program-card-image-wrapper">
-                                <img src="{{ asset('storage/' . $program->thumbnail) }}"
-                                     class="program-card-img"
-                                     alt="{{ $program->nama }}">
+                                <img src="{{ asset('storage/' . $program->thumbnail) }}" class="program-card-img"
+                                    alt="{{ $program->nama }}">
                                 @if ($program->is_active)
                                     <span class="badge bg-success program-badge">Tersedia</span>
                                 @endif
@@ -107,7 +105,7 @@
                                     Rp {{ number_format($program->harga, 0, ',', '.') }}
                                 </p>
                                 <a href="{{ route('public.program.online.show', $program->slug) }}"
-                                   class="btn btn-danger mt-auto">Lihat Detail</a>
+                                    class="btn btn-danger mt-auto">Lihat Detail</a>
                             </div>
                         </div>
                     </div>
@@ -120,37 +118,37 @@
         </div>
     </section>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const programItems = document.querySelectorAll('.program-item');
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const programItems = document.querySelectorAll('.program-item');
 
-        // Show offline programs by default
-        document.querySelector('.filter-btn[data-filter="offline"]').classList.add('active');
-        document.querySelectorAll('.program-item.offline').forEach(item => {
-            item.style.display = 'block';
-        });
+            // Show offline programs by default
+            document.querySelector('.filter-btn[data-filter="offline"]').classList.add('active');
+            document.querySelectorAll('.program-item.offline').forEach(item => {
+                item.style.display = 'block';
+            });
 
-        // Filter functionality
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const filterValue = this.getAttribute('data-filter');
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const filterValue = this.getAttribute('data-filter');
 
-                // Update active button
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
 
-                // Show/hide programs
-                programItems.forEach(item => {
-                    if (item.classList.contains(filterValue)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    // Show/hide programs
+                    programItems.forEach(item => {
+                        if (item.classList.contains(filterValue)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
                 });
             });
         });
-    });
-</script>
+    </script>
     {{-- About Section --}}
     <section class="about" id="tentang">
         <div class="container" data-aos="fade-up">
@@ -164,17 +162,20 @@
                 <div class="about-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="icon-wrapper"><i class="fas fa-rocket"></i></div>
                     <h3>Kurikulum Modern</h3>
-                    <p>Materi pembelajaran yang relevan dan selalu diperbarui sesuai standar CEFR (Common European Framework of Reference for Languages).</p>
+                    <p>Materi pembelajaran yang relevan dan selalu diperbarui sesuai standar CEFR (Common European
+                        Framework of Reference for Languages).</p>
                 </div>
                 <div class="about-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="icon-wrapper"><i class="fas fa-user-tie"></i></div>
                     <h3>Pengajar Profesional</h3>
-                    <p>Instruktur kami adalah penutur asli atau bersertifikasi dengan pengalaman mengajar yang luas dan penuh semangat.</p>
+                    <p>Instruktur kami adalah penutur asli atau bersertifikasi dengan pengalaman mengajar yang luas dan
+                        penuh semangat.</p>
                 </div>
                 <div class="about-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="icon-wrapper"><i class="fas fa-users"></i></div>
                     <h3>Komunitas Belajar</h3>
-                    <p>Bergabunglah dengan komunitas yang suportif, tempat Anda bisa berlatih dan bertumbuh bersama teman-teman baru.</p>
+                    <p>Bergabunglah dengan komunitas yang suportif, tempat Anda bisa berlatih dan bertumbuh bersama
+                        teman-teman baru.</p>
                 </div>
             </div>
         </div>
@@ -183,7 +184,9 @@
     {{-- Wave Divider 1 --}}
     <div class="wave-divider">
         <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path class="shape-fill" d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            <path class="shape-fill"
+                d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
         </svg>
     </div>
 
@@ -238,7 +241,8 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>Deutsch Brilliant</h4>
-                    <p>Membuka pintu dunia melalui bahasa Jerman. Bergabunglah dengan kami dan mulailah perjalanan Anda.</p>
+                    <p>Membuka pintu dunia melalui bahasa Jerman. Bergabunglah dengan kami dan mulailah perjalanan Anda.
+                    </p>
                 </div>
                 <div class="footer-col">
                     <h4>Navigasi</h4>
@@ -308,4 +312,5 @@
     </script>
 
 </body>
+
 </html>

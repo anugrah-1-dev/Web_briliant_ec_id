@@ -21,32 +21,37 @@ body {
     position: relative;
     height: 100%;
     width: 100%;
-    filter: brightness(50%);
+    filter: brightness(1-0%);
 }
 
 .carousel::after {
     content: "";
     position: absolute;
     inset: 0;
-    background-color: rgba(15, 81, 50, 0.5); /* hijau transparan */
+    background-color: rgba(15, 81, 50, 0.4); /* hijau transparan */
     pointer-events: none; /* biar gak ganggu klik */
+    z-index: 11;
 }
 
 .slides {
+    position: relative;
     height: 100%;
     width: 100%;
-    display: flex;
-    transition: transform 0.5s ease-in-out;
 }
 
 .slide {
-    min-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    display: none;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 .slide.active {
-    display: block;
+    opacity: 1;
+    z-index: 1;
 }
 
 .slide img {
@@ -73,9 +78,11 @@ body {
 
 .prev {
     left: 20px;
+    z-index: 11;
 }
 .next {
     right: 20px;
+    z-index: 11;
 }
 
 /* Hero Text */
@@ -86,6 +93,7 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     color: #fff;
+    z-index: 11; /* biar selalu di atas slide */
 }
 
 .hero-text h1 {
