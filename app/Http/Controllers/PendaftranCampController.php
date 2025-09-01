@@ -87,12 +87,24 @@ class PendaftranCampController extends Controller
         ]);
 
         $programcamp = $pendaftaran->program->nama ?? 'Tidak ada program';
+        $line = str_repeat('-', 64);
+        $period = Period::find($pendaftaran->period_id);
+        $periodDate = $period ? $period->date : null;
 
-        $message = "📢 *Pendaftaran Baru*\n";
-        $message .= "Nama: {$pendaftaran->nama_lengkap}\n";
-        $message .= "Email: {$pendaftaran->email}\n";
+        // Pesan lebih rapi
+        $message = "📢 *Pendaftaran Baru* 📢\n";
+        $message .= "{$line}\n";
+        $message .= "*No Transaksi:* {$pendaftaran->trx_id}\n";
+        $message .= "{$line}\n";
+        // $waNumber = preg_replace('/^0/', '62', preg_replace('/\D/', '', $pendaftaran->no_hp));
+        // $waLink = "https://wa.me/{$waNumber}";
+        // $message .= "*No HP:* [{$pendaftaran->no_hp}]({$waLink})\n";
         $message .= "No HP: {$pendaftaran->no_hp}\n";
         $message .= "Program: " . $programcamp . "\n";
+        $message .= "*Tanggal Pendaftaran:* {$periodDate->format('d M Y')}\n";
+        $message .= "{$line}\n";
+
+        $message .= "_!>w<!_";
 
 
         Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
