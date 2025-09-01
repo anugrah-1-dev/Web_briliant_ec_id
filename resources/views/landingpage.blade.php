@@ -181,12 +181,11 @@
                     </a>
                     <a href="{{ route('landing.nhc') }}" class="program1-card">
                         <div class="program1-icon icon-nhc">
-                            <img src="{{ asset('asset/img/logonhc.png') }}" alt="Logo NHC"
-                                  class="program1-img">
-                         </div>
+                            <img src="{{ asset('asset/img/logonhc.png') }}" alt="Logo NHC" class="program1-img">
+                        </div>
                         <h3>Program Perhotelan (NHC)</h3>
                         <span class="pilih1-button">Pilih</span>
-    </a>
+                    </a>
                 </div>
 
                 <style>
@@ -815,6 +814,57 @@
                     behavior: 'smooth'
                 });
             }
+        </script>
+
+
+        <style>
+            /* Transisi hanya untuk opacity */
+            .gallery-frame img {
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out;
+                /* Durasi transisi diperpanjang sedikit biar lebih halus */
+            }
+
+            /* Kelas untuk gambar yang sedang memudar keluar */
+            .gallery-frame img.fade-out-only {
+                opacity: 0;
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const galleries = @json($galleries->map(fn($g) => $g->images->pluck('image_path')));
+
+                galleries.forEach((images, galleryIndex) => {
+                    if (images.length <= 1) return; // skip kalau cuma 1 gambar
+
+                    let currentIndex = 0;
+                    const galleryFrame = document.querySelectorAll('.gallery-frame')[galleryIndex];
+                    const imgElement = galleryFrame.querySelector('img');
+
+                    // Fungsi utama untuk mengganti gambar dengan efek fade
+                    function changeImageFadeOnly() {
+                        // 1. Tambahkan kelas agar gambar lama memudar keluar
+                        imgElement.classList.add('fade-out-only');
+
+                        // 2. Tunggu sampai animasi fade-out selesai (800ms sesuai CSS)
+                        setTimeout(() => {
+                            // Ganti source gambar
+                            currentIndex = (currentIndex + 1) % images.length;
+                            imgElement.src = `/storage/${images[currentIndex]}`;
+
+                            imgElement.classList.remove('fade-out-only');
+                        }, 500); // Harus sama dengan durasi transition di CSS
+                    }
+
+                    // Atur interval pergantian gambar
+                    // Diberi delay awal agar setiap galeri tidak mulai bersamaan
+                    const startDelay = galleryIndex * 2500; // Jeda 1 detik antar galeri
+                    setTimeout(() => {
+                        setInterval(changeImageFadeOnly, 5000); // Ganti gambar setiap 3 detik
+                    }, startDelay);
+                });
+            });
         </script>
 
         <div class="lightbox" id="lightbox" onclick="closeLightbox()">

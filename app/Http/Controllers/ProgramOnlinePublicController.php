@@ -10,6 +10,7 @@ use App\Models\Customer_Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class ProgramOnlinePublicController extends Controller
 {
@@ -98,13 +99,30 @@ class ProgramOnlinePublicController extends Controller
             'subtotal'        => $subtotal,
         ]);
 
+        $programName = $pendaftaran->program->nama ?? 'Tidak ada program';
+
+        $message = "📢 *Pendaftaran Baru*\n";
+        $message .= "Nama: {$pendaftaran->nama_lengkap}\n";
+        $message .= "Email: {$pendaftaran->email}\n";
+        $message .= "No HP: {$pendaftaran->no_hp}\n";
+        $message .= "No Transaksi: {$pendaftaran->trx_id}\n";
+        $message .= "Program: " . $programName . "\n";
+
+        Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
+            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ]);
+
+
+
         // Redirect sesuai metode pembayaran
         if ($pendaftaran->payment_type === 'tunai') {
-            return redirect()->route('public.pendaftaran.offline.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
+            return redirect()->route('public.pendaftaran.online.sukses.tunai', ['trx_id' => $pendaftaran->trx_id]);
         } elseif ($pendaftaran->payment_type === 'qris') {
-            return redirect()->route('public.pendaftaran.offline.sukses.qris', ['trx_id' => $pendaftaran->trx_id]);
+            return redirect()->route('public.pendaftaran.online.sukses.qris', ['trx_id' => $pendaftaran->trx_id]);
         } else {
-            return redirect()->route('public.pendaftaran.offline.pembayaran', ['trx_id' => $newTrxId])
+            return redirect()->route('public.pendaftaran.online.pembayaran', ['trx_id' => $newTrxId])
                 ->with('success_message', 'Pendaftaran awal berhasil! Silakan lanjutkan ke tahap pembayaran.');
         }
     }

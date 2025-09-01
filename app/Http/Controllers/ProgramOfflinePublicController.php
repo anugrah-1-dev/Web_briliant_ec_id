@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Models\ProgramCamp;
+use Illuminate\Support\Facades\Http;
 
 class ProgramOfflinePublicController extends Controller
 {
@@ -118,6 +119,20 @@ class ProgramOfflinePublicController extends Controller
             $program->update(['is_active' => 0]);
         }
 
+        $programName = $pendaftaran->program->nama ?? 'Tidak ada program';
+
+        $message = "📢 *Pendaftaran Baru*\n";
+        $message .= "Nama: {$pendaftaran->nama_lengkap}\n";
+        $message .= "Email: {$pendaftaran->email}\n";
+        $message .= "No HP: {$pendaftaran->no_hp}\n";
+        $message .= "No Transaksi: {$pendaftaran->trx_id}\n";
+        $message .= "Program: " . $programName . "\n";
+
+        Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
+            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ]);
 
         // Redirect
         if ($pendaftaran->payment_type === 'tunai') {

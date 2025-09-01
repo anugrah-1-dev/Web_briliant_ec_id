@@ -11,6 +11,7 @@ use App\Models\PendaftaranProgramCamp;
 use App\Models\Banks;
 use App\Models\Rooms;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 
 class PendaftranCampController extends Controller
@@ -84,6 +85,22 @@ class PendaftranCampController extends Controller
             'nama_kamar'       => null,
             'trx_id'           => $trx_id,
         ]);
+
+        $programcamp = $pendaftaran->program->nama ?? 'Tidak ada program';
+
+        $message = "📢 *Pendaftaran Baru*\n";
+        $message .= "Nama: {$pendaftaran->nama_lengkap}\n";
+        $message .= "Email: {$pendaftaran->email}\n";
+        $message .= "No HP: {$pendaftaran->no_hp}\n";
+        $message .= "Program: " . $programcamp . "\n";
+
+
+        Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
+            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ]);
+
 
         // Kurangi stok
         $program->decrement('stok');
