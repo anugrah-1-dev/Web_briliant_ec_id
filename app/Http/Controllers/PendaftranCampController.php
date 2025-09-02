@@ -69,6 +69,7 @@ class PendaftranCampController extends Controller
         $trx_id = $prefix . $nextNumber;
 
 
+        
         // Simpan pendaftaran
         $pendaftaran = PendaftaranProgramCamp::create([
             'nama_lengkap'     => $validated['nama_lengkap'],
@@ -85,6 +86,7 @@ class PendaftranCampController extends Controller
             'nama_kamar'       => null,
             'trx_id'           => $trx_id,
         ]);
+
 
         $programcamp = $pendaftaran->program->nama ?? 'Tidak ada program';
         $line = str_repeat('-', 64);
