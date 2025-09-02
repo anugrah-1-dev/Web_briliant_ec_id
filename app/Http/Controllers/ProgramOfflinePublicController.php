@@ -146,11 +146,15 @@ class ProgramOfflinePublicController extends Controller
         $message .= "_!>w<!_";
 
 
-        Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
-            'chat_id' => env('TELEGRAM_CHAT_ID'),
-            'text' => $message,
-            'parse_mode' => 'Markdown'
-        ]);
+        $chatIds = explode(',', env('TELEGRAM_CHAT_IDS'));
+
+        foreach ($chatIds as $chatId) {
+            Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
+                'chat_id' => trim($chatId),
+                'text'    => $message,
+                'parse_mode' => 'Markdown'
+            ]);
+        }
 
         // Redirect
         if ($pendaftaran->payment_type === 'tunai') {
