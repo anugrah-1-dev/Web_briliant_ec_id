@@ -23,6 +23,7 @@ class PendaftaranProgramOffline extends Model
         'transport_id',
         'bank_id',
         'payment_type',
+        'ukuran_seragam',
         'bukti_pembayaran',
         'status',
         'subtotal',

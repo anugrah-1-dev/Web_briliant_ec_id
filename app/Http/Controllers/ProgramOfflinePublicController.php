@@ -48,7 +48,8 @@ class ProgramOfflinePublicController extends Controller
             'transport_id' => 'nullable|exists:transports,id',
             'payment_type' => 'required|in:tunai,transfer,qris',
             'bank_id' => 'required_if:payment_type,transfer|nullable|exists:banks,id',
-            'akomodasi' => 'nullable|string', // <-- validasi akomodasi
+            'akomodasi' => 'nullable|string',
+            'ukuran_seragam' => 'nullable|in:S,M,L,XL,XXL', // <--- validasi seragam
         ]);
 
         // Cek kuota
@@ -71,19 +72,18 @@ class ProgramOfflinePublicController extends Controller
             $transportPrice = $transport ? $transport->price : 0;
         }
 
-        // === Logika akomodasi (VIP / Reguler) ===
+        // === Logika akomodasi ===
         $akomodasiTipe = null;
         $akomodasiHarga = 0;
 
         if (!empty($validated['akomodasi'])) {
             if (str_starts_with($validated['akomodasi'], 'camp-')) {
-                // Ambil camp dari DB
                 $campId = str_replace('camp-', '', $validated['akomodasi']);
-                //sementeara di comment dulu
-                // // $camp = Camps::find($campId);
+                // sementara di-comment
+                // $camp = Camps::find($campId);
                 // if ($camp) {
-                //     $akomodasiTipe = $camp->kategori; // VIP
-                //     $akomodasiHarga = $camp->harga;   // ambil harga camp dari DB
+                //     $akomodasiTipe = $camp->kategori;
+                //     $akomodasiHarga = $camp->harga;
                 // }
             } elseif ($validated['akomodasi'] === 'reguler') {
                 $akomodasiTipe = 'Reguler';
@@ -106,12 +106,17 @@ class ProgramOfflinePublicController extends Controller
             'status' => 'pending',
             'payment_type' => $validated['payment_type'],
             'bank_id' => $validated['bank_id'] ?? null,
-            'akomodasi_tipe' => $akomodasiTipe,    // disimpan
-            'akomodasi_harga' => $akomodasiHarga,  // disimpan
+            'akomodasi_tipe' => $akomodasiTipe,
+            'akomodasi_harga' => $akomodasiHarga,
             'subtotal' => $subtotal,
+            'ukuran_seragam' => $validated['ukuran_seragam'] ?? null, // <--- disimpan
         ]);
+
         // Kurangi kuota
         $program->decrement('kuota');
+
+        // ...
+        // (lanjutan kode Telegram + redirect tetap sama)
 
         // Cek lagi jumlah kuota setelah dikurangi
         $program->refresh();
@@ -119,58 +124,26 @@ class ProgramOfflinePublicController extends Controller
             $program->update(['is_active' => 0]);
         }
 
-
-        // $programName = $pendaftaran->program->nama ?? 'Tidak ada program';
-        // $period = Period::find($pendaftaran->period_id);
-        // $periodDate = $period ? $period->date : null;
-
-        // // Buat garis panjang
-        // $line = str_repeat('-', 64);
-
-        // // Pesan lebih rapi
-        // $message = "📢 *Pendaftaran Baru* 📢\n";
-        // $message .= "{$line}\n";
-        // $message .= "*No Transaksi:* {$pendaftaran->trx_id}\n";
-        // $message .= "{$line}\n";
-        // $message .= "*Nama:* {$pendaftaran->nama_lengkap}\n";
-        // $message .= "*Email:* {$pendaftaran->email}\n";
-        // $message .= "{$line}\n";
-        // // $waNumber = preg_replace('/^0/', '62', preg_replace('/\D/', '', $pendaftaran->no_hp));
-        // // $waLink = "https://wa.me/{$waNumber}";
-        // // $message .= "*No HP:* [{$pendaftaran->no_hp}]({$waLink})\n";
-        // $message .= "No HP: {$pendaftaran->no_hp}\n";
-        // $message .= "*Program:* {$programName}\n";
-        // $message .= "*Tanggal Pendaftaran:* {$periodDate->format('d M Y')}\n";
-        // $message .= "{$line}\n";
-
-        // $message .= "_!>w<!_";
-
-
-        // Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
-        //     'chat_id' => env('TELEGRAM_CHAT_ID'),
-        //     'text' => $message,
-        //     'parse_mode' => 'Markdown'
-        // ]);
         $programName = $pendaftaran->program->nama ?? 'Tidak ada program';
-$period = Period::find($pendaftaran->period_id);
-$periodDate = $period ? $period->date : null;
-$periodDateText = $periodDate ? $periodDate->format('d M Y') : '-';
+        $period = Period::find($pendaftaran->period_id);
+        $periodDate = $period ? $period->date : null;
+        $periodDateText = $periodDate ? $periodDate->format('d M Y') : '-';
 
-// Garis cantik
-$line = str_repeat('─', 32);
+        // Garis cantik
+        $line = str_repeat('─', 32);
 
-// Pesan Telegram
-$message = "📢 *Pendaftaran Baru* 📢\n";
-$message .= "{$line}\n";
-$message .= "*No Transaksi:* {$pendaftaran->trx_id}\n";
-$message .= "{$line}\n";
-$message .= "*Nama:* {$pendaftaran->nama_lengkap}\n";
-$message .= "*Email:* {$pendaftaran->email}\n";
-$message .= "*No HP:* {$pendaftaran->no_hp}\n";
-$message .= "*Program:* {$programName}\n";
-$message .= "*Tanggal Pendaftaran:* {$periodDateText}\n";
-$message .= "{$line}\n";
-$message .= "_Terima kasih sudah mendaftar!_ ✨";
+        // Pesan Telegram
+        $message = "📢 *Pendaftaran Baru* 📢\n";
+        $message .= "{$line}\n";
+        $message .= "*No Transaksi:* {$pendaftaran->trx_id}\n";
+        $message .= "{$line}\n";
+        $message .= "*Nama:* {$pendaftaran->nama_lengkap}\n";
+        $message .= "*Email:* {$pendaftaran->email}\n";
+        $message .= "*No HP:* {$pendaftaran->no_hp}\n";
+        $message .= "*Program:* {$programName}\n";
+        $message .= "*Tanggal Pendaftaran:* {$periodDateText}\n";
+        $message .= "{$line}\n";
+        $message .= "_Terima kasih sudah mendaftar!_ ✨";
 
         $message .= "_!>w<!_";
 

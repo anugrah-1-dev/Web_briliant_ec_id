@@ -77,9 +77,10 @@
                             <th>No HP</th>
                             <th>Program</th>
                             <th>Periode</th>
-                            <th>Tipe Pembayaran</th> {{-- KOLOM BARU --}}
-                            <th>Bank Tujuan</th> {{-- NAMA KOLOM DISESUAIKAN --}}
-                            <th>Subtotal</th> {{-- NAMA KOLOM DISESUAIKAN --}}
+                            <th>Tipe Pembayaran</th>
+                            <th>Bank Tujuan</th>
+                            <th>Subtotal</th>
+                            <th>Ukuran Seragam</th>
                             <th>Status</th>
                             <th>Bukti Pembayaran</th>
                             <th width="10%">Aksi</th>
@@ -109,7 +110,7 @@
                                         -
                                     @endif
                                 </td>
-                                {{-- LOGIKA UNTUK KOLOM BARU TIPE PEMBAYARAN --}}
+                                {{-- KOLOM TIPE PEMBAYARAN --}}
                                 <td>
                                     @if ($data->payment_type == 'tunai')
                                         <span class="badge badge-success">Bayar Tunai</span>
@@ -119,7 +120,7 @@
                                         -
                                     @endif
                                 </td>
-                                {{-- LOGIKA UNTUK KOLOM BANK TUJUAN --}}
+                                {{-- KOLOM BANK TUJUAN --}}
                                 <td>
                                     @if ($data->payment_type == 'transfer')
                                         {{ $data->bank->name ?? '-' }}
@@ -135,7 +136,18 @@
                                         -
                                     @endif
                                 </td>
+                                {{-- KOLOM UKURAN SERAGAM --}}
+                                <td>
+                                    @if ($data->ukuran_seragam)
+                                        <i class="fas fa-shirt text-primary"></i>
+                                        {{ strtoupper($data->ukuran_seragam) }}
+                                    @else
+                                        <span class="text-muted" style="font-size: 0.85em;">Belum dipilih</span>
+                                    @endif
+                                </td>
 
+
+                                {{-- KOLOM STATUS --}}
                                 <td>
                                     @php
                                         $statusClass = 'secondary';
@@ -151,6 +163,8 @@
                                     @endphp
                                     <span class="badge badge-{{ $statusClass }}">{{ ucfirst($data->status) }}</span>
                                 </td>
+
+                                {{-- KOLOM BUKTI PEMBAYARAN --}}
                                 <td>
                                     @if ($data->bukti_pembayaran)
                                         <a href="{{ asset('storage/' . $data->bukti_pembayaran) }}" target="_blank"
@@ -162,6 +176,8 @@
                                         <span class="text-muted" style="font-size: 0.85em;">Belum ada</span>
                                     @endif
                                 </td>
+
+                                {{-- KOLOM AKSI --}}
                                 <td>
                                     <div class="btn-group btn-group-sm">
                                         <a href="{{ route('admin.pendaftaran.offline.edit', $data->id) }}"
@@ -183,7 +199,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="text-center py-4">Belum ada pendaftar.</td>
+                                <td colspan="13" class="text-center py-4">Belum ada pendaftar.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -197,6 +213,7 @@
         @endif
     </div>
 @stop
+
 
 
 

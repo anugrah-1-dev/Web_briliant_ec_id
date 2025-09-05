@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <!-- jQuery UI Autocomplete Stylesheet -->
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -174,6 +175,31 @@
                                                 value="{{ old('no_wali') }}">
                                         </div>
 
+                                        {{-- ====================================================== --}}
+                                        {{-- PERUBAHAN DIMULAI: Tambah Ukuran Seragam --}}
+                                        @if (strtolower($program->program_bahasa) === 'nhc')
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    <i class="bi bi-tag"></i> Ukuran Seragam    
+                                                </label>
+                                                <select name="ukuran_seragam" class="form-select" required>
+                                                    <option value="">Pilih Ukuran Seragam</option>
+                                                    <option value="S"
+                                                        {{ old('ukuran_seragam') == 'S' ? 'selected' : '' }}>S</option>
+                                                    <option value="M"
+                                                        {{ old('ukuran_seragam') == 'M' ? 'selected' : '' }}>M</option>
+                                                    <option value="L"
+                                                        {{ old('ukuran_seragam') == 'L' ? 'selected' : '' }}>L</option>
+                                                    <option value="XL"
+                                                        {{ old('ukuran_seragam') == 'XL' ? 'selected' : '' }}>XL
+                                                    </option>
+                                                    <option value="XXL"
+                                                        {{ old('ukuran_seragam') == 'XXL' ? 'selected' : '' }}>XXL
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        @endif
+
                                         {{-- <div class="mb-3">
                                             <label class="form-label">
                                                 <i class="bi bi-house-fill"></i> Akomodasi (Camp Reguler) - Optional
@@ -292,7 +318,8 @@
 
 
                                         <div class="mb-3">
-                                            <label class="form-label"><i class="bi bi-bus-front-fill"></i> Transportasi
+                                            <label class="form-label"><i class="bi bi-bus-front-fill"></i>
+                                                Transportasi
                                                 (Optional)</label>
                                             <select name="transport_id" class="form-select" id="transportSelect">
                                                 <option value="" data-harga="0">Pilih Transportasi </option>
@@ -406,12 +433,8 @@
                                                 });
                                             });
                                         </script>
-
-
-
-
-
                                         <br>
+
 
 
                                         {{-- ====================================================== --}}
