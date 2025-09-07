@@ -43,9 +43,10 @@ class ProgramOnlineController extends Controller
         ]);
 
         // Konversi fitur dari textarea ke array
-        $validated['features_program'] = array_filter(array_map('trim', explode("\n", $validated['features_program'])));
+        $validated['features_program'] = json_encode(
+            array_filter(array_map('trim', explode("\n", $validated['features_program'])))
+        );
 
-        // Upload thumbnail
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails/program_online', 'public');
         }
