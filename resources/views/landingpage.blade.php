@@ -158,14 +158,6 @@
         <span class="pilih1-button">Pilih</span>
     </a>
 
-    <a href="{{ route('landing.nhc') }}" class="program1-card nhc">
-        <div class="program1-icon icon-nhc">
-            <img src="{{ asset('asset/img/logonhc.png') }}" alt="Logo NHC" class="program1-img">
-        </div>
-        <h3>Program Perhotelan (NHC)</h3>
-        <span class="pilih1-button">Pilih</span>
-    </a>
-
     <a href="{{ route('program.jerman') }}" class="program1-card jerman">
         <div class="program1-icon icon-jerman">
             <img src="{{ asset('asset/img/bendera jerman.jpg') }}" alt="Bendera Jerman" class="program1-img">
