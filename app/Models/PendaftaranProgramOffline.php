@@ -33,6 +33,9 @@ class PendaftaranProgramOffline extends Model
         'subtotal',
         'akomodasi_tipe',
         'akomodasi_harga',
+        'id_catering',   // pastikan ada
+        'id_laundry',    // pastikan ada
+        'id_holiday',    // pastikan ada
     ];
 
     // Relasi ke program offline

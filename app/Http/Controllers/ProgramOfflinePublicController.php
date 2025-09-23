@@ -149,6 +149,9 @@ class ProgramOfflinePublicController extends Controller
             'akomodasi_harga' => $akomodasiHarga,
             'subtotal'      => $subtotal,
             'ukuran_seragam' => $validated['ukuran_seragam'] ?? null,
+            'id_catering'    => $request->id_catering ?? null,
+            'id_laundry'     => $request->id_laundry ?? null,
+            'id_holiday'     => $request->id_holiday ?? null,
         ]);
 
         // === setelah create $pendaftaran ===
@@ -161,33 +164,55 @@ class ProgramOfflinePublicController extends Controller
 
         // === Simpan data catering (jika ada) ===
         $caterings = parseRequestArray($request->catering);
-        foreach ($caterings as $catering) {
-            \App\Models\PendaftaranCatering::create([
-                'pendaftaran_id'      => $pendaftaran->id,
-                'catering_package_id' => $catering['id'],
-                'jumlah_porsi'        => $catering['quantity'] ?? 1, // pakai quantity sesuai data kamu
-            ]);
+        if (!empty($caterings)) {
+            foreach ($caterings as $index => $catering) {
+                \App\Models\PendaftaranCatering::create([
+                    'pendaftaran_id'      => $pendaftaran->id,
+                    'catering_package_id' => $catering['id'],
+                    'jumlah_porsi'        => $catering['quantity'] ?? 1,
+                ]);
+
+                // Simpan catering pertama ke kolom id_catering
+                if ($index === 0) {
+                    $pendaftaran->update(['id_catering' => $catering['id']]);
+                }
+            }
         }
 
         // === Simpan data laundry (jika ada) ===
         $laundries = parseRequestArray($request->laundry);
-        foreach ($laundries as $laundry) {
-            \App\Models\PendaftaranLaundry::create([
-                'pendaftaran_id'      => $pendaftaran->id,
-                'laundry_package_id'  => $laundry['id'],
-                'jumlah'              => $laundry['jumlah'] ?? 1,
-            ]);
+        if (!empty($laundries)) {
+            foreach ($laundries as $index => $laundry) {
+                \App\Models\PendaftaranLaundry::create([
+                    'pendaftaran_id'      => $pendaftaran->id,
+                    'laundry_package_id'  => $laundry['id'],
+                    'jumlah'              => $laundry['jumlah'] ?? 1,
+                ]);
+
+                // Simpan laundry pertama ke kolom id_laundry
+                if ($index === 0) {
+                    $pendaftaran->update(['id_laundry' => $laundry['id']]);
+                }
+            }
         }
 
         // === Simpan data holiday (jika ada) ===
         $holidays = parseRequestArray($request->holiday);
-        foreach ($holidays as $holiday) {
-            \App\Models\PendaftaranHoliday::create([
-                'pendaftaran_id'      => $pendaftaran->id,
-                'holiday_package_id'  => $holiday['id'],
-                'jumlah_peserta'      => $holiday['jumlah'] ?? 1,
-            ]);
+        if (!empty($holidays)) {
+            foreach ($holidays as $index => $holiday) {
+                \App\Models\PendaftaranHoliday::create([
+                    'pendaftaran_id'      => $pendaftaran->id,
+                    'holiday_package_id'  => $holiday['id'],
+                    'jumlah_peserta'      => $holiday['jumlah'] ?? 1,
+                ]);
+
+                // Simpan holiday pertama ke kolom id_holiday
+                if ($index === 0) {
+                    $pendaftaran->update(['id_holiday' => $holiday['id']]);
+                }
+            }
         }
+
 
 
 

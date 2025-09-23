@@ -562,9 +562,10 @@
                                                 </div>
                                             </div>
                                             {{-- Hidden input untuk kirim data ke controller --}}
-                                            <input type="hidden" name="catering" id="cateringInput">
-                                            <input type="hidden" name="laundry" id="laundryInput">
-                                            <input type="hidden" name="holiday" id="holidayInput">
+                                            <input type="hidden" name="id_catering" id="idCateringInput">
+                                            <input type="hidden" name="id_laundry" id="idLaundryInput">
+                                            <input type="hidden" name="id_holiday" id="idHolidayInput">
+
 
 
                                             <style>
@@ -624,6 +625,35 @@
                                             </style>
 
                                             <script>
+
+                                           function addToCart(type, id, name, price, qty) {
+    if (qty > 0) {
+        // isi hidden input sesuai kategori paket
+        if (type === 'catering') {
+            document.getElementById('idCateringInput').value = id;
+        } else if (type === 'laundry') {
+            document.getElementById('idLaundryInput').value = id;
+        } else if (type === 'holiday') {
+            document.getElementById('idHolidayInput').value = id;
+        }
+
+        // kode existing buat update keranjang
+        let cartItems = document.getElementById('cart-items');
+        document.getElementById('empty-cart-message')?.remove();
+
+        let item = document.createElement('div');
+        item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+        item.innerHTML = `
+            ${name} x${qty}
+            <span>Rp ${price.toLocaleString()}</span>
+        `;
+        cartItems.appendChild(item);
+
+        updateCartTotal();
+    }
+}
+
+
                                                 let cart = {
                                                     catering: [],
                                                     laundry: [],
@@ -745,11 +775,13 @@
                                                     cartTotal.textContent = `Rp ${formatNumber(totalPrice)}`;
                                                 }
 
-                                                function updateHiddenInputs() {
-                                                    document.getElementById('cateringInput').value = JSON.stringify(cart.catering);
-                                                    document.getElementById('laundryInput').value = JSON.stringify(cart.laundry);
-                                                    document.getElementById('holidayInput').value = JSON.stringify(cart.holiday);
-                                                }
+                                             function updateHiddenInputs() {
+    document.getElementById('idCateringInput').value = cart.catering.length > 0 ? cart.catering[0].id : '';
+    document.getElementById('idLaundryInput').value = cart.laundry.length > 0 ? cart.laundry[0].id : '';
+    document.getElementById('idHolidayInput').value = cart.holiday.length > 0 ? cart.holiday[0].id : '';
+}
+
+
 
                                                 function formatNumber(number) {
                                                     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
