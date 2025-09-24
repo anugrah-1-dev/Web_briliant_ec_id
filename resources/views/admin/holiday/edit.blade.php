@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit Paket Catering')
+@section('title', 'Edit Paket Holiday')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Edit Paket Catering</h1>
+    <h1 class="m-0 text-dark">Edit Paket Holiday</h1>
 @stop
 
 @section('content')
@@ -11,10 +11,10 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-edit mr-2"></i>Form Edit Paket Catering</h5>
+                <h5 class="mb-0"><i class="fas fa-edit mr-2"></i>Form Edit Paket Holiday</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.catering.update', $holidayPackage->id) }}" method="POST" enctype="multipart/form-data" id="cateringForm">
+                <form action="{{ route('admin.holiday.update', $holidayPackage->id) }}" method="POST" enctype="multipart/form-data" id="cateringForm">
                     @csrf
                     @method('PUT')
 
@@ -24,7 +24,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">
                                         <i class="fas fa-box-open mr-2"></i>
-                                        Data Paket Catering
+                                        Data Paket Holiday
                                     </h3>
                                 </div>
                                 <div class="card-body">

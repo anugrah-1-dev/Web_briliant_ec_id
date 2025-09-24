@@ -28,21 +28,27 @@ class LaundryPackageController extends Controller
             'periode'    => 'nullable|integer',
             'status'     => 'required|in:aktif,nonaktif',
             'deskripsi'  => 'nullable|string',
-            'thumbnail'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'thumbnail'  => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
         ]);
-    
+
         $data = $request->except('thumbnail');
-    
+
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('laundry/thumbnails', 'public');
             $data['thumbnail'] = $path;
         }
-    
+
         LaundryPackage::create($data);
-    
+
         return redirect()->route('admin.laundry.index')->with('success', 'Laundry package berhasil ditambahkan!');
     }
-    
+
+    public function edit(LaundryPackage $laundryPackage)
+    {
+        return view('admin.laundry.edit', compact('laundryPackage'));
+    }
+
+
     public function update(Request $request, LaundryPackage $laundryPackage)
     {
         $request->validate([
@@ -54,28 +60,38 @@ class LaundryPackageController extends Controller
             'deskripsi'  => 'nullable|string',
             'thumbnail'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-    
+
         $data = $request->except('thumbnail');
-    
+
         if ($request->hasFile('thumbnail')) {
             // Hapus file lama kalau ada
             if ($laundryPackage->thumbnail && file_exists(storage_path('app/public/' . $laundryPackage->thumbnail))) {
                 unlink(storage_path('app/public/' . $laundryPackage->thumbnail));
             }
-    
+
             $path = $request->file('thumbnail')->store('laundry/thumbnails', 'public');
             $data['thumbnail'] = $path;
         }
-    
+
         $laundryPackage->update($data);
-    
+
         return redirect()->route('admin.laundry.index')->with('success', 'Laundry package berhasil diperbarui!');
     }
-    
 
     public function destroy(LaundryPackage $laundryPackage)
     {
-        $laundryPackage->delete();
-        return redirect()->route('admin.laundry.index')->with('success', 'Laundry package berhasil dihapus!');
+        try {
+            $laundryPackage->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Laundry package berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus data.'
+            ], 500);
+        }
     }
 }

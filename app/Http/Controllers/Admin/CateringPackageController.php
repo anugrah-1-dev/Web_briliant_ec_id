@@ -91,11 +91,22 @@ class CateringPackageController extends Controller
 
     public function destroy(CateringPackage $cateringPackage)
     {
-        if ($cateringPackage->thumbnail) {
-            Storage::disk('public')->delete($cateringPackage->thumbnail);
-        }
+        try {
+            if ($cateringPackage->thumbnail) {
+                Storage::disk('public')->delete($cateringPackage->thumbnail);
+            }
 
-        $cateringPackage->delete();
-        return redirect()->route('admin.catering.index')->with('success', 'Catering package berhasil dihapus!');
+            $cateringPackage->delete();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Catering package berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus data.'
+            ], 500);
+        }
     }
 }

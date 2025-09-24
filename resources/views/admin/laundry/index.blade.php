@@ -67,9 +67,12 @@
                                                 onsubmit="return confirm('Yakin ingin menghapus paket laundry ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                <!-- Tombol Hapus -->
+                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                    onclick="deleteLaundry({{ $laundry->id }}, '{{ route('admin.laundry.destroy', $laundry->id) }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
+
                                             </form>
                                         </td>
 
@@ -107,9 +110,9 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
 
-        function deleteLaundry(id) {
+    <script>
+        function deleteLaundry(id, url) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -121,28 +124,26 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Tampilkan loading
                     Swal.fire({
                         title: 'Menghapus data',
                         text: 'Mohon tunggu...',
                         allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading()
-                        }
+                        didOpen: () => Swal.showLoading()
                     });
 
                     $.ajax({
-                        url: `/admin/services/laundry/${id}`,
-                        type: 'DELETE',
+                        url: url, // gunakan URL yang di-pass dari Blade
+                        type: 'POST', // pakai POST karena method spoofing
                         data: {
+                            _method: 'DELETE', // spoofing DELETE method
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(res) {
-                            Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success').then(() => {
+                            Swal.fire('Terhapus!', res.message, 'success').then(() => {
                                 location.reload();
                             });
                         },
-                        error: function(err) {
+                        error: function() {
                             Swal.fire('Error', 'Gagal menghapus data', 'error');
                         }
                     });
@@ -150,7 +151,8 @@
             });
         }
 
-        // Tutup modal saat selesai
+
+        // Reset form saat modal ditutup
         $('#laundryModal').on('hidden.bs.modal', function() {
             $('#laundryForm')[0].reset();
         });

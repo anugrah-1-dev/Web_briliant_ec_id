@@ -168,15 +168,17 @@ Route::middleware(['auth', 'role:admin|officer'])->prefix('admin')->name('admin.
     Route::post('/catering', [CateringPackageController::class, 'store'])->name('catering.store');
     Route::get('/catering/{cateringPackage}/edit', [CateringPackageController::class, 'edit'])->name('catering.edit');
     Route::put('/catering/{cateringPackage}', [CateringPackageController::class, 'update'])->name('catering.update');
-    Route::delete('/catering/{cateringPackage   }', [CateringPackageController::class, 'destroy'])->name('catering.destroy');
+    Route::delete('/catering/{cateringPackage}', [CateringPackageController::class, 'destroy'])->name('catering.destroy');
 
     // Laundry
     Route::get('/laundry', [LaundryPackageController::class, 'index'])->name('laundry.index');
     Route::get('/laundry/create', [LaundryPackageController::class, 'create'])->name('laundry.create');
     Route::post('/laundry', [LaundryPackageController::class, 'store'])->name('laundry.store');
     Route::get('/laundry/{laundryPackage}/edit', [LaundryPackageController::class, 'edit'])->name('laundry.edit');
-    Route::put('/laundry/{id}', [LaundryPackageController::class, 'update'])->name('laundry.update');
-    Route::delete('/laundry/{id}', [LaundryPackageController::class, 'destroy'])->name('laundry.destroy');
+    Route::put('/laundry/{laundryPackage}', [LaundryPackageController::class, 'update'])->name('laundry.update');
+    Route::delete('/laundry/{laundryPackage}', [LaundryPackageController::class, 'destroy'])
+        ->name('laundry.destroy');
+
 
 
     //dashboard admin

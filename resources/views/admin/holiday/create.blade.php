@@ -137,7 +137,6 @@
                                             style="width: 100%;" required>
                                             <option value="aktif">Aktif</option> <!-- ini otomatis jadi default -->
                                             <option value="nonaktif">Nonaktif</option>
-
                                         </select>
                                     </div>
                                 </div>

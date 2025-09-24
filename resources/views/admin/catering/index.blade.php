@@ -53,14 +53,17 @@
                                             </a>
 
                                             <!-- Tombol Hapus -->
-                                            <form action="{{ route('admin.catering.destroy', $catering->id) }}" method="POST"
-                                                class="d-inline"
+                                            <form action="{{ route('admin.catering.destroy', $catering->id) }}"
+                                                method="POST" class="d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus paket catering ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                <!-- Tombol Hapus -->
+                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                    onclick="deleteCatering({{ $catering->id }}, '{{ route('admin.catering.destroy', $catering->id) }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
+
                                             </form>
                                         </td>
 
@@ -97,7 +100,7 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function deleteCatering(id) {
+        function deleteCatering(id, url) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -110,13 +113,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/admin/services/catering/${id}`,
-                        type: 'DELETE',
+                        url: url,
+                        type: 'POST', // POST + spoof DELETE
                         data: {
+                            _method: 'DELETE',
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(res) {
-                            Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success').then(() => {
+                            Swal.fire('Terhapus!', res.message, 'success').then(() => {
                                 location.reload();
                             });
                         },
@@ -132,4 +136,5 @@
             $('#cateringForm')[0].reset();
         });
     </script>
+
 @stop
