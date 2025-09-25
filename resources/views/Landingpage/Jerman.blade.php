@@ -227,15 +227,23 @@
             </div>
         </div>
     </section>
-
-    {{-- Wave Divider 1 --}}
-    <div class="wave-divider">
+<div class="wave-divider">
         <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <defs>
+  <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="var(--primary-orange-dark)" />
+    <stop offset="40%" stop-color="var(--primary-orange-dark)" />
+    <stop offset="60%" stop-color="#c0392b" />
+    <stop offset="100%" stop-color="#c0392b" />
+  </linearGradient>
+</defs>
+
             <path class="shape-fill"
                 d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
             </path>
         </svg>
     </div>
+
 
     {{-- Alur Pendaftaran Section --}}
     <section class="alur" id="alur">
@@ -273,7 +281,7 @@
     </section>
 
     {{-- Wave Divider 2 (dibalik) --}}
-    <!-- <div class="wave-divider wave-flipped">
+    <!-- <div class="wave-divider"">
         <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
             <path class="shape-fill" d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
         </svg>
