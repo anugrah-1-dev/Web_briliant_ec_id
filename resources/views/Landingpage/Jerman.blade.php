@@ -22,14 +22,16 @@
         <div class="carousel">
             <div class="slides">
                 <div class="slide active">
-
-                    <img src="{{ asset('asset/img/BIE1.jpg') }}" alt="Belajar Bahasa Jerman di Berlin">
+                    <img src="{{ asset('asset/img/Brilliant3Bhs.jpg') }}" alt="Belajar Bahasa Arab 1">
                 </div>
                 <div class="slide">
-                    <img src="{{ asset('asset/img/BIE2.jpg') }}" alt="Kelas Bahasa Jerman yang Interaktif">
+                    <img src="{{ asset('asset/img/Brilliant1.3.jpg') }}" alt="Belajar Bahasa Arab 2">
                 </div>
                 <div class="slide">
-                    <img src="{{ asset('asset/img/BIE3.jpg') }}" alt="Kelas Bahasa Jerman yang Interaktif">
+                    <img src="{{ asset('asset/img/Brilliant1.1.jpg') }}" alt="Belajar Bahasa Arab 3">
+                </div>
+                <div class="slide">
+                    <img src="{{ asset('asset/img/Brilliant1.2.jpg') }}" alt="Belajar Bahasa Arab 4">
                 </div>
             </div>
             <button class="prev">&#10094;</button>
