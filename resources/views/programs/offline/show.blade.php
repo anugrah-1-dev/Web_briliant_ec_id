@@ -761,7 +761,7 @@
                                                     value="{{ old('no_wali') }}">
                                             </div>
 
-                                            @if (strtolower($program->program_bahasa) === 'arab')
+                                            {{-- @if (strtolower($program->program_bahasa) === 'arab')
                                                 <div class="mb-3">
                                                     <label class="form-label">
                                                         <i class="bi bi-house-fill"></i> Akomodasi (Camp Reguler) -
@@ -776,7 +776,7 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                            @endif
+                                            @endif --}}
 
 
                                             {{-- Camp VIP dari database --}}
@@ -899,13 +899,13 @@
                                                                 <span>Transportasi</span>
                                                                 <span id="hargaTransport">Rp0</span>
                                                             </div>
-
+{{-- 
                                                             @if (strtolower($program->program_bahasa) === 'arab')
                                                                 <div class="d-flex justify-content-between mb-2">
                                                                     <span>Akomodasi Camp (Reguler)</span>
                                                                     <span id="hargaCamp">Rp0</span>
                                                                 </div>
-                                                            @endif
+                                                            @endif --}}
 
                                                             <hr>
                                                             <div
