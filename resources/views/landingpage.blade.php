@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -111,7 +111,7 @@
     <section class="carousel" id="carousel">
         <div class="carousel-container">
             <div class="slides">
-                <img src="{{ asset('asset/img/BIE01.jpg') }}" class="slide" alt="Slide 1">
+                <img src="{{ asset('asset/img/BIE01.JPG') }}" class="slide" alt="Slide 1">
             </div>
             <div class="carousel-overlay"></div>
 
@@ -149,7 +149,7 @@
             </a>
             <a href="#" class="program1-card pilih-kursus" data-kursus="bec">
                 <div class="program2-icon">
-                    <img src="{{ asset('asset/img/BRILLIANT1.jpg') }}" alt="Brilliant English Course" class="program1-img">
+                    <img src="{{ asset('asset/img/brilliant1.jpg') }}" alt="Brilliant English Course" class="program1-img">
                 </div>
                 <h3>Brilliant English Course</h3>
                 <span class="pilih1-button">Pilih</span>
@@ -205,87 +205,85 @@
 
     </section>
     <script>
-        const openPopupButton = document.getElementById('openPopupBtn');
-const kursusPopup = document.getElementById('kursusPopup');
-const closeKursusPopupButton = document.getElementById('closeKursusPopupBtn');
+        document.addEventListener('DOMContentLoaded', function () {
+            const openPopupButton = document.getElementById('openPopupBtn');
+            const kursusPopup = document.getElementById('kursusPopup');
+            const closeKursusPopupButton = document.getElementById('closeKursusPopupBtn');
+            const programPopup = document.getElementById('programPopup');
+            const closePopupButton = document.getElementById('closePopupBtn');
+            const programPopupTitle = document.getElementById('programPopupTitle');
 
-const programPopup = document.getElementById('programPopup');
-const closePopupButton = document.getElementById('closePopupBtn');
-const programPopupTitle = document.getElementById('programPopupTitle');
+            if (!openPopupButton || !kursusPopup || !programPopup) return;
 
-let selectedKursus = null;
+            let selectedKursus = null;
 
-const urlMap = {
-    bie: {
-        inggris: "{{ route('bieplus.program.inggris') }}",
-        jerman: "{{ route('bieplus.program.jerman') }}",
-        mandarin: "{{ route('bieplus.program.mandarin') }}",
-        arab: "{{ route('bieplus.program.arab') }}"
-    },
-    bec: {
-        inggris: "{{ route('program.inggris') }}",
-        jerman: "{{ route('program.jerman') }}",
-        mandarin: "{{ route('program.mandarin') }}",
-        arab: "{{ route('program.arab') }}"
-    }
-};
+            const urlMap = {
+                bie: {
+                    inggris: "{{ route('bieplus.program.inggris') }}",
+                    jerman: "{{ route('bieplus.program.jerman') }}",
+                    mandarin: "{{ route('bieplus.program.mandarin') }}",
+                    arab: "{{ route('bieplus.program.arab') }}"
+                },
+                bec: {
+                    inggris: "{{ route('program.inggris') }}",
+                    jerman: "{{ route('program.jerman') }}",
+                    mandarin: "{{ route('program.mandarin') }}",
+                    arab: "{{ route('program.arab') }}"
+                }
+            };
 
-function showPopup(popup) { popup.classList.add('show'); }
-function hidePopup(popup) { popup.classList.remove('show'); }
+            function showPopup(popup) { popup.classList.add('show'); }
+            function hidePopup(popup) { popup.classList.remove('show'); }
 
-openPopupButton.addEventListener('click', function(e){
-    e.preventDefault();
-    showPopup(kursusPopup);
-});
+            openPopupButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                showPopup(kursusPopup);
+            });
 
-closeKursusPopupButton.addEventListener('click', function(){
-    hidePopup(kursusPopup);
-});
+            if (closeKursusPopupButton) closeKursusPopupButton.addEventListener('click', function () {
+                hidePopup(kursusPopup);
+            });
 
-document.querySelectorAll('.pilih-kursus').forEach(function(btn){
-    btn.addEventListener('click', function(e){
-        e.preventDefault();
-        selectedKursus = this.getAttribute('data-kursus');
+            document.querySelectorAll('.pilih-kursus').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    selectedKursus = this.getAttribute('data-kursus');
+                    if (selectedKursus === 'bie' && programPopupTitle)
+                        programPopupTitle.textContent = "Pilih Program Kursus Anda (International)";
+                    else if (selectedKursus === 'bec' && programPopupTitle)
+                        programPopupTitle.textContent = "Pilih Program Kursus Anda";
+                    hidePopup(kursusPopup);
+                    showPopup(programPopup);
+                });
+            });
 
-        // Ganti judul popup sesuai kursus
-        if(selectedKursus === 'bie'){
-            programPopupTitle.textContent = "Pilih Program Kursus Anda (International)";
-        } else if(selectedKursus === 'bec'){
-            programPopupTitle.textContent = "Pilih Program Kursus Anda";
-        }
+            if (closePopupButton) closePopupButton.addEventListener('click', function () {
+                hidePopup(programPopup);
+            });
 
-        hidePopup(kursusPopup);
-        showPopup(programPopup);
-    });
-});
-
-closePopupButton.addEventListener('click', function(){
-    hidePopup(programPopup);
-});
-
-document.querySelectorAll('.program1-card').forEach(function(card){
-    card.addEventListener('click', function(e){
-        e.preventDefault();
-        const program = this.classList.contains('inggris') ? 'inggris' :
+            document.querySelectorAll('.program1-card').forEach(function (card) {
+                card.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const program = this.classList.contains('inggris') ? 'inggris' :
                         this.classList.contains('jerman') ? 'jerman' :
                         this.classList.contains('mandarin') ? 'mandarin' :
                         this.classList.contains('arab') ? 'arab' : null;
-        if(selectedKursus && program && urlMap[selectedKursus][program]){
-            window.location.href = urlMap[selectedKursus][program];
-        }
-    });
-});
+                    if (selectedKursus && program && urlMap[selectedKursus] && urlMap[selectedKursus][program]) {
+                        window.location.href = urlMap[selectedKursus][program];
+                    }
+                });
+            });
 
-[kursusPopup, programPopup].forEach(popup => {
-    popup.addEventListener('click', function(event){
-        if(event.target === popup) hidePopup(popup);
-    });
-});
-
+            [kursusPopup, programPopup].forEach(popup => {
+                popup.addEventListener('click', function (event) {
+                    if (event.target === popup) hidePopup(popup);
+                });
+            });
+        });
     </script>
 
 
-    {{-- ✅ Section "Tentang Kami" dengan animasi --}}
+    {{-- âœ… Section "Tentang Kami" dengan animasi --}}
     <section class="about-us-section" id="tentang" data-aos="fade-up">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
             <h2 class="about-section-title" data-aos="fade-up">TENTANG KAMI</h2>
@@ -729,7 +727,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
 
                                 <ul class="list-unstyled">
                                     @foreach ($fasilitasList as $fasilitas)
-                                        <li>✅ {{ $fasilitas }}</li>
+                                        <li>âœ… {{ $fasilitas }}</li>
                                     @endforeach
                                 </ul>
 
@@ -743,7 +741,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
                                 <i class="fas fa-star"></i> Special Promo Available <i class="fas fa-fire"></i>
                             </div>
                             <a href="{{ route('camps.show', $camp->slug) }}" class="btn-details">Lihat
-                                Selengkapnya →</a>
+                                Selengkapnya â†’</a>
                         </div>
                     </div>
                     @empty
@@ -767,8 +765,21 @@ document.querySelectorAll('.program1-card').forEach(function(card){
             <div class="container" data-aos="fade-up">
                 <h2 class="section-title">GALERI</h2>
                 <p class="section-subtitle text-center mb-4">
-                    Dokumentasi kegiatan dan momen-momen seru bersama Brilliant International Education PLUS.
+                    Dokumentasi kegiatan dan momen-momen seru bersama Brilliant International Education PLUS dan Erfan.
                 </p>
+
+                {{-- Tab buttons --}}
+                <div class="gallery-tabs text-center mb-4">
+                    <button class="gallery-tab-btn active" onclick="switchGalleryTab('bie', this)">
+                        <i class="fas fa-images me-2"></i>Galeri BIE
+                    </button>
+                    <button class="gallery-tab-btn" onclick="switchGalleryTab('erfan', this)">
+                        <i class="fas fa-star me-2"></i>Galeri Erfan
+                    </button>
+                </div>
+
+                {{-- ===== Tab Galeri BIE ===== --}}
+                <div id="tab-bie" class="gallery-tab-pane">
 
                 <div class="gallery-slider-wrapper">
                     <button class="gallery-nav left" onclick="slideGalleryGrid(-1)">
@@ -797,7 +808,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
                                     {{-- Setiap frame galeri diberi animasi fade-up dengan delay --}}
                                     <div class="gallery-frame text-center" data-index="{{ $index }}"
                                         data-aos="fade-up" data-aos-delay="{{ 100 * ($index + 1) }}">
-                                        <div style="position:relative; display:inline-block; width:100%;">
+                                        <div style="position:relative; display:block; width:100%;">
                                             @if ($thumbSrc)
                                                 <img src="{{ $thumbSrc }}"
                                                     alt="{{ $gallery->title }}" class="gallery-thumbnail"
@@ -806,7 +817,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
                                                 {{-- Local video tanpa thumbnail --}}
                                                 <div onclick="openGalleryModal({{ $gallery->id }})"
                                                     class="gallery-thumbnail d-flex align-items-center justify-content-center"
-                                                    style="cursor:pointer; background:#1e1e2e; height:200px; border-radius:10px;">
+                                                    style="cursor:pointer; background:#1e1e2e; border-radius:10px;">
                                                     <i class="fas fa-film" style="font-size:40px; color:#ccc;"></i>
                                                 </div>
                                             @endif
@@ -872,25 +883,139 @@ document.querySelectorAll('.program1-card').forEach(function(card){
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
+                </div>
+                {{-- ===== Tab Galeri Erfan ===== --}}
+                <div id="tab-erfan" class="gallery-tab-pane" style="display:none;">
+                    @if($galleriesErfan->isNotEmpty())
+                    <div class="gallery-slider-wrapper">
+                        <button class="gallery-nav left" onclick="slideErfanGrid(-1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+
+                        <div class="gallery-scroll-outer">
+                            <div class="gallery-scroll-inner" id="erfanSlider">
+                                @php $erfanIdx = 0; @endphp
+                                @foreach ($galleriesErfan as $gallery)
+                                    @if ($gallery->images->isNotEmpty())
+                                        @php
+                                            $firstMedia = $gallery->images->first();
+                                            $thumbSrc = null;
+                                            $isVideoThumb = false;
+                                            if ($firstMedia->type === 'video') {
+                                                if ($firstMedia->video_url) {
+                                                    preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $firstMedia->video_url ?? '', $ytMatch);
+                                                    $thumbSrc = isset($ytMatch[1]) ? 'https://img.youtube.com/vi/' . $ytMatch[1] . '/hqdefault.jpg' : null;
+                                                }
+                                                $isVideoThumb = true;
+                                            } else {
+                                                $thumbSrc = asset('storage/' . $firstMedia->image_path);
+                                            }
+                                        @endphp
+                                        <div class="gallery-frame text-center" data-index="{{ $erfanIdx }}"
+                                            data-aos="fade-up" data-aos-delay="{{ 100 * ($erfanIdx + 1) }}">
+                                            <div style="position:relative; display:block; width:100%;">
+                                                @if ($thumbSrc)
+                                                    <img src="{{ $thumbSrc }}"
+                                                        alt="{{ $gallery->title }}" class="gallery-thumbnail"
+                                                        onclick="openErfanModal({{ $gallery->id }})">
+                                                @elseif ($isVideoThumb)
+                                                    <div onclick="openErfanModal({{ $gallery->id }})"
+                                                        class="gallery-thumbnail d-flex align-items-center justify-content-center"
+                                                        style="cursor:pointer; background:#1e1e2e; border-radius:10px;">
+                                                        <i class="fas fa-film" style="font-size:40px; color:#ccc;"></i>
+                                                    </div>
+                                                @endif
+                                                @if ($isVideoThumb)
+                                                    <div onclick="openErfanModal({{ $gallery->id }})"
+                                                        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); cursor:pointer; background:rgba(0,0,0,0.5); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center;">
+                                                        <i class="fas fa-play text-white" style="font-size:20px; margin-left:4px;"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="gallery-caption">
+                                                <h5>{{ $gallery->title }}</h5>
+                                                <p>{{ Str::limit($gallery->deskripsi ?? '', 50) }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div id="erfan-modal-{{ $gallery->id }}" class="gallery-modal">
+                                            <div class="modal-content">
+                                                <span class="close-btn" onclick="closeErfanModal({{ $gallery->id }})">&times;</span>
+                                                <h3>{{ $gallery->title }}</h3>
+                                                <div class="modal-slider-wrapper">
+                                                    <button class="nav-btn left" onclick="slideErfan({{ $gallery->id }}, -1)">&#8592;</button>
+                                                    <div class="modal-slider" id="erfan-slider-{{ $gallery->id }}">
+                                                        <div class="slide-track">
+                                                            @foreach ($gallery->images as $image)
+                                                                <div class="slide-item">
+                                                                    @if ($image->isYoutubeVideo() && $image->getYoutubeEmbedUrl())
+                                                                        <iframe src="{{ $image->getYoutubeEmbedUrl() }}"
+                                                                            frameborder="0"
+                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                            allowfullscreen
+                                                                            style="width:100%; height:400px; border-radius:8px;">
+                                                                        </iframe>
+                                                                    @elseif ($image->isLocalVideo())
+                                                                        <video controls style="max-width:100%; max-height:65vh; border-radius:8px; background:#000;">
+                                                                            <source src="{{ asset('storage/' . $image->image_path) }}">
+                                                                            Browser Anda tidak mendukung pemutaran video.
+                                                                        </video>
+                                                                    @elseif ($image->image_path)
+                                                                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="Foto Galeri Erfan">
+                                                                    @endif
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <button class="nav-btn right" onclick="slideErfan({{ $gallery->id }}, 1)">&#8594;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @php $erfanIdx++; @endphp
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <button class="gallery-nav right" onclick="slideErfanGrid(1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    @else
+                        <p class="text-center text-muted mt-4">Belum ada galeri Erfan.</p>
+                    @endif
+                </div>
+                {{-- ===== END TABS ===== --}}
             </div>
         </section>
 
+        <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+            <span class="lightbox-close" onclick="closeLightbox()">x</span>
+            <img class="lightbox-content" id="lightboxImg">
+        </div>
 
         <script>
+            // Tab switcher galeri
+            function switchGalleryTab(tab, btn) {
+                document.querySelectorAll('.gallery-tab-pane').forEach(function(p) { p.style.display = 'none'; });
+                document.querySelectorAll('.gallery-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                document.getElementById('tab-' + tab).style.display = 'block';
+                btn.classList.add('active');
+            }
+
+            // Galeri BIE â€” modal & slider
             function openGalleryModal(id) {
                 document.getElementById('modal-' + id).classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-
             function closeGalleryModal(id) {
                 document.getElementById('modal-' + id).classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
-
-            // Geser slider ke kiri atau kanan (transform-based carousel)
             const gallerySlidePos = {};
             function slideGallery(id, direction) {
                 const slider = document.getElementById('slider-' + id);
+                if (!slider) return;
                 const track = slider.querySelector('.slide-track');
                 const items = track.querySelectorAll('.slide-item');
                 if (!items.length) return;
@@ -898,184 +1023,12 @@ document.querySelectorAll('.program1-card').forEach(function(card){
                 gallerySlidePos[id] = (gallerySlidePos[id] + direction + items.length) % items.length;
                 track.style.transform = `translateX(-${gallerySlidePos[id] * 100}%)`;
             }
-
             function slideGalleryGrid(direction) {
                 const slider = document.getElementById('gallerySlider');
-                slider.scrollBy({ left: 320 * direction, behavior: 'smooth' });
+                if (slider) slider.scrollBy({ left: 320 * direction, behavior: 'smooth' });
             }
-        </script>
 
-
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const galleries = @json($galleries->map(fn($g) => $g->images->pluck('image_path')));
-
-                galleries.forEach((images, galleryIndex) => {
-                    if (images.length <= 1) return; // skip kalau cuma 1 gambar
-
-                    let currentIndex = 0;
-                    const galleryFrame = document.querySelectorAll('.gallery-frame')[galleryIndex];
-                    const imgElement = galleryFrame.querySelector('img');
-
-                    // Fungsi utama untuk mengganti gambar dengan efek fade
-                    function changeImageFadeOnly() {
-                        // 1. Tambahkan kelas agar gambar lama memudar keluar
-                        imgElement.classList.add('fade-out-only');
-
-                        // 2. Tunggu sampai animasi fade-out selesai (800ms sesuai CSS)
-                        setTimeout(() => {
-                            // Ganti source gambar
-                            currentIndex = (currentIndex + 1) % images.length;
-                            imgElement.src = `/storage/${images[currentIndex]}`;
-
-                            imgElement.classList.remove('fade-out-only');
-                        }, 500); // Harus sama dengan durasi transition di CSS
-                    }
-
-                    // Atur interval pergantian gambar
-                    // Diberi delay awal agar setiap galeri tidak mulai bersamaan
-                    const startDelay = galleryIndex * 2500; // Jeda 1 detik antar galeri
-                    setTimeout(() => {
-                        setInterval(changeImageFadeOnly, 5000); // Ganti gambar setiap 3 detik
-                    }, startDelay);
-                });
-            });
-        </script>
-
-        <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-            <span class="lightbox-close" onclick="closeLightbox()">x</span>
-            <img class="lightbox-content" id="lightboxImg">
-        </div>
-        {{--
-        <div class="wave-divider6">
-            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                <path class="shape-fill6"
-                    d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,197.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                </path>
-            </svg>
-        </div> --}}
-
-        <link rel="stylesheet" href="{{ asset('css/sosmed.css') }}">
-
-        {{-- ===== GALERI ERFAN ===== --}}
-        <section id="galeri-erfan" class="gallery" style="background: #1a1033;">
-            <div class="container" data-aos="fade-up">
-                <h2 class="section-title">GALERI ERFAN</h2>
-                <p class="section-subtitle text-center mb-4">
-                    Dokumentasi kegiatan dan momen-momen bersama Erfan.
-                </p>
-
-                @if($galleriesErfan->isNotEmpty())
-                <div class="gallery-slider-wrapper">
-                    <button class="gallery-nav left" onclick="slideErfanGrid(-1)">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-
-                    <div class="gallery-scroll-outer">
-                        <div class="gallery-scroll-inner" id="erfanSlider">
-                            @php $erfanIdx = 0; @endphp
-                            @foreach ($galleriesErfan as $gallery)
-                                @if ($gallery->images->isNotEmpty())
-                                    @php
-                                        $firstMedia = $gallery->images->first();
-                                        $thumbSrc = null;
-                                        $isVideoThumb = false;
-                                        if ($firstMedia->type === 'video') {
-                                            if ($firstMedia->video_url) {
-                                                preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $firstMedia->video_url ?? '', $ytMatch);
-                                                $thumbSrc = isset($ytMatch[1]) ? 'https://img.youtube.com/vi/' . $ytMatch[1] . '/hqdefault.jpg' : null;
-                                            }
-                                            $isVideoThumb = true;
-                                        } else {
-                                            $thumbSrc = asset('storage/' . $firstMedia->image_path);
-                                        }
-                                    @endphp
-                                    <div class="gallery-frame text-center" data-index="{{ $erfanIdx }}"
-                                        data-aos="fade-up" data-aos-delay="{{ 100 * ($erfanIdx + 1) }}">
-                                        <div style="position:relative; display:inline-block; width:100%;">
-                                            @if ($thumbSrc)
-                                                <img src="{{ $thumbSrc }}"
-                                                    alt="{{ $gallery->title }}" class="gallery-thumbnail"
-                                                    onclick="openErfanModal({{ $gallery->id }})">
-                                            @elseif ($isVideoThumb)
-                                                {{-- Local video tanpa thumbnail --}}
-                                                <div onclick="openErfanModal({{ $gallery->id }})"
-                                                    class="gallery-thumbnail d-flex align-items-center justify-content-center"
-                                                    style="cursor:pointer; background:#1e1e2e; height:200px; border-radius:10px;">
-                                                    <i class="fas fa-film" style="font-size:40px; color:#ccc;"></i>
-                                                </div>
-                                            @endif
-                                            @if ($isVideoThumb)
-                                                <div onclick="openErfanModal({{ $gallery->id }})"
-                                                    style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); cursor:pointer; background:rgba(0,0,0,0.5); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center;">
-                                                    <i class="fas fa-play text-white" style="font-size:20px; margin-left:4px;"></i>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="gallery-caption">
-                                            <h5>{{ $gallery->title }}</h5>
-                                            <p>{{ Str::limit($gallery->deskripsi ?? '', 50) }}</p>
-                                        </div>
-                                    </div>
-
-                                    {{-- Modal per galeri Erfan --}}
-                                    <div id="erfan-modal-{{ $gallery->id }}" class="gallery-modal">
-                                        <div class="modal-content">
-                                            <span class="close-btn"
-                                                onclick="closeErfanModal({{ $gallery->id }})">&times;</span>
-                                            <h3>{{ $gallery->title }}</h3>
-                                            <div class="modal-slider-wrapper">
-                                                <button class="nav-btn left"
-                                                    onclick="slideErfan({{ $gallery->id }}, -1)">&#8592;</button>
-                                                <div class="modal-slider" id="erfan-slider-{{ $gallery->id }}">
-                                                    <div class="slide-track">
-                                                        @foreach ($gallery->images as $image)
-                                                            <div class="slide-item">
-                                                                @if ($image->isYoutubeVideo() && $image->getYoutubeEmbedUrl())
-                                                                    <iframe
-                                                                        src="{{ $image->getYoutubeEmbedUrl() }}"
-                                                                        frameborder="0"
-                                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                        allowfullscreen
-                                                                        style="width:100%; height:400px; border-radius:8px;">
-                                                                    </iframe>
-                                                                @elseif ($image->isLocalVideo())
-                                                                    <video controls style="max-width:100%; max-height:65vh; border-radius:8px; background:#000;">
-                                                                        <source src="{{ asset('storage/' . $image->image_path) }}">
-                                                                        Browser Anda tidak mendukung pemutaran video.
-                                                                    </video>
-                                                                @elseif ($image->image_path)
-                                                                    <img src="{{ asset('storage/' . $image->image_path) }}"
-                                                                        alt="Foto Galeri Erfan">
-                                                                @endif
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                                <button class="nav-btn right"
-                                                    onclick="slideErfan({{ $gallery->id }}, 1)">&#8594;</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @php $erfanIdx++; @endphp
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <button class="gallery-nav right" onclick="slideErfanGrid(1)">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                @else
-                    <p class="text-center text-muted">Belum ada galeri Erfan.</p>
-                @endif
-            </div>
-        </section>
-
-        <script>
+            // Galeri Erfan â€” modal & slider
             function openErfanModal(id) {
                 document.getElementById('erfan-modal-' + id).classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -1087,6 +1040,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
             const erfanSlidePos = {};
             function slideErfan(id, direction) {
                 const slider = document.getElementById('erfan-slider-' + id);
+                if (!slider) return;
                 const track = slider.querySelector('.slide-track');
                 const items = track.querySelectorAll('.slide-item');
                 if (!items.length) return;
@@ -1096,10 +1050,13 @@ document.querySelectorAll('.program1-card').forEach(function(card){
             }
             function slideErfanGrid(direction) {
                 const slider = document.getElementById('erfanSlider');
-                slider.scrollBy({ left: 320 * direction, behavior: 'smooth' });
+                if (slider) slider.scrollBy({ left: 320 * direction, behavior: 'smooth' });
             }
         </script>
-        {{-- ===== END GALERI ERFAN ===== --}}
+
+        </section>
+
+        <link rel="stylesheet" href="{{ asset('css/sosmed.css') }}">
 
         <section id="sosmed" class="sosmed-section">
             <div class="container">
@@ -1177,12 +1134,9 @@ document.querySelectorAll('.program1-card').forEach(function(card){
             </div>
         </section>
 
-
-
         <footer>
-            © 2025 Brilliant International Education PLUS. Hak Cipta Dilindungi Oleh Undang-Undang
+            &copy; 2025 Brilliant International Education PLUS. Hak Cipta Dilindungi Oleh Undang-Undang
         </footer>
-
 
         @include('partials.whatsapp-floating')
 
@@ -1191,9 +1145,10 @@ document.querySelectorAll('.program1-card').forEach(function(card){
 
     <script>
         AOS.init({
-            duration: 800, // Durasi animasi
-            once: true, // Animasi hanya berjalan sekali
+            duration: 800,
+            once: true,
         });
     </script>
 
     </html>
+

@@ -1655,3 +1655,32 @@ footer > * {
         font-size: 0.85rem;
     }
 }
+
+/* ===== Gallery Tabs ===== */
+.gallery-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.gallery-tab-btn {
+    padding: 0.7rem 2rem;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.gallery-tab-btn:hover,
+.gallery-tab-btn.active {
+    background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
+    border-color: #8e24aa;
+    box-shadow: 0 5px 20px rgba(106, 27, 154, 0.5);
+}
+.gallery-tab-pane {
+    display: block;
+}
