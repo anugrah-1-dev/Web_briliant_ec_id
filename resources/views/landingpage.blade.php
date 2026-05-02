@@ -941,7 +941,7 @@ document.querySelectorAll('.program1-card').forEach(function(card){
         <link rel="stylesheet" href="{{ asset('css/sosmed.css') }}">
 
         {{-- ===== GALERI ERFAN ===== --}}
-        <section id="galeri-erfan" class="gallery" style="background: #fffbf0;">
+        <section id="galeri-erfan" class="gallery" style="background: #1a1033;">
             <div class="container" data-aos="fade-up">
                 <h2 class="section-title">GALERI ERFAN</h2>
                 <p class="section-subtitle text-center mb-4">

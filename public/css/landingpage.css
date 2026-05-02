@@ -1755,16 +1755,16 @@ html {
    PERBAIKAN WARNA FONT — KETERBACAAN TEKS
    ============================================================ */
 
-/* 1. Section Galeri Erfan: background cream, teks harus gelap */
+/* 1. Section Galeri Erfan: background gelap, teks terang */
 #galeri-erfan h2.section-title,
 #galeri-erfan h2,
 #galeri-erfan .section-title {
-    color: #18005b !important; /* ungu gelap, kontras & mencolok di cream */
+    color: #e0f7fa !important;
     text-shadow: none !important;
-    -webkit-text-fill-color: #18005b !important;
+    -webkit-text-fill-color: #e0f7fa !important;
 }
 #galeri-erfan .section-subtitle {
-    color: #444444 !important;
+    color: #cce7ea !important;
 }
 #galeri-erfan .gallery-caption h5 {
     color: #1a1a2e;
