@@ -56,14 +56,8 @@ use App\Http\Controllers\Admin\LaundryPackageController;
 //camp
 Route::get('/camps', [CampController::class, 'publicIndex'])->name('camps.index');
 Route::get('/camps/{camp:slug}', [CampController::class, 'publicShow'])->name('camps.show');
-Route::get('/camp/{slug}/room', [CampController::class, 'room'])->name('camp.room');
-Route::get('/camp/{slug}', [CampController::class, 'show'])->name('camps.show');
-
-// List semua camp
-Route::get('/camps', [CampController::class, 'publicIndex'])->name('camps.index');
-
-// Detail camp (public)
-Route::get('/camps/{camp:slug}', [CampController::class, 'publicShow'])->name('camps.show');
+Route::get('/camp/{slug}/room', [CampController::class, 'room'])->name('camp.slug.room');
+Route::get('/camp/{slug}', [CampController::class, 'show'])->name('camp.show');
 
 
 // Form pendaftaran awal
