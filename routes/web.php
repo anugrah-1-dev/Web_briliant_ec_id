@@ -227,10 +227,12 @@ Route::middleware(['auth', 'role:admin|officer'])->prefix('admin')->name('admin.
     // gallery umum
     Route::resource('galleries', GalleryController::class);
     Route::delete('galleries/images/{id}', [GalleryController::class, 'destroyImage'])->name('galleries.images.destroy');
+    Route::post('galleries/images/{id}/update', [GalleryController::class, 'updateImage'])->name('galleries.images.update');
 
     // gallery erfan
     Route::resource('galleries-erfan', GalleryErfanController::class)->names('galleries-erfan');
     Route::delete('galleries-erfan/images/{id}', [GalleryErfanController::class, 'destroyImage'])->name('galleries-erfan.images.destroy');
+    Route::post('galleries-erfan/images/{id}/update', [GalleryErfanController::class, 'updateImage'])->name('galleries-erfan.images.update');
 
     //program camp
     Route::resource('programs/camp', ProgramCampController::class)->names('programs.camp');

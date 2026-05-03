@@ -102,6 +102,13 @@
                                 <span class="badge {{ $image->type === 'video' ? 'badge-danger' : 'badge-info' }} mb-1">
                                     {{ $image->isLocalVideo() ? 'Video (Lokal)' : ($image->isYoutubeVideo() ? 'Video (YouTube)' : 'Foto') }}
                                 </span>
+                                @if ($image->isLocalVideo())
+                                    <button type="button" class="btn btn-sm btn-warning btn-block mb-1"
+                                        data-toggle="modal"
+                                        data-target="#editVideoModal{{ $image->id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                @endif
                                 <button class="btn btn-sm btn-danger btn-block btn-delete-image"
                                     data-id="{{ $image->id }}"
                                     data-url="{{ route('admin.galleries.images.destroy', $image->id) }}">
@@ -118,6 +125,47 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Edit Video --}}
+    @foreach ($gallery->images as $image)
+        @if ($image->isLocalVideo())
+            <div class="modal fade" id="editVideoModal{{ $image->id }}" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="{{ route('admin.galleries.images.update', $image->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Video</h5>
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="small font-weight-bold">Ganti File Video <span class="text-muted">(opsional, maks 100MB)</span></label>
+                                    <input type="file" name="video" class="form-control-file" accept="video/*">
+                                    <small class="text-muted">Kosongkan jika tidak ingin mengganti video.</small>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold">Ganti Foto Cover <span class="text-muted">(opsional, maks 5MB)</span></label>
+                                    @if ($image->thumbnail_path)
+                                        <div class="mb-1">
+                                            <img src="{{ asset('storage/' . $image->thumbnail_path) }}" style="height:80px; object-fit:cover; border-radius:4px;" alt="Cover saat ini">
+                                            <small class="d-block text-muted">Cover saat ini</small>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="video_cover" class="form-control-file" accept="image/*">
+                                    <small class="text-muted">Kosongkan jika tidak ingin mengganti cover.</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-warning"><i class="fas fa-save mr-1"></i> Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
 
     <form id="delete-image-form" method="POST" style="display: none;">
         @csrf

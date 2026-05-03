@@ -182,6 +182,34 @@ class GalleryController extends Controller
         return redirect()->route('admin.galleries.index')->with('success', 'Galeri berhasil dihapus.');
     }
 
+    public function updateImage(Request $request, $id)
+    {
+        $image = GalleryImage::findOrFail($id);
+
+        $request->validate([
+            'video'       => 'nullable|mimes:mp4,mov,avi,mkv,webm|max:102400',
+            'video_cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('video')) {
+            if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
+                Storage::disk('public')->delete($image->image_path);
+            }
+            $image->image_path = $request->file('video')->store('galleries/videos', 'public');
+        }
+
+        if ($request->hasFile('video_cover')) {
+            if ($image->thumbnail_path && Storage::disk('public')->exists($image->thumbnail_path)) {
+                Storage::disk('public')->delete($image->thumbnail_path);
+            }
+            $image->thumbnail_path = $request->file('video_cover')->store('galleries/covers', 'public');
+        }
+
+        $image->save();
+
+        return back()->with('success', 'Video berhasil diperbarui.');
+    }
+
     public function destroyImage($id)
     {
         $image = GalleryImage::findOrFail($id);
