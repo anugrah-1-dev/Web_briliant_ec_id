@@ -152,7 +152,7 @@
 
     /* === Button Styles === */
     .btn {
-        background-color: #0066cc;
+        background-color: #0066cc !important;
         color: white !important;
         padding: 10px 20px;
         border-radius: 6px;
