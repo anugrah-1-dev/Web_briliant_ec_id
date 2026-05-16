@@ -10,7 +10,7 @@
     <div class="row">
         {{-- Logo 1: Default --}}
         <div class="col-md-6">
-            <x-adminlte-card title="Logo Default (Sebelum Scroll)" theme="lightblue" theme-mode="outline">
+            <x-adminlte-card title="Logo 1" theme="lightblue" theme-mode="outline">
                 <div class="text-center mb-3">
                     @if ($logo1 && $logo1->image_path)
                         <img src="{{ asset('storage/' . $logo1->image_path) }}" alt="Logo Default"
@@ -24,7 +24,7 @@
 
                 <form action="{{ route('admin.logos.update', 'logo1') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <x-adminlte-input-file name="image_path" label="Upload Logo Default" id="imageInput1"
+                    <x-adminlte-input-file name="image_path" label="Upload Logo 1" id="imageInput1"
                         placeholder="Pilih gambar..." />
                     <img id="imagePreview1" src="#" alt="Preview" class="mt-2 d-none img-thumbnail"
                         style="max-height: 150px;">
@@ -40,7 +40,7 @@
 
         {{-- Logo 2: Scroll --}}
         <div class="col-md-6">
-            <x-adminlte-card title="Logo Scroll (Setelah Scroll)" theme="success" theme-mode="outline">
+            <x-adminlte-card title="Logo 2" theme="success" theme-mode="outline">
                 <div class="text-center mb-3">
                     @if ($logo2 && $logo2->image_path)
                         <img src="{{ asset('storage/' . $logo2->image_path) }}" alt="Logo Scroll"
@@ -54,7 +54,7 @@
 
                 <form action="{{ route('admin.logos.update', 'logo2') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <x-adminlte-input-file name="image_path" label="Upload Logo Scroll" id="imageInput2"
+                    <x-adminlte-input-file name="image_path" label="Upload Logo 2" id="imageInput2"
                         placeholder="Pilih gambar..." />
                     <img id="imagePreview2" src="#" alt="Preview" class="mt-2 d-none img-thumbnail"
                         style="max-height: 150px;">

@@ -36,7 +36,7 @@ class LogoController extends Controller
             Logo::create(['key' => $key, 'image_path' => $path]);
         }
 
-        $label = $key === 'logo1' ? 'Logo Default' : 'Logo Scroll';
+        $label = $key === 'logo1' ? 'Logo 1' : 'Logo 2';
 
         return redirect()->route('admin.logos.index')->with('alert', [
             'icon'  => 'success',
