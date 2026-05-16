@@ -13,8 +13,8 @@
     }
 
     #navbar.scrolled {
-        background-color: #000;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
     }
 
     .logo img {
@@ -79,7 +79,7 @@
         border: none;
         font-family: inherit;
         font-size: 1rem;
-        color: #fff;
+        color: #333;
         font-weight: 600;
     }
 
@@ -109,12 +109,9 @@
 
     /* Dropdown saat navbar di-scroll */
     #navbar.scrolled .dropdown-content {
-        background-color: #000;
-        /* ikut hitam */
-        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
-        /* bayangan lebih terang biar kelihatan */
-        color: #fff;
-        /* teks jadi putih */
+        background-color: #fff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #333;
     }
 
 
@@ -136,12 +133,10 @@
         padding-left: 25px;
     }
 
-    /* Saat navbar scrolled (hitam) */
+    /* Saat navbar scrolled (putih) */
     #navbar.scrolled .dropdown-content a:hover {
-        background-color: #222;
-        /* abu gelap, masih beda dari navbar hitam */
-        color: #66b2ff;
-        /* biru muda agar kontras di background gelap */
+        background-color: #f8f9fa;
+        color: #0066cc;
         padding-left: 25px;
     }
 
