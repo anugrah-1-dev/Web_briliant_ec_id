@@ -19,8 +19,8 @@ class BIEPlusArabSeeder extends Seeder
                 'lama_program'     => '22 Hari',
                 'kategori'         => "I'dad",
                 'harga'            => 165000,
-                'jadwal_mulai'     => '2025-09-08',
-                'jadwal_selesai'   => '2025-09-30',
+                'jadwal_mulai'     => '2026-05-04',
+                'jadwal_selesai'   => '2026-12-28',
                 'features_program' => json_encode([
                     'Pelajaran dasar bahasa Arab',
                     'Qowaid',
@@ -33,8 +33,8 @@ class BIEPlusArabSeeder extends Seeder
                 'lama_program'     => '22 Hari',
                 'kategori'         => 'Mustawa 1',
                 'harga'            => 460000,
-                'jadwal_mulai'     => '2025-09-08',
-                'jadwal_selesai'   => '2025-09-30',
+                'jadwal_mulai'     => '2026-05-04',
+                'jadwal_selesai'   => '2026-12-28',
                 'features_program' => json_encode([
                     'Latihan percakapan',
                     'Penyusunan kalimat sederhana',
@@ -47,8 +47,8 @@ class BIEPlusArabSeeder extends Seeder
                 'lama_program'     => '22 Hari',
                 'kategori'         => 'Mustawa 2',
                 'harga'            => 460000,
-                'jadwal_mulai'     => '2025-09-08',
-                'jadwal_selesai'   => '2025-09-30',
+                'jadwal_mulai'     => '2026-05-04',
+                'jadwal_selesai'   => '2026-12-28',
                 'features_program' => json_encode([
                     'Pendalaman kaidah',
                     'Percakapan lancar',
@@ -61,8 +61,8 @@ class BIEPlusArabSeeder extends Seeder
                 'lama_program'     => '22 Hari',
                 'kategori'         => 'Mustawa 3',
                 'harga'            => 460000,
-                'jadwal_mulai'     => '2025-09-08',
-                'jadwal_selesai'   => '2025-09-30',
+                'jadwal_mulai'     => '2026-05-04',
+                'jadwal_selesai'   => '2026-12-28',
                 'features_program' => json_encode([
                     'Penekanan dalam fashohah',
                     "Insya' (mengarang)",
