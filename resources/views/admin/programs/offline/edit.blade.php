@@ -117,14 +117,14 @@
                             <div class="form-group">
                                 <label for="jadwal_mulai">Jadwal Mulai</label>
                                 <input type="date" class="form-control" id="jadwal_mulai" name="jadwal_mulai"
-                                    value="{{ old('jadwal_mulai', $offline->jadwal_mulai) }}">
+                                    value="{{ old('jadwal_mulai', $offline->jadwal_mulai ? \Carbon\Carbon::parse($offline->jadwal_mulai)->format('Y-m-d') : '') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="jadwal_selesai">Jadwal Selesai</label>
                                 <input type="date" class="form-control" id="jadwal_selesai" name="jadwal_selesai"
-                                    value="{{ old('jadwal_selesai', $offline->jadwal_selesai) }}">
+                                    value="{{ old('jadwal_selesai', $offline->jadwal_selesai ? \Carbon\Carbon::parse($offline->jadwal_selesai)->format('Y-m-d') : '') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
