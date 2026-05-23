@@ -62,8 +62,7 @@
                                     </button>
                                 </form>
                             </div>
-
-
+                        </td>
                     </tr>
                 @empty
                     <tr>

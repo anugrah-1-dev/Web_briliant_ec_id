@@ -158,6 +158,7 @@
         });
 
         // Set tanggal minimal ke hari ini
-        document.getElementById('tanggal_penjemputan').min = new Date().toISOString().split("T")[0];
+        const tanggalEl = document.getElementById('tanggal_penjemputan');
+        if (tanggalEl) tanggalEl.min = new Date().toISOString().split("T")[0];
     </script>
 @stop

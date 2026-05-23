@@ -282,7 +282,7 @@
                                                                     <div class="card me-3" style="min-width: 220px;">
                                                                         <div class="card-header bg-light">
                                                                             <div class="card">
-                                                                                <img src="{{ $catering->thumbnail ? asset('storage/' . $catering->thumbnail) : 'https://via.placeholder.com/150' }}"
+                                                                                <img src="{{ $catering->thumbnail ? asset('storage/' . $catering->thumbnail) : 'https://placehold.co/150' }}"
                                                                                     alt="{{ $catering->nama_paket }}"
                                                                                     class="img-fluid rounded"
                                                                                     style="height: 150px; object-fit: cover;">
@@ -334,7 +334,7 @@
                                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                                 </div>
                                                                                 <div class="modal-body">
-                                                                                    <img src="{{ $catering->thumbnail ? asset('storage/' . $catering->thumbnail) : 'https://via.placeholder.com/300' }}"
+                                                                                    <img src="{{ $catering->thumbnail ? asset('storage/' . $catering->thumbnail) : 'https://placehold.co/300' }}"
                                                                                         class="img-fluid mb-3 rounded"
                                                                                         alt="{{ $catering->nama_paket }}">
                                                                                     <p><strong>Harga:</strong> Rp {{ number_format($catering->harga, 0, ',', '.') }}</p>                                                                                    <p><strong>Periode:</strong> {{ $catering->periode ? $catering->periode . ' hari' : '-' }}</p>
@@ -363,7 +363,7 @@
                                                                     <div class="card me-3" style="min-width: 220px;">
                                                                         <div class="card-header bg-light">
                                                                             <div class="card">
-                                                                                <img src="{{ $laundry->thumbnail ? asset('storage/' . $laundry->thumbnail) : 'https://via.placeholder.com/150' }}"
+                                                                                <img src="{{ $laundry->thumbnail ? asset('storage/' . $laundry->thumbnail) : 'https://placehold.co/150' }}"
                                                                                     alt="{{ $laundry->nama_paket }}"
                                                                                     class="img-fluid rounded"
                                                                                     style="height: 150px; object-fit: cover;">
@@ -415,7 +415,7 @@
                                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                                 </div>
                                                                                 <div class="modal-body">
-                                                                                    <img src="{{ $laundry->thumbnail ? asset('storage/' . $laundry->thumbnail) : 'https://via.placeholder.com/300' }}"
+                                                                                    <img src="{{ $laundry->thumbnail ? asset('storage/' . $laundry->thumbnail) : 'https://placehold.co/300' }}"
                                                                                         class="img-fluid mb-3 rounded"
                                                                                         alt="{{ $laundry->nama_paket }}">
                                                                                     <p><strong>Harga:</strong> Rp {{ number_format($laundry->harga, 0, ',', '.') }}</p>                                                                                    <p><strong>Jenis:</strong> {{ $laundry->jenis ?? '-' }}</p>
@@ -445,7 +445,7 @@
                                                                     <div class="card me-3" style="min-width: 220px;">
                                                                         <div class="card-header bg-light">
                                                                             <div class="card">
-                                                                                <img src="{{ $holiday->gambar_cover ? asset('storage/' . $holiday->gambar_cover) : 'https://via.placeholder.com/150' }}"
+                                                                                <img src="{{ $holiday->gambar_cover ? asset('storage/' . $holiday->gambar_cover) : 'https://placehold.co/150' }}"
                                                                                     alt="{{ $holiday->nama_paket }}"
                                                                                     class="img-fluid rounded"
                                                                                     style="height: 150px; object-fit: cover;">
@@ -497,7 +497,7 @@
                                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                                 </div>
                                                                                 <div class="modal-body">
-                                                                                    <img src="{{ $holiday->gambar_cover ? asset('storage/' . $holiday->gambar_cover) : 'https://via.placeholder.com/300' }}"
+                                                                                    <img src="{{ $holiday->gambar_cover ? asset('storage/' . $holiday->gambar_cover) : 'https://placehold.co/300' }}"
                                                                                         class="img-fluid mb-3 rounded"
                                                                                         alt="{{ $holiday->nama_paket }}">
                                                                                     <p><strong>Harga:</strong> Rp {{ number_format($holiday->harga, 0, ',', '.') }}</p>

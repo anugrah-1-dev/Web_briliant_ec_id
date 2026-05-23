@@ -65,7 +65,7 @@
                                     <small class="form-text text-muted">Format: JPG, PNG. Maksimal 2MB</small>
                                     <div class="mt-2 text-center">
                                         <img id="preview-image"
-                                            src="https://via.placeholder.com/300x200?text=Preview+Gambar"
+                                            src="https://placehold.co/300x200?text=Preview+Gambar"
                                             alt="Preview Gambar" class="img-fluid img-thumbnail" style="max-height: 200px;">
                                     </div>
                                 </div>
