@@ -237,11 +237,8 @@
                                 </td>
 
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="19" class="text-center py-4">Belum ada pendaftar.</td>
-                            </tr>
-                        @endforelse
+                    @empty
+                    @endforelse
                     </tbody>
                 </table>
             </div>
@@ -342,7 +339,7 @@
                 ordering: true,
                 searching: true,
                 info: false,
-                responsive: true,
+                responsive: false,
                 columnDefs: [{
                     orderable: false,
                     // PERUBAHAN: Menyesuaikan target kolom yang tidak bisa di-sort

@@ -204,11 +204,8 @@
                                 </td>
 
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="15" class="text-center py-4">Belum ada pendaftar.</td>
-                            </tr>
-                        @endforelse
+                    @empty
+                    @endforelse
                     </tbody>
                 </table>
 
@@ -278,7 +275,7 @@
                 ordering: true,
                 searching: true,
                 info: false,
-                responsive: true,
+                responsive: false,
                 columnDefs: [{
                     orderable: false,
                     targets: [0, 10, 11]
