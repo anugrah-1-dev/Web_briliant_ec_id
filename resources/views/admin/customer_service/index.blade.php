@@ -1,8 +1,11 @@
 @extends('adminlte::page')
 
 @section('title', 'Manajemen Customer Service')
-@section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
+
+@section('css')
+<link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+@stop
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -64,6 +67,8 @@
 @stop
 
 @push('js')
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function confirmDelete(id) {
@@ -88,7 +93,7 @@
     <script>
         $(function() {
             $('#table_customer_service').DataTable({
-                responsive: true,
+                responsive: false,
                 autoWidth: false,
                 language: {
                     search: "Cari:",
