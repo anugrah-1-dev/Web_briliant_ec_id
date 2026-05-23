@@ -14,11 +14,11 @@
 
                 <div class="form-group">
                     <label for="title">Judul</label>
-                    <input type="text" name="title" class="form-control" required>
+                    <input type="text" id="title" name="title" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="image_path">Gambar</label>
+                    <label for="imageInput">Gambar</label>
                     <input type="file" name="image_path[]" class="form-control-file" multiple accept="image/*"
                         id="imageInput">
                     <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
@@ -26,7 +26,7 @@
 
                 <div class="form-group">
                     <label for="status">Status</label>
-                    <select name="status" class="form-control">
+                    <select id="status" name="status" class="form-control">
                         <option value="1">Aktif</option>
                         <option value="0">Tidak Aktif</option>
                     </select>

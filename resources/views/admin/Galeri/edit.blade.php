@@ -15,12 +15,12 @@
 
                 <div class="form-group">
                     <label for="title">Judul</label>
-                    <input type="text" name="title" class="form-control" value="{{ $galeri->title }}" required>
+                    <input type="text" id="title" name="title" class="form-control" value="{{ $galeri->title }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="image_path">Gambar (opsional)</label>
-                    <input type="file" name="image_path" class="form-control-file" accept="image/*">
+                    <input type="file" id="image_path" name="image_path" class="form-control-file" accept="image/*">
                     @if($galeri->image_path)
                         <div class="mt-2">
                             <img src="{{ asset('storage/' . $galeri->image_path) }}" width="120">
@@ -30,7 +30,7 @@
 
                 <div class="form-group">
                     <label for="status">Status</label>
-                    <select name="status" class="form-control">
+                    <select id="status" name="status" class="form-control">
                         <option value="1" {{ $galeri->status ? 'selected' : '' }}>Aktif</option>
                         <option value="0" {{ !$galeri->status ? 'selected' : '' }}>Tidak Aktif</option>
                     </select>
