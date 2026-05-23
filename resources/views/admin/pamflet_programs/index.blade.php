@@ -19,8 +19,9 @@
             <div class="mb-4">
                 <form action="{{ route('admin.pamflet_programs.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control"
-                            placeholder="Cari berdasarkan judul program..." value="{{ request('search') }}">
+                        <label for="search" class="visually-hidden">Cari Program</label>
+                        <input type="text" id="search" name="search" class="form-control"
+                            placeholder="Cari berdasarkan judul program..." value="{{ request('search') }}" autocomplete="off">
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search"></i>
                         </button>

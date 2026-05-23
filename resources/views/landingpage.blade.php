@@ -978,13 +978,22 @@
                                         <div class="sosmed-card" data-platform="{{ strtolower($platform) }}">
                                             <div class="sosmed-card-image">
                                                 @if (strtolower($platform) === 'youtube')
+                                                    @php $ytId = getYoutubeVideoId($item->url); @endphp
                                                     <div class="sosmed-card-video">
-                                                        <iframe width="100%" height="200"
-                                                            src="https://www.youtube.com/embed/{{ getYoutubeVideoId($item->url) }}"
-                                                            title="YouTube video player" frameborder="0"
-                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                            allowfullscreen>
-                                                        </iframe>
+                                                        @if ($ytId)
+                                                            <iframe width="100%" height="200"
+                                                                src="https://www.youtube.com/embed/{{ $ytId }}"
+                                                                title="YouTube video player" frameborder="0"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowfullscreen>
+                                                            </iframe>
+                                                        @else
+                                                            <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer"
+                                                                class="d-flex align-items-center justify-content-center"
+                                                                style="height:200px; background:#000; color:#fff; text-decoration:none; border-radius:8px;">
+                                                                <span>&#9654; Tonton di YouTube</span>
+                                                            </a>
+                                                        @endif
                                                     </div>
                                                 @elseif (strtolower($platform) === 'instagram')
                                                     <a href="{{ $item->url }}" target="_blank"

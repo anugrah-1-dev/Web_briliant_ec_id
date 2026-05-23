@@ -46,8 +46,9 @@
                         <form action="{{ route('tracking.search') }}" method="POST" class="row g-3">
                             @csrf
                             <div class="col-md-8">
-                                <input type="text" name="trx_id" class="form-control form-control-lg"
-                                    placeholder="Masukkan Kode Transaksi (TRX-XXXXXX)" required
+                                <label for="trx_id" class="visually-hidden">Kode Transaksi</label>
+                                <input type="text" id="trx_id" name="trx_id" class="form-control form-control-lg"
+                                    placeholder="Masukkan Kode Transaksi (TRX-XXXXXX)" autocomplete="off" required
                                     value="{{ old('trx_id', $trx_id ?? '') }}">
                             </div>
                             <div class="col-md-4">

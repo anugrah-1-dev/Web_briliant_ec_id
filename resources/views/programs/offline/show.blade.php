@@ -73,6 +73,10 @@
 
                                     </tr>
                                     <tr>
+                                        <th class="bg-light">Durasi</th>
+                                        <td>{{ $program->lama_program ?? '-' }}</td>
+                                    </tr>
+                                    <tr>
                                         <th class="bg-light">Kuota</th>
                                         <td>{{ $program->kuota }}</td>
                                     </tr>

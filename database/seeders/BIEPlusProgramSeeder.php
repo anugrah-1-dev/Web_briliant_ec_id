@@ -129,6 +129,8 @@ class BIEPlusProgramSeeder extends Seeder
                 'is_active'        => 1,
                 'kursus'           => 'bieplus',
                 'thumbnail'        => null,
+                'jadwal_mulai'     => '2026-05-04',
+                'jadwal_selesai'   => '2026-12-28',
             ]);
         }
     }

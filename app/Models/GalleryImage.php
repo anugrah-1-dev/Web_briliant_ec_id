@@ -36,9 +36,10 @@ class GalleryImage extends Model
     public function getYoutubeEmbedUrl(): ?string
     {
         if (!$this->video_url) return null;
-        // Support format: https://youtu.be/ID atau https://www.youtube.com/watch?v=ID
-        preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $this->video_url, $matches);
-        return isset($matches[1]) ? 'https://www.youtube.com/embed/' . $matches[1] : null;
+        // Gunakan helper yang sudah di-autoload untuk mendukung semua format URL YouTube
+        // termasuk: ?v=ID, ?si=...&v=ID, youtu.be/ID, shorts/ID, embed/ID
+        $id = getYoutubeVideoId($this->video_url);
+        return $id ? 'https://www.youtube.com/embed/' . $id : null;
     }
 
     // Relasi: gambar ini milik satu galeri
