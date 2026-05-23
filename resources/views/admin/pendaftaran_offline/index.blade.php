@@ -239,7 +239,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="13" class="text-center py-4">Belum ada pendaftar.</td>
+                                <td colspan="19" class="text-center py-4">Belum ada pendaftar.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -259,7 +259,7 @@
 
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <style>
         .dataTables_filter {
             display: none;
@@ -333,8 +333,8 @@
     </script>
 @endif
 @section('js')
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#pendaftarTable').DataTable({

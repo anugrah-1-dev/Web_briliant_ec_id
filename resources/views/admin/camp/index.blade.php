@@ -203,12 +203,10 @@
                                     </div>
                                 </td>
 
-                                <!-- Bootstrap JS (should be included in the main layout, not here) -->
-                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="text-center py-4">Belum ada pendaftar.</td>
+                                <td colspan="15" class="text-center py-4">Belum ada pendaftar.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -249,7 +247,7 @@
 @endif
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <style>
         .dataTables_filter {
             display: none;
@@ -271,8 +269,8 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#pendaftarTable').DataTable({
