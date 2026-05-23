@@ -4,6 +4,10 @@
 
 @section('plugins.BootstrapSwitch', true)
 
+@prepend('js')
+<script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+@endprepend
+
 @section('content_header')
 <div class="d-flex justify-content-between align-items-center">
     <h1 class="m-0">Manajemen Periode</h1>
