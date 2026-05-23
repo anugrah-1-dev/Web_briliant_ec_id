@@ -47,11 +47,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="start_date">Dari Tanggal</label>
-                            <input type="date" name="start_date" class="form-control" required>
+                            <input type="date" name="start_date" id="start_date" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="end_date">Sampai Tanggal</label>
-                            <input type="date" name="end_date" class="form-control" required>
+                            <input type="date" name="end_date" id="end_date" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -165,8 +165,8 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="status">Status</label>
-                                                                <select name="status" class="form-control" required>
+                                                                <label for="status_{{ $data->id }}">Status</label>
+                                                                <select name="status" id="status_{{ $data->id }}" class="form-control" required>
                                                                     <option value="pending"
                                                                         {{ $data->status == 'pending' ? 'selected' : '' }}>
                                                                         Pending</option>
