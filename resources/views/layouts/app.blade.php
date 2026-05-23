@@ -71,8 +71,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     // kalau user sudah login tapi sessionStorage kosong
     if ({{ Auth::check() ? 'true' : 'false' }} && !sessionStorage.getItem("tab_active")) {
-        // logout otomatis (tab baru atau tab ditutup lalu buka lagi)
-        window.location.href = "{{ route('logout') }}";
+        // logout otomatis via POST (route logout hanya menerima POST)
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ route('logout') }}";
+        var csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = "{{ csrf_token() }}";
+        form.appendChild(csrf);
+        document.body.appendChild(form);
+        form.submit();
     }
 
     // set flag di sessionStorage
