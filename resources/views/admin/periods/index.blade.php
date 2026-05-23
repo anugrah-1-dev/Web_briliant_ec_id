@@ -2,6 +2,8 @@
 
 @section('title', 'Manajemen Periode')
 
+@section('plugins.BootstrapSwitch', true)
+
 @section('content_header')
 <div class="d-flex justify-content-between align-items-center">
     <h1 class="m-0">Manajemen Periode</h1>
