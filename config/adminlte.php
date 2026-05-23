@@ -650,7 +650,7 @@
                     [
                         'type' => 'js',
                         'asset' => true,
-                        'location' => 'vendor/datatables/js/jquery.dataTables.min.js',
+                        'location' => 'vendor/datatables/jquery.dataTables.min.js',
                     ],
                     [
                         'type' => 'js',
