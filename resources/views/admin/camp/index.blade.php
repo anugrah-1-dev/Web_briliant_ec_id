@@ -141,8 +141,8 @@
                                 <td>
                                     <div class="btn-group btn-group-sm">
                                         <!-- Edit Status Button -->
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#statusModal{{ $data->id }}" title="Edit Status"
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#statusModal{{ $data->id }}" title="Edit Status"
                                             style="width: 38px; height: 38px;">
                                             <i class="fas fa-eye"></i>
                                         </button>
@@ -160,8 +160,8 @@
                                                             <h5 class="modal-title"
                                                                 id="statusModalLabel{{ $data->id }}">Ubah Status
                                                                 Pendaftaran</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
@@ -181,7 +181,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Batal</button>
+                                                                data-dismiss="modal">Batal</button>
                                                             <button type="submit" class="btn btn-primary">Simpan</button>
                                                         </div>
                                                     </div>
