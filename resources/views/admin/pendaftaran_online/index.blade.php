@@ -47,11 +47,11 @@
                     <!-- Filter tanggal -->
                     <div class="form-group">
                         <label for="start_date">Dari Tanggal</label>
-                        <input type="date" name="start_date" class="form-control" required>
+                        <input type="date" name="start_date" id="start_date" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="end_date">Sampai Tanggal</label>
-                        <input type="date" name="end_date" class="form-control" required>
+                        <input type="date" name="end_date" id="end_date" class="form-control" required>
                     </div>
 
                     <!-- Filter program -->
