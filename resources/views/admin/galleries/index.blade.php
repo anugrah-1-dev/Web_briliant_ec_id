@@ -149,7 +149,7 @@
         );
 
         setTimeout(function () {
-            $('.alert').alert('close');
+            $('.alert').fadeOut('slow');
         }, 5000);
     });
 </script>

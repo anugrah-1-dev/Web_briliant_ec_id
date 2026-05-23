@@ -197,7 +197,7 @@
 
             // Auto-hide alert setelah 5 detik
             setTimeout(function() {
-                $('.alert').alert('close');
+                $('.alert').fadeOut('slow');
             }, 5000);
         });
     </script>
